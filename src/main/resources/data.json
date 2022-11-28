@@ -7634,20 +7634,6 @@
                     "MAGIC_LUMP_3:1"
                 ],
                 "time": 80
-            }, {
-                "outputs": ["SU_SOUL_STAINED_GLASS:1"],
-                "inputs": [
-                    "ENDER_LUMP_1:1",
-                    "ESSENCE_OF_AFTERLIFE:1",
-                    "ENDER_LUMP_1:1",
-                    "ANCIENT_RUNE_ENDER:1",
-                    "tinted_glass:1",
-                    "ANCIENT_RUNE_ENDER:1",
-                    "ENDER_LUMP_1:1",
-                    "ESSENCE_OF_AFTERLIFE:1",
-                    "ENDER_LUMP_1:1"
-                ],
-                "time": 80
             }
         ],
         "ELECTRIC_PRESS": [
@@ -14160,32 +14146,6 @@
                     "obsidian:1",
                     "GOLD_8K:1",
                     "obsidian:1"
-                ]
-            }, {
-                "outputs": ["SU_INFUSED_MEMBRANE:1"],
-                "inputs": [
-                    "ENDER_LUMP_1:1",
-                    "",
-                    "ENDER_LUMP_1:1",
-                    "",
-                    "phantom_membrane:1",
-                    "",
-                    "ENDER_LUMP_1:1",
-                    "",
-                    "ENDER_LUMP_1:1"
-                ]
-            }, {
-                "outputs": ["SU_INFUSED_FEATHER:1"],
-                "inputs": [
-                    "ENDER_LUMP_1:1",
-                    "",
-                    "ENDER_LUMP_1:1",
-                    "",
-                    "feather:1",
-                    "",
-                    "ENDER_LUMP_1:1",
-                    "",
-                    "ENDER_LUMP_1:1"
                 ]
             }
         ],
