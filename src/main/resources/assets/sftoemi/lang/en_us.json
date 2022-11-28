@@ -1,0 +1,31 @@
+{
+  "emi.category.sftoemi.multiblock.enhanced_crafting_table": "Enhanced Crafting",
+  "emi.category.sftoemi.multiblock.pressure_chamber": "Pressurizing",
+  "emi.category.sftoemi.multiblock.crucible": "Melting",
+  "emi.category.sftoemi.multiblock.juicer": "Juicing",
+  "emi.category.sftoemi.multiblock.composter": "Composting",
+  "emi.category.sftoemi.multiblock.magic_workbench": "Magical Crafting",
+  "emi.category.sftoemi.multiblock.makeshift_smeltery": "Makeshift Superheated Smelting",
+  "emi.category.sftoemi.multiblock.ore_washer": "Ore Washing",
+  "emi.category.sftoemi.multiblock.ore_crusher": "Ore Crushing",
+  "emi.category.sftoemi.multiblock.industrial_miner": "Industrial Mining",
+  "emi.category.sftoemi.multiblock.advanced_industrial_miner": "Advanced Industrial Mining",
+  "emi.category.sftoemi.multiblock.automated_panning_machine": "Automated Panning",
+  "emi.category.sftoemi.multiblock.table_saw": "Sawing",
+  "emi.category.sftoemi.multiblock.compressor": "Compressing",
+  "emi.category.sftoemi.multiblock.armor_forge": "Forging",
+  "emi.category.sftoemi.multiblock.grind_stone": "Grinding",
+  "emi.category.sftoemi.multiblock.smeltery": "Superheated Smelting",
+  "emi.category.sftoemi.ancient_altar": "Ancient Altar Fusing",
+  "emi.category.sftoemi.smeltery": "%s",
+  "emi.category.sftoemi.machine": "%s",
+  "emi.category.sftoemi.break": "Specialized Block Breaking",
+  "emi.category.sftoemi.trade": "Piglin Trading",
+  "emi.category.sftoemi.kill": "Kill Mob",
+
+  "sftoemi.missing_entity": "Missing Entity!",
+
+  "sftoemi.recipe.time": "%s Seconds (%s Ticks)",
+  "sftoemi.recipe.energy.use": "%sj Used",
+  "sftoemi.recipe.energy.generate": "%sj Generated"
+}

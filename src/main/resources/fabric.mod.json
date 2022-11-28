@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "sftoemi",
+  "version": "${version}",
+  "name": "SlimefunToEMI",
+  "description": "A EMI Plugin adding Slimefun4 Recipes!",
+  "authors": [
+    "JustAHuman_xD"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/sftoemi/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.justahuman.slimefuntoemi.SlimefunToEMI"
+    ],
+    "emi": [
+      "me.justahuman.slimefuntoemi.SlimefunToEMI"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.10",
+    "fabric": "*",
+    "minecraft": "1.19.2"
+  }
+}
