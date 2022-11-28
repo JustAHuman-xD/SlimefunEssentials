@@ -1018,6 +1018,12 @@
             "nbt": "{Damage:0,PublicBukkitValues:{\"slimefun:slimefun_item\":\"SOULBOUND_SWORD\"},display:{Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"red\",\"text\":\"Soulbound Sword\"}],\"text\":\"\"}\u0027 }}",
             "type": "emi:item"
         },
+        "SOULBOUND_PICKAXE": {
+            "item": "minecraft:diamond_pickaxe",
+            "amount": 1,
+            "nbt": "{Damage:0,PublicBukkitValues:{\"slimefun:slimefun_item\":\"SOULBOUND_PICKAXE\"},display:{Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"red\",\"text\":\"Soulbound Pickaxe\"}],\"text\":\"\"}\u0027 }}",
+            "type": "emi:item"
+        },
         "CHRISTMAS_EGG_NOG": {
             "item": "minecraft:potion",
             "amount": 1,
