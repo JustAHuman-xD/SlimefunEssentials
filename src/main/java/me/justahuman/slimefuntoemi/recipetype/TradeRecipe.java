@@ -6,11 +6,10 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefuntoemi.EntityEmiStack;
-import me.justahuman.slimefuntoemi.SlimefunToEMI;
+import me.justahuman.slimefuntoemi.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
@@ -87,19 +86,19 @@ public class TradeRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final int offsetX = getDisplayWidth() / 2 - (SlimefunToEMI.slotWidth + SlimefunToEMI.bigSlotWidth + SlimefunToEMI.arrowWidth + SlimefunToEMI.slotWidth + 12) /2;
-        final int offsetYS = (getDisplayHeight() - SlimefunToEMI.slotHeight) / 2;
-        final int offsetYO = (getDisplayHeight() - SlimefunToEMI.bigSlotHeight) / 2;
-        final int offsetYA = (getDisplayHeight() - SlimefunToEMI.arrowHeight) / 2;
+        final int offsetX = getDisplayWidth() / 2 - (Utils.slotWidth + Utils.bigSlotWidth + Utils.arrowWidth + Utils.slotWidth + 12) /2;
+        final int offsetYS = (getDisplayHeight() - Utils.slotHeight) / 2;
+        final int offsetYO = (getDisplayHeight() - Utils.bigSlotHeight) / 2;
+        final int offsetYA = (getDisplayHeight() - Utils.arrowHeight) / 2;
 
-        widgets.addSlot(EmiStack.of(Items.GOLD_INGOT), offsetX, offsetYS);
-        widgets.addSlot(inputStack, offsetX + SlimefunToEMI.slotWidth + 4, offsetYO).output(true);
-        widgets.addFillingArrow(offsetX + SlimefunToEMI.slotWidth + SlimefunToEMI.bigSlotWidth + 8, offsetYA, 2000);
-        widgets.addSlot(outputs.get(0), offsetX + SlimefunToEMI.slotWidth + SlimefunToEMI.bigSlotWidth + SlimefunToEMI.arrowWidth + 12, offsetYS);
+        widgets.addSlot(inputs.get(0), offsetX, offsetYS);
+        widgets.addSlot(inputs.get(1), offsetX + Utils.slotWidth + 4, offsetYO).output(true);
+        widgets.addFillingArrow(offsetX + Utils.slotWidth + Utils.bigSlotWidth + 8, offsetYA, 2000);
+        widgets.addSlot(outputs.get(0), offsetX + Utils.slotWidth + Utils.bigSlotWidth + Utils.arrowWidth + 12, offsetYS);
     }
 
     @Override
     public boolean supportsRecipeTree() {
-        return false;
+        return true;
     }
 }

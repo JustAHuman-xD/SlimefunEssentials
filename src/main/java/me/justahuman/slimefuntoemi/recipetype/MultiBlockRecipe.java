@@ -24,6 +24,6 @@ public class MultiBlockRecipe extends EmiCraftingRecipe {
 
     @Override
     public boolean supportsRecipeTree() {
-        return false;
+        return true;
     }
 }

@@ -7,6 +7,8 @@
   "authors": [
     "JustAHuman_xD"
   ],
+  "homepage": "https://github.com/JustAHuman-xD/SlimefunToEMI",
+  "issues": "https://github.com/JustAHuman-xD/SlimefunToEMI/issues",
   "contact": {},
   "license": "MIT",
   "icon": "assets/sftoemi/icon.png",
@@ -17,6 +19,9 @@
     ],
     "emi": [
       "me.justahuman.slimefuntoemi.SlimefunToEMI"
+    ],
+    "modmenu": [
+      "me.justahuman.slimefuntoemi.config.ModMenuIntegration"
     ]
   },
   "depends": {

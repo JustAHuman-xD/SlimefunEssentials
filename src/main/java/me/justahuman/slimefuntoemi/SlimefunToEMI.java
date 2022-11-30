@@ -4,15 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import dev.emi.emi.EmiStackSerializer;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmptyEmiStack;
+import dev.emi.emi.bom.BoM;
+import me.justahuman.slimefuntoemi.config.ModConfig;
 import me.justahuman.slimefuntoemi.recipehandler.MultiblockHandler;
 import me.justahuman.slimefuntoemi.recipetype.AncientAltarRecipe;
 import me.justahuman.slimefuntoemi.recipetype.KillRecipe;
@@ -21,13 +23,13 @@ import me.justahuman.slimefuntoemi.recipetype.MultiBlockRecipe;
 import me.justahuman.slimefuntoemi.recipetype.OtherRecipe;
 import me.justahuman.slimefuntoemi.recipetype.SmelteryRecipe;
 import me.justahuman.slimefuntoemi.recipetype.TradeRecipe;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,32 +40,29 @@ import java.util.List;
 import java.util.Map;
 
 public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
-    public static final int bigSlotHeight = 26;
-    public static final int bigSlotWidth = 26;
-    public static final int slotHeight = 18;
-    public static final int slotWidth = 18;
-    public static final int arrowHeight = 17;
-    public static final int arrowWidth = 24;
-    public static final int chargeWidth = 7;
-    public static final int chargeHeight = 9;
-    public static final Identifier WIDGETS = new Identifier("sftoemi", "textures/gui/widgets.png");
-    public static final EmiTexture EMPTY_CHARGE = new EmiTexture(WIDGETS, 36, 0, chargeWidth, chargeHeight);
-    public static final EmiTexture GAIN_CHARGE = new EmiTexture(WIDGETS, 43, 0, chargeWidth, chargeHeight);
-    public static final EmiTexture LOOSE_CHARGE = new EmiTexture(WIDGETS, 50, 0, chargeWidth, chargeHeight);
+    //Data Processing Maps
     protected static final Map<String, EmiStack> recipeTypes = new HashMap<>();
     protected static final Map<String, EmiStack> multiblocks = new HashMap<>();
     protected static final Map<String, EmiStack> items = new HashMap<>();
-    private static final Logger logger = LoggerFactory.getLogger("sftoemi");
-    private static final String errorMessage = "[SFtoEMI] Failed to parse persistent data";
-    private static final InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("data.json");
+    //Data Loading Things
     private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();
-    private static final JsonObject jsonObject = inputStream != null ? GSON.fromJson(new InputStreamReader(inputStream), JsonObject.class) : null;
+    private static final InputStream dataStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("data.json");
+    private static final JsonObject jsonObject = dataStream != null ? GSON.fromJson(new InputStreamReader(dataStream), JsonObject.class) : null;
+     //Defaults
+    private static final InputStream defaultStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("defaults.json");
+    private static final JsonObject defaultObject = defaultStream != null ? GSON.fromJson(new InputStreamReader(defaultStream), JsonObject.class) : null;
 
     @Override
     public void register(EmiRegistry emiRegistry) {
         emiRegistry.addRecipeHandler(ScreenHandlerType.GENERIC_3X3, new MultiblockHandler());
-        final JsonObject totalRecipes = jsonObject != null ? jsonObject.getAsJsonObject("recipes") : jsonObject;
-        if (totalRecipes != null) {
+        loadItems();
+
+        final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+        final JsonArray defaults = defaultObject.getAsJsonArray(modConfig.getUseMachineDefaults() ? "machines" : "multiblocks");
+        final JsonArray otherDefaults = defaultObject.getAsJsonArray(! modConfig.getUseMachineDefaults() ? "machines" : "multiblocks");
+        final JsonObject totalRecipes = jsonObject != null ? jsonObject.getAsJsonObject("recipes") : null;
+
+        if (totalRecipes != null && defaults != null) {
             for (String workstationId : totalRecipes.keySet()) {
 
                 final EmiStack workstationStack = getWorkstationStack(workstationId);
@@ -94,6 +93,10 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
                         continue;
                     }
 
+                    //Define important Variables
+                    final List<EmiIngredient> inputs = new ArrayList<>();
+                    final List<EmiStack> outputs = new ArrayList<>();
+                    final StringBuilder uniqueId = new StringBuilder().append("sftoemi:/").append(workstationId.toLowerCase());
                     final JsonArray recipeInputs = recipe.getAsJsonArray("inputs");
                     final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs");
                     final Integer ticks = recipe.get("time") != null ? recipe.get("time").getAsInt() : 0;
@@ -103,45 +106,60 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
                         continue;
                     }
 
-                    final List<EmiIngredient> inputs = new ArrayList<>();
-                    final List<EmiStack> outputs = new ArrayList<>();
-
+                    //Fill Inputs
                     for (JsonElement jsonElement : recipeInputs) {
                         if (jsonElement instanceof JsonArray jsonArray) {
                             final List<EmiStack> multiples = new ArrayList<>();
                             for (JsonElement subJsonElement : jsonArray) {
-                                final String input = subJsonElement.getAsString();
-                                if (input.equals("")) {
-                                    inputs.add(EmiIngredient.of(Ingredient.EMPTY));
-                                } else {
-                                    final String inputId = input.substring(0, input.indexOf(":"));
-                                    final int amount = Integer.parseInt(input.substring(input.indexOf(":") + 1));
-                                    multiples.add(getStackFromId(inputId).copy().setAmount(amount));
+                                final EmiStack input = getStackFromElement(subJsonElement, false);
+                                if (input != null) {
+                                    multiples.add(input);
                                 }
                             }
                             inputs.add(EmiIngredient.of(multiples));
                         } else {
-                            final String input = jsonElement.getAsString();
-                            if (input.equals("")) {
-                                inputs.add(EmiIngredient.of(Ingredient.EMPTY));
-                            } else {
-                                final String inputId = input.substring(0, input.indexOf(":"));
-                                final int amount = Integer.parseInt(input.substring(input.indexOf(":") + 1));
-                                inputs.add(getStackFromId(inputId).copy().setAmount(amount));
+                            final EmiStack input = getStackFromElement(jsonElement, true);
+                            if (input != null) {
+                                inputs.add(input);
                             }
                         }
                     }
 
+                    //Fill Outputs
                     for (JsonElement jsonElement : recipeOutputs) {
-                        final String output = jsonElement.getAsString();
-                        if (! output.equals("")) {
-                            final String outputId = output.substring(0, output.indexOf(":"));
-                            final int amount = Integer.parseInt(output.substring(output.indexOf(":") + 1));
-                            outputs.add(getStackFromId(outputId).copy().setAmount(amount));
+                        final EmiStack output = getStackFromElement(jsonElement, false);
+                        if (output != null) {
+                            outputs.add(output);
                         }
                     }
 
-                    addRecipe(emiRegistry, getCategoryId(workstationId), emiRecipeCategory, inputs, outputs, ticks, energy);
+                    //Remove any parts of the String that cannot be an Identifier
+                    for (char x : recipe.toString().toLowerCase().toCharArray()) {
+                        if (Character.isLetterOrDigit(x)) {
+                            uniqueId.append(x);
+                        }
+                    }
+
+                    if (emiRegistry.getRecipeManager().get(new Identifier(uniqueId.toString())).isPresent()) {
+                        continue;
+                    }
+
+                    //Get and Register the Recipe
+                    final EmiRecipe emiRecipe = getRecipe(getCategoryId(workstationId), emiRecipeCategory, new Identifier(uniqueId.toString()), inputs, outputs, ticks, energy);
+                    emiRegistry.addRecipe(emiRecipe);
+
+                    //Add default Recipes
+                    if (defaults.contains(new JsonPrimitive(uniqueId.toString()))) {
+                        for (EmiStack output : outputs) {
+                            EmiRecipe defaultRecipe = BoM.getRecipe(output);
+                            if (defaultRecipe != null && otherDefaults.contains(new JsonPrimitive(defaultRecipe.getId().toString()))) {
+                                BoM.removeRecipe(defaultRecipe);
+                                BoM.addRecipe(emiRecipe, output);
+                            } else if (defaultRecipe == null) {
+                                BoM.addRecipe(emiRecipe, output);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -151,40 +169,44 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
         for (String itemId : itemIds) {
             emiRegistry.addEmiStack(items.get(itemId));
         }
+
+        recipeTypes.clear();
+        multiblocks.clear();
+        items.clear();
     }
 
     @Override
     public void onInitializeClient() {
-        loadItems();
+        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
     }
 
-    private void addRecipe(EmiRegistry emiRegistry, String type, EmiRecipeCategory emiRecipeCategory, List<EmiIngredient> inputs, List<EmiStack> outputs, Integer ticks, Integer energy) {
+    private EmiRecipe getRecipe(String type, EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs, Integer ticks, Integer energy) {
         final EmiRecipe recipe;
         switch (type) {
             case "ancient_altar":
-                recipe = new AncientAltarRecipe(emiRecipeCategory, null, inputs, outputs);
+                recipe = new AncientAltarRecipe(emiRecipeCategory, id, inputs, outputs);
                 break;
             case "machine":
                 if (ticks == 0 || energy == 0) {
-                    recipe = new OtherRecipe(emiRecipeCategory, null, inputs, outputs);
+                    recipe = new OtherRecipe(emiRecipeCategory, id, inputs, outputs);
                 } else {
-                    recipe = new MachineRecipe(emiRecipeCategory, null, inputs, outputs, ticks, energy);
+                    recipe = new MachineRecipe(emiRecipeCategory, id, inputs, outputs, ticks, energy);
                 }
                 break;
             case "trade":
-                recipe = new TradeRecipe(emiRecipeCategory, null, inputs, outputs);
+                recipe = new TradeRecipe(emiRecipeCategory, id, inputs, outputs);
                 break;
             case "kill":
-                recipe = new KillRecipe(emiRecipeCategory, null, inputs, outputs);
+                recipe = new KillRecipe(emiRecipeCategory, id, inputs, outputs);
                 break;
             case "smeltery":
-                recipe = new SmelteryRecipe(emiRecipeCategory, null, inputs, outputs, ticks, energy);
+                recipe = new SmelteryRecipe(emiRecipeCategory, id, inputs, outputs, ticks, energy);
                 break;
             default:
-                recipe = new MultiBlockRecipe(emiRecipeCategory, null, inputs, outputs);
+                recipe = new MultiBlockRecipe(emiRecipeCategory, id, inputs, outputs);
                 break;
         }
-        emiRegistry.addRecipe(recipe);
+        return recipe;
     }
 
     private String getCategoryId(String workstationId) {
@@ -192,7 +214,7 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
             return "multiblock." + workstationId;
         } else if (workstationId.contains("ANCIENT_ALTAR")) {
             return "ancient_altar";
-        } else if (workstationId.contains("TRADE_PIGLIN")) {
+        } else if (workstationId.contains("TRADE")) {
             return "trade";
         } else if (workstationId.contains("KILL")) {
             return "kill";
@@ -203,7 +225,7 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
         } else if (items.containsKey(workstationId) || recipeTypes.containsKey(workstationId)) {
             return "machine";
         }
-        return "ERROR";
+        return "error";
     }
 
     private EmiStack getWorkstationStack(String workstationId) {
@@ -218,15 +240,29 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
     }
 
     private EmiStack getStackFromId(String id) {
-        if (items.containsKey(id)) {
-            return items.get(id).comparison(original -> original.copy().nbt(true).build()).setAmount(1);
+        final String first = id.substring(0, id.indexOf(":"));
+        final String second = id.substring(id.indexOf(":") + 1);
+        if (items.containsKey(first)) {
+            return items.get(first).comparison(original -> original.copy().nbt(true).build()).copy().setAmount(Integer.parseInt(second));
         } else {
-            if (id.equals("iron_golem")) {
-                return EmiStack.EMPTY;
+            if (first.equals("entity")) {
+                return new EntityEmiStack(Registry.ENTITY_TYPE.get(new Identifier("minecraft:" + second)).create(MinecraftClient.getInstance().world));
             } else {
-                return EmiStack.of(Registry.ITEM.get(new Identifier("minecraft:" + id.toLowerCase())));
+                return EmiStack.of(Registry.ITEM.get(new Identifier("minecraft:" + first.toLowerCase()))).copy().setAmount(Integer.parseInt(second));
             }
         }
+    }
+
+    private EmiStack getStackFromElement(JsonElement jsonElement, boolean empty) {
+        final String id = jsonElement.getAsString();
+
+        if (! id.equals("")) {
+            return getStackFromId(id);
+        } else if (empty) {
+            return EmiStack.EMPTY;
+        }
+
+        return null;
     }
 
     private void loadItems() {
@@ -264,8 +300,7 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
             }
 
         } catch (Exception e) {
-            logger.error(errorMessage);
-            e.printStackTrace();
+            Utils.error(e);
         }
     }
 }
