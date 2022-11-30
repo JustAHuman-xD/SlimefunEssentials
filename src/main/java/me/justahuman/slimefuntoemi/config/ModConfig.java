@@ -13,12 +13,29 @@ class ModConfig implements ConfigData {
     @ConfigEntry.Category("addons")
     @ConfigEntry.Gui.Tooltip
     boolean enableInfinityExpansion = false;
+    @ConfigEntry.Category("addons")
+    @ConfigEntry.Gui.Tooltip
+    boolean enableSpiritsUnchained = false;
+    @ConfigEntry.Category("addons")
+    @ConfigEntry.Gui.Tooltip
+    boolean enableEcoPower = false;
+    @ConfigEntry.Category("addons")
+    @ConfigEntry.Gui.Tooltip
+    boolean enableElectricSpawners = false;
 
-    public boolean getUseMachineDefaults() {
+    public boolean useMachineDefaults() {
         return useMachineDefaults;
     }
-
-    public boolean getEnableInfinityExpansion() {
+    public boolean enableInfinityExpansion() {
         return enableInfinityExpansion;
+    }
+    public boolean enableElectricSpawners() {
+        return enableElectricSpawners;
+    }
+    public boolean enableEcoPower() {
+        return enableEcoPower;
+    }
+    public boolean enableSpiritsUnchained() {
+        return enableSpiritsUnchained;
     }
 }

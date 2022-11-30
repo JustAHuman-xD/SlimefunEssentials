@@ -27,7 +27,9 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.item.Item;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -58,11 +60,29 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
         loadItems();
 
         final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-        final JsonArray defaults = defaultObject.getAsJsonArray(modConfig.getUseMachineDefaults() ? "machines" : "multiblocks");
-        final JsonArray otherDefaults = defaultObject.getAsJsonArray(! modConfig.getUseMachineDefaults() ? "machines" : "multiblocks");
-        final JsonObject totalRecipes = jsonObject != null ? jsonObject.getAsJsonObject("recipes") : null;
+        final JsonArray defaults = defaultObject.getAsJsonArray(modConfig.useMachineDefaults() ? "machines" : "multiblocks");
+        final JsonArray otherDefaults = defaultObject.getAsJsonArray(! modConfig.useMachineDefaults() ? "machines" : "multiblocks");
 
-        if (totalRecipes != null && defaults != null) {
+        loadRecipes(emiRegistry, "core", defaults, otherDefaults);
+        for (String addon : getEnabledAddons()) {
+            loadRecipes(emiRegistry, addon, defaults, otherDefaults);
+        }
+
+        final List<String> itemIds = new ArrayList<>(items.keySet());
+        itemIds.sort(Comparator.naturalOrder());
+        for (String itemId : itemIds) {
+            emiRegistry.addEmiStack(items.get(itemId));
+        }
+
+        recipeTypes.clear();
+        multiblocks.clear();
+        items.clear();
+    }
+
+    private void loadRecipes(EmiRegistry emiRegistry, String sectionKey, JsonArray defaults, JsonArray otherDefaults) {
+        final JsonObject sectionJson = jsonObject != null ? jsonObject.getAsJsonObject(sectionKey) : null;
+        final JsonObject totalRecipes = sectionJson != null ? sectionJson.getAsJsonObject("recipes") : null;
+        if (totalRecipes != null && defaults != null && otherDefaults != null) {
             for (String workstationId : totalRecipes.keySet()) {
 
                 final EmiStack workstationStack = getWorkstationStack(workstationId);
@@ -109,16 +129,16 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
                     //Fill Inputs
                     for (JsonElement jsonElement : recipeInputs) {
                         if (jsonElement instanceof JsonArray jsonArray) {
-                            final List<EmiStack> multiples = new ArrayList<>();
+                            final List<EmiIngredient> multiples = new ArrayList<>();
                             for (JsonElement subJsonElement : jsonArray) {
-                                final EmiStack input = getStackFromElement(subJsonElement, false);
+                                final EmiIngredient input = getStackFromElement(subJsonElement, false);
                                 if (input != null) {
                                     multiples.add(input);
                                 }
                             }
                             inputs.add(EmiIngredient.of(multiples));
                         } else {
-                            final EmiStack input = getStackFromElement(jsonElement, true);
+                            final EmiIngredient input = getStackFromElement(jsonElement, true);
                             if (input != null) {
                                 inputs.add(input);
                             }
@@ -127,7 +147,7 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
 
                     //Fill Outputs
                     for (JsonElement jsonElement : recipeOutputs) {
-                        final EmiStack output = getStackFromElement(jsonElement, false);
+                        final EmiStack output = (EmiStack) getStackFromElement(jsonElement, false);
                         if (output != null) {
                             outputs.add(output);
                         }
@@ -163,16 +183,6 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
                 }
             }
         }
-
-        final List<String> itemIds = new ArrayList<>(items.keySet());
-        itemIds.sort(Comparator.naturalOrder());
-        for (String itemId : itemIds) {
-            emiRegistry.addEmiStack(items.get(itemId));
-        }
-
-        recipeTypes.clear();
-        multiblocks.clear();
-        items.clear();
     }
 
     @Override
@@ -222,6 +232,8 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
             return "use";
         } else if (workstationId.contains("SMELTERY")) {
             return "smeltery";
+        } else if (workstationId.contains("MULTIBLOCK")) {
+            return "multiblock";
         } else if (items.containsKey(workstationId) || recipeTypes.containsKey(workstationId)) {
             return "machine";
         }
@@ -239,21 +251,26 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
         return new EmptyEmiStack();
     }
 
-    private EmiStack getStackFromId(String id) {
+    private EmiIngredient getStackFromId(String id) {
         final String first = id.substring(0, id.indexOf(":"));
         final String second = id.substring(id.indexOf(":") + 1);
         if (items.containsKey(first)) {
             return items.get(first).comparison(original -> original.copy().nbt(true).build()).copy().setAmount(Integer.parseInt(second));
+        } else if (multiblocks.containsKey(first)) {
+            return multiblocks.get(first).comparison(original -> original.copy().nbt(true).build()).copy().setAmount(Integer.parseInt(second));
         } else {
             if (first.equals("entity")) {
                 return new EntityEmiStack(Registry.ENTITY_TYPE.get(new Identifier("minecraft:" + second)).create(MinecraftClient.getInstance().world));
+            } else if (first.contains("#")) {
+                final TagKey<Item> tagKey = TagKey.of(Registry.ITEM_KEY, new Identifier("minecraft", first.substring(1)));
+                return EmiIngredient.of(tagKey);
             } else {
                 return EmiStack.of(Registry.ITEM.get(new Identifier("minecraft:" + first.toLowerCase()))).copy().setAmount(Integer.parseInt(second));
             }
         }
     }
 
-    private EmiStack getStackFromElement(JsonElement jsonElement, boolean empty) {
+    private EmiIngredient getStackFromElement(JsonElement jsonElement, boolean empty) {
         final String id = jsonElement.getAsString();
 
         if (! id.equals("")) {
@@ -265,14 +282,17 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
         return null;
     }
 
-    private void loadItems() {
-        if (jsonObject == null) {
-            return;
-        }
+    private void loadSection(String sectionKey) {
         try {
-            final JsonObject itemsJson = jsonObject.getAsJsonObject("items");
-            final JsonObject recipeTypeJson = jsonObject.getAsJsonObject("recipe_types");
-            final JsonObject multiblockJson = jsonObject.getAsJsonObject("multiblocks");
+            final JsonObject sectionJson = jsonObject.getAsJsonObject(sectionKey);
+
+            if (sectionJson == null) {
+                return;
+            }
+
+            final JsonObject itemsJson = sectionJson.getAsJsonObject("items");
+            final JsonObject recipeTypeJson = sectionJson.getAsJsonObject("recipe_types");
+            final JsonObject multiblockJson = sectionJson.getAsJsonObject("multiblocks");
 
             if (itemsJson != null && ! itemsJson.keySet().isEmpty()) {
                 for (String slimefunId : itemsJson.keySet()) {
@@ -302,5 +322,35 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
         } catch (Exception e) {
             Utils.error(e);
         }
+    }
+
+    private void loadItems() {
+        if (jsonObject == null) {
+            return;
+        }
+
+        loadSection("core");
+        for (String addon : getEnabledAddons()) {
+            loadSection(addon);
+        }
+    }
+
+    private List<String> getEnabledAddons() {
+        final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+        final List<String> addonList = new ArrayList<>();
+
+        if (modConfig.enableSpiritsUnchained()) {
+            addonList.add("spirits_unchained");
+        }
+
+        if (modConfig.enableElectricSpawners()) {
+            addonList.add("electric_spawners");
+        }
+
+        if (modConfig.enableEcoPower()) {
+            addonList.add("eco_power");
+        }
+
+        return addonList;
     }
 }
