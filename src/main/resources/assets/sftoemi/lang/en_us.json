@@ -11,8 +11,8 @@
   "sftoemi.missing_entity": "Missing Entity!",
 
   "sftoemi.recipe.time": "%s Seconds (%s Ticks)",
-  "sftoemi.recipe.energy.use": "%sj Used",
-  "sftoemi.recipe.energy.generate": "%sj Generated",
+  "sftoemi.recipe.energy.use": "%sJ Used",
+  "sftoemi.recipe.energy.generate": "%sJ Generated",
 
   "text.autoconfig.sftoemi.title": "Slimefun To EMI Config Options!",
   "text.autoconfig.sftoemi.category.general": "General Settings",
