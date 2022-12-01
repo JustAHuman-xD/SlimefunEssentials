@@ -260,7 +260,7 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
     private EmiStack getWorkstationStack(String workstationId) {
         for (String specialCase : specialCases) {
             if (workstationId.contains(specialCase)) {
-                workstationId = workstationId.substring(workstationId.indexOf(specialCase) + specialCase.length() + 1);
+                workstationId = workstationId.substring(workstationId.indexOf(specialCase) + specialCase.length());
             }
         }
         if (multiblocks.containsKey(workstationId)) {

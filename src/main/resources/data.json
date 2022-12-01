@@ -3420,7 +3420,7 @@
                     "energy": -176
                 }, {
                     "outputs": ["mushroom_stew:1"],
-                    "inputs": ["bowl:1"],
+                    "inputs": ["bowl:1", "entity:mooshroom"],
                     "time": 110,
                     "energy": -176
                 }
@@ -27996,5 +27996,5 @@
                 "type": "emi:item"
             }
         }
-    }    
+    }
 }
