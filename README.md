@@ -1,10 +1,12 @@
 # SlimefunToEmi
 Slimefun to EMI is a minecraft mod that adds items from the Slimefun4 plugin and addons to EMI the recipe viewer mod! As time passes I will add support for more and more slimefun 4 addons as well as various abstract recipes from slimefun and its addons!
-
-Configuration (requires mod menu & cloth config):
-
-Toggle for Manual or Machine default Recipes (for the recipe trees. See What does it do)
-Toggle for all Slimefun Addon Support
+# Dependencies
+- EMI (Required)
+- Cloth Config API (Required)
+- Mod Menu (Optional)
+# Configuration (requires cloth config api, mod menu optional for in game menu):
+- Toggle for Manual or Machine default Recipes (for the recipe trees. See What does it do)
+- Toggle for all Slimefun Addon Support
 # What does it do:
 - Includes all Core Slimefun Items
 - Includes all Core Slimefun Item Recipes
