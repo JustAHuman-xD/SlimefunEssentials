@@ -21,7 +21,7 @@
   "text.autoconfig.sftoemi.category.addons": "Toggle Addons",
   "text.autoconfig.sftoemi.option.enableInfinityExpansion": "Infinity Expansion Support",
   "text.autoconfig.sftoemi.option.enableInfinityExpansion.@Tooltip": "Should InfinityExpansion Items & Recipes Be Enabled",
-  "text.autoconfig.sftoemi.option.enableSpiritsUnchained": "Should SpiritsUnchained Support",
+  "text.autoconfig.sftoemi.option.enableSpiritsUnchained": "SpiritsUnchained Support",
   "text.autoconfig.sftoemi.option.enableSpiritsUnchained.@Tooltip": "Should SpiritsUnchained Items & Recipes Be Enabled",
   "text.autoconfig.sftoemi.option.enableSoulJars": "SoulJars Support",
   "text.autoconfig.sftoemi.option.enableSoulJars.@Tooltip": "Should SoulJars Items & Recipes Be Enabled",
