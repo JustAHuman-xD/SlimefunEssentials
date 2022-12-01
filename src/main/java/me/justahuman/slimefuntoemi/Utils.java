@@ -21,6 +21,10 @@ public class Utils {
     private static final Logger logger = LoggerFactory.getLogger("sftoemi");
     private static final String errorMessage = "[SFtoEMI] Failed to parse persistent data";
 
+    public static void log(String message) {
+        logger.info(message);
+    }
+
     public static void error(Exception exception) {
         logger.error(errorMessage);
         exception.printStackTrace();

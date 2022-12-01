@@ -8,11 +8,11 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class MultiBlockRecipe extends EmiCraftingRecipe {
+public class ThreeByThreeRecipe extends EmiCraftingRecipe {
 
     private final EmiRecipeCategory emiRecipeCategory;
 
-    public MultiBlockRecipe(EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs) {
+    public ThreeByThreeRecipe(EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs) {
         super(inputs, outputs.isEmpty() ? EmiStack.EMPTY : outputs.get(0), id);
         this.emiRecipeCategory = emiRecipeCategory;
     }

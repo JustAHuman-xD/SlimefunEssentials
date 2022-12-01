@@ -7,7 +7,6 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefuntoemi.Utils;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,15 +63,20 @@ public class KillRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final int offsetX = getDisplayWidth() / 2 - (Utils.slotWidth + Utils.bigSlotWidth + Utils.arrowWidth + Utils.slotWidth + 12) /2;
+        int offsetX = getDisplayWidth() / 2 - ((inputs.get(0) == EmiStack.EMPTY ? 0 : Utils.slotWidth) + Utils.bigSlotWidth + Utils.arrowWidth + Utils.slotWidth + 12) /2;
         final int offsetYS = (getDisplayHeight() - Utils.slotHeight) / 2;
         final int offsetYO = (getDisplayHeight() - Utils.bigSlotHeight) / 2;
         final int offsetYA = (getDisplayHeight() - Utils.arrowHeight) / 2;
 
-        widgets.addSlot(EmiStack.of(Items.DIAMOND_SWORD), offsetX, offsetYS);
-        widgets.addSlot(inputs.get(0), offsetX + Utils.slotWidth + 4, offsetYO).output(true);
-        widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX + Utils.slotWidth + Utils.bigSlotWidth + 8, offsetYA);
-        widgets.addSlot(outputs.get(0), offsetX + Utils.slotWidth + Utils.bigSlotWidth + Utils.arrowWidth + 12, offsetYS);
+        if (inputs.get(0) != EmiStack.EMPTY) {
+            widgets.addSlot(inputs.get(0), offsetX, offsetYS);
+            offsetX = offsetX + Utils.slotWidth + 4;
+        }
+        widgets.addSlot(inputs.get(1), offsetX, offsetYO).output(true);
+        offsetX = offsetX + Utils.bigSlotWidth + 4;
+        widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetYA);
+        offsetX = offsetX + Utils.arrowWidth + 4;
+        widgets.addSlot(outputs.get(0), offsetX, offsetYS);
     }
 
     @Override
