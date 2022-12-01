@@ -10,6 +10,7 @@ Toggle for all Slimefun Addon Support
 - Includes all Core Slimefun Item Recipes
 - Includes all Core Slimefun Machine Recipes
 - Includes all Core Slimefun Generator Recipes
+- Fill Multiblock Recipes into the Dispensers of Multiblocks with a click of a Button!
 - Supports Core Recipe Trees
 - Includes Various Addon Items & Recipes (See Addon List)
 # How does it do it:
