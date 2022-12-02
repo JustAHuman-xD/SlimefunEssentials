@@ -141,14 +141,17 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
                     //Fill Inputs
                     for (JsonElement jsonElement : recipeInputs) {
                         if (jsonElement instanceof JsonArray jsonArray) {
+                            long amount = 0;
                             final List<EmiIngredient> multiples = new ArrayList<>();
                             for (JsonElement subJsonElement : jsonArray) {
-                                final EmiIngredient input = getStackFromElement(subJsonElement, false);
+                                final EmiStack input = (EmiStack) getStackFromElement(subJsonElement, false);
                                 if (input != null) {
+                                    amount = input.getAmount();
+                                    input.setAmount(1);
                                     multiples.add(input);
                                 }
                             }
-                            inputs.add(EmiIngredient.of(multiples));
+                            inputs.add(EmiIngredient.of(multiples, amount));
                         } else {
                             final EmiIngredient input = getStackFromElement(jsonElement, true);
                             if (input != null) {
