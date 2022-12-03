@@ -7,9 +7,12 @@
   "authors": [
     "JustAHuman_xD"
   ],
-  "homepage": "https://github.com/JustAHuman-xD/SlimefunToEMI",
-  "issues": "https://github.com/JustAHuman-xD/SlimefunToEMI/issues",
-  "contact": {},
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/slimefun-to-emi",
+    "sources": "https://github.com/JustAHuman-xD/SlimefunToEMI",
+    "issues": "https://github.com/JustAHuman-xD/SlimefunToEMI/issues",
+    "discord": "https://discord.gg/y6fV6pbgHB"
+  },
   "license": "MIT",
   "icon": "assets/sftoemi/icon.png",
   "environment": "client",
@@ -28,5 +31,13 @@
     "fabricloader": ">=0.14.10",
     "fabric": "*",
     "minecraft": "1.19.2"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.website": "https://www.curseforge.com/members/traben_0/projects",
+        "modmenu.discord": "https://discord.gg/y6fV6pbgHB"
+      }
+    }
   }
 }
