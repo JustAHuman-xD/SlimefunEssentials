@@ -1,6 +1,7 @@
 package me.justahuman.slimefunessentials;
 
 import dev.emi.emi.api.render.EmiTexture;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,5 +29,9 @@ public class Utils {
     public static void error(Exception exception) {
         logger.error(errorMessage);
         exception.printStackTrace();
+    }
+
+    public static boolean isClothConfigEnabled() {
+        return FabricLoader.getInstance().isModLoaded("cloth-config2");
     }
 }

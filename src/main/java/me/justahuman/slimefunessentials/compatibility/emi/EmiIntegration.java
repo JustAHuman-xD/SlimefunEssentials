@@ -72,9 +72,8 @@ public class EmiIntegration implements EmiPlugin {
         emiRegistry.addRecipeHandler(ScreenHandlerType.GENERIC_3X3, new MultiblockHandler());
         loadItems();
 
-        final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-        final JsonArray defaults = defaultObject.getAsJsonArray(modConfig.useMachineDefaults() ? "machines" : "multiblocks");
-        final JsonArray otherDefaults = defaultObject.getAsJsonArray(! modConfig.useMachineDefaults() ? "machines" : "multiblocks");
+        final JsonArray defaults = defaultObject.getAsJsonArray(getDefaults());
+        final JsonArray otherDefaults = defaultObject.getAsJsonArray(getOtherDefaults());
 
         loadRecipes(emiRegistry, "core", defaults, otherDefaults);
         for (String addon : getEnabledAddons()) {
@@ -365,52 +364,72 @@ public class EmiIntegration implements EmiPlugin {
         }
     }
 
+    private String getDefaults() {
+        String toReturn = "multiblocks";
+        if (Utils.isClothConfigEnabled()) {
+            final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+            toReturn = modConfig.useMachineDefaults() ? "machines" : "multiblocks";
+        }
+        return toReturn;
+    }
+
+    private String getOtherDefaults() {
+        String toReturn = "machines";
+        if (Utils.isClothConfigEnabled()) {
+            final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+            toReturn = ! modConfig.useMachineDefaults() ? "machines" : "multiblocks";
+        }
+        return toReturn;
+    }
+
     private List<String> getEnabledAddons() {
-        final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
         final List<String> addonList = new ArrayList<>();
+        if (Utils.isClothConfigEnabled()) {
+            final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
-        if (modConfig.enableSpiritsUnchained()) {
-            addonList.add("spirits_unchained");
-        }
+            if (modConfig.enableSpiritsUnchained()) {
+                addonList.add("spirits_unchained");
+            }
 
-        if (modConfig.enableElectricSpawners()) {
-            addonList.add("electric_spawners");
-        }
+            if (modConfig.enableElectricSpawners()) {
+                addonList.add("electric_spawners");
+            }
 
-        if (modConfig.enableEcoPower()) {
-            addonList.add("eco_power");
-        }
+            if (modConfig.enableEcoPower()) {
+                addonList.add("eco_power");
+            }
 
-        if (modConfig.enableExoticGarden()) {
-            addonList.add("exotic_garden");
-        }
+            if (modConfig.enableExoticGarden()) {
+                addonList.add("exotic_garden");
+            }
 
-        if (modConfig.enableHotbarPets()) {
-            addonList.add("hotbar_pets");
-        }
+            if (modConfig.enableHotbarPets()) {
+                addonList.add("hotbar_pets");
+            }
 
-        if (modConfig.enableExtraGear()) {
-            addonList.add("extra_gear");
-        }
+            if (modConfig.enableExtraGear()) {
+                addonList.add("extra_gear");
+            }
 
-        if (modConfig.enableLuckyBlocks()) {
-            addonList.add("lucky_blocks");
-        }
+            if (modConfig.enableLuckyBlocks()) {
+                addonList.add("lucky_blocks");
+            }
 
-        if (modConfig.enableSoulJars()) {
-            addonList.add("soul_jars");
-        }
+            if (modConfig.enableSoulJars()) {
+                addonList.add("soul_jars");
+            }
 
-        if (modConfig.enableSlimyTreeTaps()) {
-            addonList.add("slimy_tree_taps");
-        }
+            if (modConfig.enableSlimyTreeTaps()) {
+                addonList.add("slimy_tree_taps");
+            }
 
-        if (modConfig.enableDankTech()) {
-            addonList.add("dank_tech");
-        }
+            if (modConfig.enableDankTech()) {
+                addonList.add("dank_tech");
+            }
 
-        if (modConfig.enableTransCendence()) {
-            addonList.add("transcendence");
+            if (modConfig.enableTransCendence()) {
+                addonList.add("transcendence");
+            }
         }
 
         return addonList;
