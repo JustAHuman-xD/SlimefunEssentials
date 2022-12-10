@@ -1,4 +1,4 @@
-package me.justahuman.slimefuntoemi.config;
+package me.justahuman.slimefunessentials.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;

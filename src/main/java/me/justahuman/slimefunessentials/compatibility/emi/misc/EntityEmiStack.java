@@ -1,4 +1,4 @@
-package me.justahuman.slimefuntoemi;
+package me.justahuman.slimefunessentials.compatibility.emi.misc;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.emi.emi.EmiPort;
@@ -33,7 +33,7 @@ public class EntityEmiStack extends EmiStack {
     private final EntityEntry entry;
     private final double scale;
 
-    protected EntityEmiStack(@Nullable Entity entity) {
+    public EntityEmiStack(@Nullable Entity entity) {
         this.entity = entity;
         this.entry = new EntityEntry(entity);
         this.scale = 8.0f;

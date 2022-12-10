@@ -1,10 +1,11 @@
-package me.justahuman.slimefuntoemi;
+package me.justahuman.slimefunessentials.compatibility.emi;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+
 import dev.emi.emi.EmiStackSerializer;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -14,19 +15,23 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmptyEmiStack;
 import dev.emi.emi.bom.BoM;
-import me.justahuman.slimefuntoemi.config.ModConfig;
-import me.justahuman.slimefuntoemi.recipehandler.MultiblockHandler;
-import me.justahuman.slimefuntoemi.recipetype.AncientAltarRecipe;
-import me.justahuman.slimefuntoemi.recipetype.KillRecipe;
-import me.justahuman.slimefuntoemi.recipetype.MachineRecipe;
-import me.justahuman.slimefuntoemi.recipetype.MultiblockRecipe;
-import me.justahuman.slimefuntoemi.recipetype.OtherRecipe;
-import me.justahuman.slimefuntoemi.recipetype.SmelteryRecipe;
-import me.justahuman.slimefuntoemi.recipetype.ThreeByThreeRecipe;
-import me.justahuman.slimefuntoemi.recipetype.TradeRecipe;
+
+import me.justahuman.slimefunessentials.Utils;
+import me.justahuman.slimefunessentials.compatibility.emi.misc.Category;
+import me.justahuman.slimefunessentials.compatibility.emi.misc.EntityEmiStack;
+import me.justahuman.slimefunessentials.compatibility.emi.recipehandler.MultiblockHandler;
+import me.justahuman.slimefunessentials.compatibility.emi.recipetype.AncientAltarRecipe;
+import me.justahuman.slimefunessentials.compatibility.emi.recipetype.KillRecipe;
+import me.justahuman.slimefunessentials.compatibility.emi.recipetype.MachineRecipe;
+import me.justahuman.slimefunessentials.compatibility.emi.recipetype.MultiblockRecipe;
+import me.justahuman.slimefunessentials.compatibility.emi.recipetype.OtherRecipe;
+import me.justahuman.slimefunessentials.compatibility.emi.recipetype.SmelteryRecipe;
+import me.justahuman.slimefunessentials.compatibility.emi.recipetype.ThreeByThreeRecipe;
+import me.justahuman.slimefunessentials.compatibility.emi.recipetype.TradeRecipe;
+import me.justahuman.slimefunessentials.config.ModConfig;
+
 import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import net.fabricmc.api.ClientModInitializer;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
 import net.minecraft.screen.ScreenHandlerType;
@@ -46,7 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
+public class EmiIntegration implements EmiPlugin {
     //Data Processing Maps
     protected static final Set<String> specialCases = Collections.singleton("3X3_");
     protected static final Map<String, EmiRecipeCategory> categories = new HashMap<>();
@@ -58,7 +63,7 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
     private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();
     private static final InputStream dataStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("data.json");
     private static final JsonObject jsonObject = dataStream != null ? GSON.fromJson(new InputStreamReader(dataStream), JsonObject.class) : null;
-     //Defaults
+    //Defaults
     private static final InputStream defaultStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("defaults.json");
     private static final JsonObject defaultObject = defaultStream != null ? GSON.fromJson(new InputStreamReader(defaultStream), JsonObject.class) : null;
 
@@ -101,11 +106,11 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
                     continue;
                 }
 
-                final String categoryId = "sftoemi:" + getCategoryId(workstationId).toLowerCase();
+                final String categoryId = "slimefunessentials:" + getCategoryId(workstationId).toLowerCase();
                 final EmiRecipeCategory emiRecipeCategory;
 
                 if (categories.containsKey(categoryId + workstationId)) {
-                  emiRecipeCategory = categories.get(categoryId + workstationId);
+                    emiRecipeCategory = categories.get(categoryId + workstationId);
                 } else {
                     emiRecipeCategory = new Category(new Identifier(categoryId), workstationStack, workstationStack.getItemStack().getName());
                     emiRegistry.addCategory(emiRecipeCategory);
@@ -128,7 +133,7 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
                     //Define important Variables
                     final List<EmiIngredient> inputs = new ArrayList<>();
                     final List<EmiStack> outputs = new ArrayList<>();
-                    final StringBuilder uniqueId = new StringBuilder().append("sftoemi:/").append(workstationId.toLowerCase());
+                    final StringBuilder uniqueId = new StringBuilder().append("slimefunessentials:/").append(workstationId.toLowerCase());
                     final JsonArray recipeInputs = recipe.getAsJsonArray("inputs");
                     final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs");
                     final Integer ticks = recipe.get("time") != null ? recipe.get("time").getAsInt() : 0;
@@ -198,11 +203,6 @@ public class SlimefunToEMI implements EmiPlugin, ClientModInitializer {
                 }
             }
         }
-    }
-
-    @Override
-    public void onInitializeClient() {
-        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
     }
 
     private EmiRecipe getRecipe(String type, EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs, Integer ticks, Integer energy) {
