@@ -14,7 +14,7 @@ Slimefun Essentials is a minecraft mod dedicated to add support for Slimefun4 it
 - Adds Support for Slimefun Recipes to EMI
 - More Coming Soon™
 # Specifics:
-When viewing a Machine Recipe, hover over the elctrictity symbol to see how much was produced/used, and hover over the arrow to see how long the recipe takes in seconds & ticks.
+When viewing a Machine Recipe, hover over the electricity symbol to see how much was produced/used, and hover over the arrow to see how long the recipe takes in seconds & ticks.
 
 # Addon List (with more coming):
 
