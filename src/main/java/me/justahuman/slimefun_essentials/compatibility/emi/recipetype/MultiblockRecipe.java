@@ -1,4 +1,4 @@
-package me.justahuman.slimefunessentials.compatibility.emi.recipetype;
+package me.justahuman.slimefun_essentials.compatibility.emi.recipetype;
 
 import dev.emi.emi.api.recipe.EmiCraftingRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -8,11 +8,11 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class ThreeByThreeRecipe extends EmiCraftingRecipe {
+public class MultiblockRecipe extends EmiCraftingRecipe {
 
     private final EmiRecipeCategory emiRecipeCategory;
 
-    public ThreeByThreeRecipe(EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs) {
+    public MultiblockRecipe(EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs) {
         super(inputs, outputs.isEmpty() ? EmiStack.EMPTY : outputs.get(0), id);
         this.emiRecipeCategory = emiRecipeCategory;
     }

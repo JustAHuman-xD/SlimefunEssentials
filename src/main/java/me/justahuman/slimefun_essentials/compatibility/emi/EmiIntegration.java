@@ -1,4 +1,4 @@
-package me.justahuman.slimefunessentials.compatibility.emi;
+package me.justahuman.slimefun_essentials.compatibility.emi;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -16,19 +16,19 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmptyEmiStack;
 import dev.emi.emi.bom.BoM;
 
-import me.justahuman.slimefunessentials.Utils;
-import me.justahuman.slimefunessentials.compatibility.emi.misc.Category;
-import me.justahuman.slimefunessentials.compatibility.emi.misc.EntityEmiStack;
-import me.justahuman.slimefunessentials.compatibility.emi.recipehandler.MultiblockHandler;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.AncientAltarRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.KillRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.MachineRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.MultiblockRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.OtherRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.SmelteryRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.ThreeByThreeRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.TradeRecipe;
-import me.justahuman.slimefunessentials.config.ModConfig;
+import me.justahuman.slimefun_essentials.Utils;
+import me.justahuman.slimefun_essentials.compatibility.emi.misc.Category;
+import me.justahuman.slimefun_essentials.compatibility.emi.misc.EntityEmiStack;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipehandler.MultiblockHandler;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.AncientAltarRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.KillRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.MachineRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.MultiblockRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.OtherRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.SmelteryRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.ThreeByThreeRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.TradeRecipe;
+import me.justahuman.slimefun_essentials.config.ModConfig;
 
 import me.shedaniel.autoconfig.AutoConfig;
 
@@ -72,9 +72,8 @@ public class EmiIntegration implements EmiPlugin {
         emiRegistry.addRecipeHandler(ScreenHandlerType.GENERIC_3X3, new MultiblockHandler());
         loadItems();
 
-        final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-        final JsonArray defaults = defaultObject.getAsJsonArray(modConfig.useMachineDefaults() ? "machines" : "multiblocks");
-        final JsonArray otherDefaults = defaultObject.getAsJsonArray(! modConfig.useMachineDefaults() ? "machines" : "multiblocks");
+        final JsonArray defaults = defaultObject.getAsJsonArray(getDefaults());
+        final JsonArray otherDefaults = defaultObject.getAsJsonArray(getOtherDefaults());
 
         loadRecipes(emiRegistry, "core", defaults, otherDefaults);
         for (String addon : getEnabledAddons()) {
@@ -106,7 +105,7 @@ public class EmiIntegration implements EmiPlugin {
                     continue;
                 }
 
-                final String categoryId = "slimefunessentials:" + getCategoryId(workstationId).toLowerCase();
+                final String categoryId = "slimefun_essentials:" + getCategoryId(workstationId).toLowerCase();
                 final EmiRecipeCategory emiRecipeCategory;
 
                 if (categories.containsKey(categoryId + workstationId)) {
@@ -133,7 +132,7 @@ public class EmiIntegration implements EmiPlugin {
                     //Define important Variables
                     final List<EmiIngredient> inputs = new ArrayList<>();
                     final List<EmiStack> outputs = new ArrayList<>();
-                    final StringBuilder uniqueId = new StringBuilder().append("slimefunessentials:/").append(workstationId.toLowerCase());
+                    final StringBuilder uniqueId = new StringBuilder().append("slimefun_essentials:/").append(workstationId.toLowerCase());
                     final JsonArray recipeInputs = recipe.getAsJsonArray("inputs");
                     final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs");
                     final Integer ticks = recipe.get("time") != null ? recipe.get("time").getAsInt() : 0;
@@ -365,52 +364,72 @@ public class EmiIntegration implements EmiPlugin {
         }
     }
 
+    private String getDefaults() {
+        String toReturn = "multiblocks";
+        if (Utils.isClothConfigEnabled()) {
+            final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+            toReturn = modConfig.useMachineDefaults() ? "machines" : "multiblocks";
+        }
+        return toReturn;
+    }
+
+    private String getOtherDefaults() {
+        String toReturn = "machines";
+        if (Utils.isClothConfigEnabled()) {
+            final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+            toReturn = ! modConfig.useMachineDefaults() ? "machines" : "multiblocks";
+        }
+        return toReturn;
+    }
+
     private List<String> getEnabledAddons() {
-        final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
         final List<String> addonList = new ArrayList<>();
+        if (Utils.isClothConfigEnabled()) {
+            final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
-        if (modConfig.enableSpiritsUnchained()) {
-            addonList.add("spirits_unchained");
-        }
+            if (modConfig.enableSpiritsUnchained()) {
+                addonList.add("spirits_unchained");
+            }
 
-        if (modConfig.enableElectricSpawners()) {
-            addonList.add("electric_spawners");
-        }
+            if (modConfig.enableElectricSpawners()) {
+                addonList.add("electric_spawners");
+            }
 
-        if (modConfig.enableEcoPower()) {
-            addonList.add("eco_power");
-        }
+            if (modConfig.enableEcoPower()) {
+                addonList.add("eco_power");
+            }
 
-        if (modConfig.enableExoticGarden()) {
-            addonList.add("exotic_garden");
-        }
+            if (modConfig.enableExoticGarden()) {
+                addonList.add("exotic_garden");
+            }
 
-        if (modConfig.enableHotbarPets()) {
-            addonList.add("hotbar_pets");
-        }
+            if (modConfig.enableHotbarPets()) {
+                addonList.add("hotbar_pets");
+            }
 
-        if (modConfig.enableExtraGear()) {
-            addonList.add("extra_gear");
-        }
+            if (modConfig.enableExtraGear()) {
+                addonList.add("extra_gear");
+            }
 
-        if (modConfig.enableLuckyBlocks()) {
-            addonList.add("lucky_blocks");
-        }
+            if (modConfig.enableLuckyBlocks()) {
+                addonList.add("lucky_blocks");
+            }
 
-        if (modConfig.enableSoulJars()) {
-            addonList.add("soul_jars");
-        }
+            if (modConfig.enableSoulJars()) {
+                addonList.add("soul_jars");
+            }
 
-        if (modConfig.enableSlimyTreeTaps()) {
-            addonList.add("slimy_tree_taps");
-        }
+            if (modConfig.enableSlimyTreeTaps()) {
+                addonList.add("slimy_tree_taps");
+            }
 
-        if (modConfig.enableDankTech()) {
-            addonList.add("dank_tech");
-        }
+            if (modConfig.enableDankTech()) {
+                addonList.add("dank_tech");
+            }
 
-        if (modConfig.enableTransCendence()) {
-            addonList.add("transcendence");
+            if (modConfig.enableTranscendence()) {
+                addonList.add("transcendence");
+            }
         }
 
         return addonList;

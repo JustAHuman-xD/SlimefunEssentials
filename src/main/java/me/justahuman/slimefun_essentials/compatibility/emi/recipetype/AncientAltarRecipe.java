@@ -1,11 +1,11 @@
-package me.justahuman.slimefunessentials.compatibility.emi.recipetype;
+package me.justahuman.slimefun_essentials.compatibility.emi.recipetype;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import me.justahuman.slimefunessentials.Utils;
+import me.justahuman.slimefun_essentials.Utils;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 

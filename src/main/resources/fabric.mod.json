@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "slimefunessentials",
+  "id": "slimefun_essentials",
   "version": "${version}",
-  "name": "SlimefunEssentials",
+  "name": "Slimefun Essentials",
   "description": "A Minecraft mod bringing new features and compatibility with the Slimefun4 Plugin!",
   "authors": [
     "JustAHuman_xD"
@@ -14,17 +14,17 @@
     "discord": "https://discord.gg/y6fV6pbgHB"
   },
   "license": "MIT",
-  "icon": "assets/slimefunessentials/icon.png",
+  "icon": "assets/slimefun_essentials/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "me.justahuman.slimefunessentials.SlimefunEssentials"
+      "me.justahuman.slimefun_essentials.SlimefunEssentials"
     ],
     "emi": [
-      "me.justahuman.slimefunessentials.compatibility.emi.EmiIntegration"
+      "me.justahuman.slimefun_essentials.compatibility.emi.EmiIntegration"
     ],
     "modmenu": [
-      "me.justahuman.slimefunessentials.config.ModMenuIntegration"
+      "me.justahuman.slimefun_essentials.config.ModMenuIntegration"
     ]
   },
   "depends": {
