@@ -10,6 +10,11 @@ Slimefun Essentials is a minecraft mod dedicated to add support for Slimefun4 it
 - Emi:
   - Toggle for Manual or Machine default Recipes (For the recipe trees)
 
+# Downloads
+- https://github.com/JustAHuman-xD/SlimefunEssentials/releases
+- https://modrinth.com/mod/slimefun-essentials
+- https://www.curseforge.com/minecraft/mc-mods/slimefun-essentials
+
 # What does it do:
 - Adds Support for Slimefun Recipes to EMI
 - More Coming Soon™
