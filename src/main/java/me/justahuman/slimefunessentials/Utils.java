@@ -1,4 +1,4 @@
-package me.justahuman.slimefuntoemi;
+package me.justahuman.slimefunessentials;
 
 import dev.emi.emi.api.render.EmiTexture;
 import net.minecraft.util.Identifier;
@@ -14,11 +14,11 @@ public class Utils {
     public static final int arrowWidth = 24;
     public static final int chargeWidth = 7;
     public static final int chargeHeight = 9;
-    public static final Identifier WIDGETS = new Identifier("sftoemi", "textures/gui/widgets.png");
+    public static final Identifier WIDGETS = new Identifier("slimefunessentials", "textures/gui/widgets.png");
     public static final EmiTexture EMPTY_CHARGE = new EmiTexture(WIDGETS, 36, 0, chargeWidth, chargeHeight);
     public static final EmiTexture GAIN_CHARGE = new EmiTexture(WIDGETS, 43, 0, chargeWidth, chargeHeight);
     public static final EmiTexture LOOSE_CHARGE = new EmiTexture(WIDGETS, 50, 0, chargeWidth, chargeHeight);
-    private static final Logger logger = LoggerFactory.getLogger("sftoemi");
+    private static final Logger logger = LoggerFactory.getLogger("slimefunessentials");
     private static final String errorMessage = "[SFtoEMI] Failed to parse persistent data";
 
     public static void log(String message) {

@@ -1,4 +1,4 @@
-package me.justahuman.slimefuntoemi.recipetype;
+package me.justahuman.slimefunessentials.compatibility.emi.recipetype;
 
 import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -6,7 +6,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import me.justahuman.slimefuntoemi.Utils;
+import me.justahuman.slimefunessentials.Utils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "sftoemi",
+  "id": "slimefunessentials",
   "version": "${version}",
-  "name": "SlimefunToEMI",
-  "description": "A EMI Plugin adding Slimefun4 Recipes!",
+  "name": "SlimefunEssentials",
+  "description": "A Minecraft mod bringing new features and compatibility with the Slimefun4 Plugin!",
   "authors": [
     "JustAHuman_xD"
   ],
@@ -14,30 +14,22 @@
     "discord": "https://discord.gg/y6fV6pbgHB"
   },
   "license": "MIT",
-  "icon": "assets/sftoemi/icon.png",
+  "icon": "assets/slimefunessentials/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "me.justahuman.slimefuntoemi.SlimefunToEMI"
+      "me.justahuman.slimefunessentials.SlimefunEssentials"
     ],
     "emi": [
-      "me.justahuman.slimefuntoemi.SlimefunToEMI"
+      "me.justahuman.slimefunessentials.compatibility.emi.EmiIntegration"
     ],
     "modmenu": [
-      "me.justahuman.slimefuntoemi.config.ModMenuIntegration"
+      "me.justahuman.slimefunessentials.config.ModMenuIntegration"
     ]
   },
   "depends": {
     "fabricloader": ">=0.14.10",
     "fabric": "*",
     "minecraft": "1.19.2"
-  },
-  "custom": {
-    "modmenu": {
-      "links": {
-        "modmenu.website": "https://www.curseforge.com/members/traben_0/projects",
-        "modmenu.discord": "https://discord.gg/y6fV6pbgHB"
-      }
-    }
   }
 }
