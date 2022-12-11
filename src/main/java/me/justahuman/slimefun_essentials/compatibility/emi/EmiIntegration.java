@@ -1,4 +1,4 @@
-package me.justahuman.slimefunessentials.compatibility.emi;
+package me.justahuman.slimefun_essentials.compatibility.emi;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -16,19 +16,19 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmptyEmiStack;
 import dev.emi.emi.bom.BoM;
 
-import me.justahuman.slimefunessentials.Utils;
-import me.justahuman.slimefunessentials.compatibility.emi.misc.Category;
-import me.justahuman.slimefunessentials.compatibility.emi.misc.EntityEmiStack;
-import me.justahuman.slimefunessentials.compatibility.emi.recipehandler.MultiblockHandler;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.AncientAltarRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.KillRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.MachineRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.MultiblockRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.OtherRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.SmelteryRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.ThreeByThreeRecipe;
-import me.justahuman.slimefunessentials.compatibility.emi.recipetype.TradeRecipe;
-import me.justahuman.slimefunessentials.config.ModConfig;
+import me.justahuman.slimefun_essentials.Utils;
+import me.justahuman.slimefun_essentials.compatibility.emi.misc.Category;
+import me.justahuman.slimefun_essentials.compatibility.emi.misc.EntityEmiStack;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipehandler.MultiblockHandler;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.AncientAltarRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.KillRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.MachineRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.MultiblockRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.OtherRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.SmelteryRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.ThreeByThreeRecipe;
+import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.TradeRecipe;
+import me.justahuman.slimefun_essentials.config.ModConfig;
 
 import me.shedaniel.autoconfig.AutoConfig;
 
@@ -105,7 +105,7 @@ public class EmiIntegration implements EmiPlugin {
                     continue;
                 }
 
-                final String categoryId = "slimefunessentials:" + getCategoryId(workstationId).toLowerCase();
+                final String categoryId = "slimefun_essentials:" + getCategoryId(workstationId).toLowerCase();
                 final EmiRecipeCategory emiRecipeCategory;
 
                 if (categories.containsKey(categoryId + workstationId)) {
@@ -132,7 +132,7 @@ public class EmiIntegration implements EmiPlugin {
                     //Define important Variables
                     final List<EmiIngredient> inputs = new ArrayList<>();
                     final List<EmiStack> outputs = new ArrayList<>();
-                    final StringBuilder uniqueId = new StringBuilder().append("slimefunessentials:/").append(workstationId.toLowerCase());
+                    final StringBuilder uniqueId = new StringBuilder().append("slimefun_essentials:/").append(workstationId.toLowerCase());
                     final JsonArray recipeInputs = recipe.getAsJsonArray("inputs");
                     final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs");
                     final Integer ticks = recipe.get("time") != null ? recipe.get("time").getAsInt() : 0;
@@ -427,7 +427,7 @@ public class EmiIntegration implements EmiPlugin {
                 addonList.add("dank_tech");
             }
 
-            if (modConfig.enableTransCendence()) {
+            if (modConfig.enableTranscendence()) {
                 addonList.add("transcendence");
             }
         }

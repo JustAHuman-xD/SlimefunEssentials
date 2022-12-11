@@ -1,4 +1,4 @@
-package me.justahuman.slimefunessentials.compatibility.emi.recipehandler;
+package me.justahuman.slimefun_essentials.compatibility.emi.recipehandler;
 
 import dev.emi.emi.api.EmiRecipeHandler;
 import dev.emi.emi.api.recipe.EmiRecipe;

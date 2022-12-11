@@ -1,10 +1,10 @@
-package me.justahuman.slimefunessentials.config;
+package me.justahuman.slimefun_essentials.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-@Config(name = "sftoemi")
+@Config(name = "slimefun_essentials")
 public
 class ModConfig implements ConfigData {
     @ConfigEntry.Category("general")
@@ -45,7 +45,7 @@ class ModConfig implements ConfigData {
     boolean enableDankTech = false;
     @ConfigEntry.Category("addons")
     @ConfigEntry.Gui.Tooltip
-    boolean enableTransCendence = false;
+    boolean enableTranscendence = false;
 
     public boolean useMachineDefaults() {
         return useMachineDefaults;
@@ -83,7 +83,7 @@ class ModConfig implements ConfigData {
     public boolean enableDankTech() {
         return enableDankTech;
     }
-    public boolean enableTransCendence() {
-        return enableTransCendence;
+    public boolean enableTranscendence() {
+        return enableTranscendence;
     }
 }

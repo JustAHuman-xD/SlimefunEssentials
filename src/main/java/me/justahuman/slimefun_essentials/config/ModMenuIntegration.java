@@ -1,4 +1,4 @@
-package me.justahuman.slimefunessentials.config;
+package me.justahuman.slimefun_essentials.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

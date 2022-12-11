@@ -1,4 +1,4 @@
-package me.justahuman.slimefunessentials.compatibility.emi.misc;
+package me.justahuman.slimefun_essentials.compatibility.emi.misc;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.emi.emi.EmiPort;

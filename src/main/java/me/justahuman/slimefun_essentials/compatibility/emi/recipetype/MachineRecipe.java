@@ -1,29 +1,35 @@
-package me.justahuman.slimefunessentials.compatibility.emi.recipetype;
+package me.justahuman.slimefun_essentials.compatibility.emi.recipetype;
 
+import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import me.justahuman.slimefunessentials.Utils;
+import me.justahuman.slimefun_essentials.Utils;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.NumberFormat;
 import java.util.List;
 
-public class OtherRecipe implements EmiRecipe {
+public class MachineRecipe implements EmiRecipe {
 
     private final EmiRecipeCategory emiRecipeCategory;
     private final Identifier id;
     private final List<EmiIngredient> inputs;
     private final List<EmiStack> outputs;
+    private final int ticks;
+    private final int energy;
 
-    public OtherRecipe(EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs) {
+    public MachineRecipe(EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs, int ticks, int energy) {
         this.emiRecipeCategory = emiRecipeCategory;
         this.id = id;
         this.inputs = inputs;
         this.outputs = outputs;
+        this.ticks = ticks;
+        this.energy = energy;
     }
 
     @Override
@@ -63,16 +69,23 @@ public class OtherRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        int offsetX = getDisplayWidth() / 2 - (Utils.slotWidth * 2 + Utils.arrowWidth + Utils.bigSlotWidth + 12) /2;
+        int offsetX = getDisplayWidth() / 2 - (Utils.chargeWidth + Utils.slotWidth * 2 + Utils.arrowWidth + Utils.bigSlotWidth + 16) /2;
+        final int offsetYC = (getDisplayHeight() - Utils.chargeHeight) / 2;
         final int offsetYS = (getDisplayHeight() - Utils.slotHeight) / 2;
         final int offsetYO = (getDisplayHeight() - Utils.bigSlotHeight) / 2;
         final int offsetYA = (getDisplayHeight() - Utils.arrowHeight) / 2;
+        final int time = (int) (ticks / 20f * 1000);
+        final NumberFormat numberFormat = NumberFormat.getInstance();
 
+        numberFormat.setGroupingUsed(true);
+        widgets.addTexture(Utils.EMPTY_CHARGE, offsetX, offsetYC);
+        widgets.addAnimatedTexture(energy > 0 ? Utils.GAIN_CHARGE : Utils.LOOSE_CHARGE, offsetX, offsetYC, 1000, false, energy <= 0, energy <= 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("sftoemi.recipe.energy." + (energy > 0 ? "generate" : "use"), numberFormat.format(Math.abs(energy)))))));
+        offsetX = offsetX + Utils.chargeWidth + 4;
         widgets.addSlot(! inputs.isEmpty() ? inputs.get(0) : EmiStack.EMPTY, offsetX, offsetYS);
         offsetX = offsetX + Utils.slotWidth + 4;
         widgets.addSlot(inputs.size() >= 2 ? inputs.get(1) : EmiStack.EMPTY, offsetX, offsetYS);
         offsetX = offsetX + Utils.slotWidth + 4;
-        widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetYA);
+        widgets.addFillingArrow(offsetX, offsetYA, time).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("sftoemi.recipe.time", numberFormat.format(ticks / 20f), numberFormat.format(ticks))))));
         offsetX = offsetX + Utils.arrowWidth + 4;
         widgets.addSlot(! outputs.isEmpty() ? outputs.get(0) : EmiStack.EMPTY, offsetX, offsetYO).output(true);
     }
