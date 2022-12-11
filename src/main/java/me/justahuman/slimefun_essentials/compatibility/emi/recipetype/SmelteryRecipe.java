@@ -76,7 +76,7 @@ public class SmelteryRecipe implements EmiRecipe {
         final int time = (int) (ticks / 20f * 1000);
 
         widgets.addTexture(Utils.EMPTY_CHARGE, offsetX, offsetYC);
-        widgets.addAnimatedTexture(energy > 0 ? Utils.GAIN_CHARGE : Utils.LOOSE_CHARGE, offsetX, offsetYC, 1000, false, energy <= 0, energy <= 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("sftoemi.recipe.energy." + (energy > 0 ? "generate" : "use"), Math.abs(energy))))));
+        widgets.addAnimatedTexture(energy > 0 ? Utils.GAIN_CHARGE : Utils.LOOSE_CHARGE, offsetX, offsetYC, 1000, false, energy <= 0, energy <= 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (energy > 0 ? "generate" : "use"), Math.abs(energy))))));
         offsetX = offsetX + Utils.chargeWidth + 4;
         widgets.addSlot(! inputs.isEmpty() ? inputs.get(0) : EmiStack.EMPTY, offsetX, offsetYS);
         widgets.addSlot(inputs.size() >= 4 ? inputs.get(3) : EmiStack.EMPTY, offsetX, offsetYS + Utils.slotHeight + 4);
@@ -87,7 +87,7 @@ public class SmelteryRecipe implements EmiRecipe {
         widgets.addSlot(inputs.size() >= 3 ? inputs.get(2) : EmiStack.EMPTY, offsetX, offsetYS);
         widgets.addSlot(inputs.size() >= 6 ? inputs.get(5) : EmiStack.EMPTY, offsetX, offsetYS + Utils.slotHeight + 4);
         offsetX = offsetX + Utils.slotWidth + 4;
-        widgets.addFillingArrow(offsetX, offsetYA, time).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("sftoemi.recipe.time", ticks / 20f, ticks)))));
+        widgets.addFillingArrow(offsetX, offsetYA, time).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", ticks / 20f, ticks)))));
         offsetX = offsetX + Utils.arrowWidth + 4;
         widgets.addSlot(! outputs.isEmpty() ? outputs.get(0) : EmiStack.EMPTY, offsetX, offsetYO).output(true);
     }

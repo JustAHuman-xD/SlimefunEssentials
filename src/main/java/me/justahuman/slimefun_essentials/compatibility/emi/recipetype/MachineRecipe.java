@@ -79,13 +79,13 @@ public class MachineRecipe implements EmiRecipe {
 
         numberFormat.setGroupingUsed(true);
         widgets.addTexture(Utils.EMPTY_CHARGE, offsetX, offsetYC);
-        widgets.addAnimatedTexture(energy > 0 ? Utils.GAIN_CHARGE : Utils.LOOSE_CHARGE, offsetX, offsetYC, 1000, false, energy <= 0, energy <= 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("sftoemi.recipe.energy." + (energy > 0 ? "generate" : "use"), numberFormat.format(Math.abs(energy)))))));
+        widgets.addAnimatedTexture(energy > 0 ? Utils.GAIN_CHARGE : Utils.LOOSE_CHARGE, offsetX, offsetYC, 1000, false, energy <= 0, energy <= 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (energy > 0 ? "generate" : "use"), numberFormat.format(Math.abs(energy)))))));
         offsetX = offsetX + Utils.chargeWidth + 4;
         widgets.addSlot(! inputs.isEmpty() ? inputs.get(0) : EmiStack.EMPTY, offsetX, offsetYS);
         offsetX = offsetX + Utils.slotWidth + 4;
         widgets.addSlot(inputs.size() >= 2 ? inputs.get(1) : EmiStack.EMPTY, offsetX, offsetYS);
         offsetX = offsetX + Utils.slotWidth + 4;
-        widgets.addFillingArrow(offsetX, offsetYA, time).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("sftoemi.recipe.time", numberFormat.format(ticks / 20f), numberFormat.format(ticks))))));
+        widgets.addFillingArrow(offsetX, offsetYA, time).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", numberFormat.format(ticks / 20f), numberFormat.format(ticks))))));
         offsetX = offsetX + Utils.arrowWidth + 4;
         widgets.addSlot(! outputs.isEmpty() ? outputs.get(0) : EmiStack.EMPTY, offsetX, offsetYO).output(true);
     }
