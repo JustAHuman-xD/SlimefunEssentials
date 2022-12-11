@@ -6,7 +6,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import me.justahuman.slimefun_essentials.Utils;
+import me.justahuman.slimefun_essentials.compatibility.emi.EmiUtils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -69,24 +69,24 @@ public class MachineRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        int offsetX = getDisplayWidth() / 2 - (Utils.chargeWidth + Utils.slotWidth * 2 + Utils.arrowWidth + Utils.bigSlotWidth + 16) /2;
-        final int offsetYC = (getDisplayHeight() - Utils.chargeHeight) / 2;
-        final int offsetYS = (getDisplayHeight() - Utils.slotHeight) / 2;
-        final int offsetYO = (getDisplayHeight() - Utils.bigSlotHeight) / 2;
-        final int offsetYA = (getDisplayHeight() - Utils.arrowHeight) / 2;
+        int offsetX = getDisplayWidth() / 2 - (EmiUtils.chargeWidth + EmiUtils.slotWidth * 2 + EmiUtils.arrowWidth + EmiUtils.bigSlotWidth + 16) /2;
+        final int offsetYC = (getDisplayHeight() - EmiUtils.chargeHeight) / 2;
+        final int offsetYS = (getDisplayHeight() - EmiUtils.slotHeight) / 2;
+        final int offsetYO = (getDisplayHeight() - EmiUtils.bigSlotHeight) / 2;
+        final int offsetYA = (getDisplayHeight() - EmiUtils.arrowHeight) / 2;
         final int time = (int) (ticks / 20f * 1000);
         final NumberFormat numberFormat = NumberFormat.getInstance();
 
         numberFormat.setGroupingUsed(true);
-        widgets.addTexture(Utils.EMPTY_CHARGE, offsetX, offsetYC);
-        widgets.addAnimatedTexture(energy > 0 ? Utils.GAIN_CHARGE : Utils.LOOSE_CHARGE, offsetX, offsetYC, 1000, false, energy <= 0, energy <= 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (energy > 0 ? "generate" : "use"), numberFormat.format(Math.abs(energy)))))));
-        offsetX = offsetX + Utils.chargeWidth + 4;
+        widgets.addTexture(EmiUtils.EMPTY_CHARGE, offsetX, offsetYC);
+        widgets.addAnimatedTexture(energy > 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, offsetX, offsetYC, 1000, false, energy <= 0, energy <= 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (energy > 0 ? "generate" : "use"), numberFormat.format(Math.abs(energy)))))));
+        offsetX = offsetX + EmiUtils.chargeWidth + 4;
         widgets.addSlot(! inputs.isEmpty() ? inputs.get(0) : EmiStack.EMPTY, offsetX, offsetYS);
-        offsetX = offsetX + Utils.slotWidth + 4;
+        offsetX = offsetX + EmiUtils.slotWidth + 4;
         widgets.addSlot(inputs.size() >= 2 ? inputs.get(1) : EmiStack.EMPTY, offsetX, offsetYS);
-        offsetX = offsetX + Utils.slotWidth + 4;
+        offsetX = offsetX + EmiUtils.slotWidth + 4;
         widgets.addFillingArrow(offsetX, offsetYA, time).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", numberFormat.format(ticks / 20f), numberFormat.format(ticks))))));
-        offsetX = offsetX + Utils.arrowWidth + 4;
+        offsetX = offsetX + EmiUtils.arrowWidth + 4;
         widgets.addSlot(! outputs.isEmpty() ? outputs.get(0) : EmiStack.EMPTY, offsetX, offsetYO).output(true);
     }
 

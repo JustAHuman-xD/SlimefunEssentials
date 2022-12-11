@@ -6,7 +6,7 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import me.justahuman.slimefun_essentials.Utils;
+import me.justahuman.slimefun_essentials.compatibility.emi.EmiUtils;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,19 +63,19 @@ public class KillRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        int offsetX = getDisplayWidth() / 2 - ((inputs.get(0) == EmiStack.EMPTY ? 0 : Utils.slotWidth) + Utils.bigSlotWidth + Utils.arrowWidth + Utils.slotWidth + 12) /2;
-        final int offsetYS = (getDisplayHeight() - Utils.slotHeight) / 2;
-        final int offsetYO = (getDisplayHeight() - Utils.bigSlotHeight) / 2;
-        final int offsetYA = (getDisplayHeight() - Utils.arrowHeight) / 2;
+        int offsetX = getDisplayWidth() / 2 - ((inputs.get(0) == EmiStack.EMPTY ? 0 : EmiUtils.slotWidth) + EmiUtils.bigSlotWidth + EmiUtils.arrowWidth + EmiUtils.slotWidth + 12) /2;
+        final int offsetYS = (getDisplayHeight() - EmiUtils.slotHeight) / 2;
+        final int offsetYO = (getDisplayHeight() - EmiUtils.bigSlotHeight) / 2;
+        final int offsetYA = (getDisplayHeight() - EmiUtils.arrowHeight) / 2;
 
         if (inputs.get(0) != EmiStack.EMPTY) {
             widgets.addSlot(inputs.get(0), offsetX, offsetYS);
-            offsetX = offsetX + Utils.slotWidth + 4;
+            offsetX = offsetX + EmiUtils.slotWidth + 4;
         }
         widgets.addSlot(inputs.get(1), offsetX, offsetYO).output(true);
-        offsetX = offsetX + Utils.bigSlotWidth + 4;
+        offsetX = offsetX + EmiUtils.bigSlotWidth + 4;
         widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetYA);
-        offsetX = offsetX + Utils.arrowWidth + 4;
+        offsetX = offsetX + EmiUtils.arrowWidth + 4;
         widgets.addSlot(outputs.get(0), offsetX, offsetYS);
     }
 

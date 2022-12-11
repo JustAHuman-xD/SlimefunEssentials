@@ -5,8 +5,8 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
+import me.justahuman.slimefun_essentials.compatibility.emi.EmiUtils;
 import me.justahuman.slimefun_essentials.compatibility.emi.misc.EntityEmiStack;
-import me.justahuman.slimefun_essentials.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -86,15 +86,15 @@ public class TradeRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final int offsetX = getDisplayWidth() / 2 - (Utils.slotWidth + Utils.bigSlotWidth + Utils.arrowWidth + Utils.slotWidth + 12) /2;
-        final int offsetYS = (getDisplayHeight() - Utils.slotHeight) / 2;
-        final int offsetYO = (getDisplayHeight() - Utils.bigSlotHeight) / 2;
-        final int offsetYA = (getDisplayHeight() - Utils.arrowHeight) / 2;
+        final int offsetX = getDisplayWidth() / 2 - (EmiUtils.slotWidth + EmiUtils.bigSlotWidth + EmiUtils.arrowWidth + EmiUtils.slotWidth + 12) /2;
+        final int offsetYS = (getDisplayHeight() - EmiUtils.slotHeight) / 2;
+        final int offsetYO = (getDisplayHeight() - EmiUtils.bigSlotHeight) / 2;
+        final int offsetYA = (getDisplayHeight() - EmiUtils.arrowHeight) / 2;
 
         widgets.addSlot(inputs.get(0), offsetX, offsetYS);
-        widgets.addSlot(inputs.get(1), offsetX + Utils.slotWidth + 4, offsetYO).output(true);
-        widgets.addFillingArrow(offsetX + Utils.slotWidth + Utils.bigSlotWidth + 8, offsetYA, 2000);
-        widgets.addSlot(outputs.get(0), offsetX + Utils.slotWidth + Utils.bigSlotWidth + Utils.arrowWidth + 12, offsetYS);
+        widgets.addSlot(inputs.get(1), offsetX + EmiUtils.slotWidth + 4, offsetYO).output(true);
+        widgets.addFillingArrow(offsetX + EmiUtils.slotWidth + EmiUtils.bigSlotWidth + 8, offsetYA, 2000);
+        widgets.addSlot(outputs.get(0), offsetX + EmiUtils.slotWidth + EmiUtils.bigSlotWidth + EmiUtils.arrowWidth + 12, offsetYS);
     }
 
     @Override
