@@ -9,7 +9,6 @@ public class SlimefunEssentials implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-
         if (Utils.isClothConfigEnabled()) {
             AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
         }

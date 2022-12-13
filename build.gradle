@@ -12,11 +12,18 @@ repositories {
         url = "https://maven.terraformersmc.com/"
     }
     maven {
-        url "https://maven.shedaniel.me/"
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
-        url "https://maven.terraformersmc.com/releases/"
+        name = "ModMaven"
+        url = "https://modmaven.dev"
     }
+    maven {
+        name = "REI"
+        url = "https://maven.shedaniel.me/"
+    }
+    mavenCentral()
 }
 
 dependencies {
@@ -24,11 +31,25 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "dev.emi:emi:0.4.2+1.19"
+
+    modImplementation ("dev.emi:emi:$emi_version") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+
+    modImplementation("mezz.jei:$jei_version") {
+        exclude(group: "mezz.jei")
+    }
+
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:$rei_version")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:$rei_version")
+
     modApi "com.terraformersmc:modmenu:4.1.1"
     modApi("me.shedaniel.cloth:cloth-config-fabric:8.2.88") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 processResources {
