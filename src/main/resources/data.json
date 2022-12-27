@@ -30435,7 +30435,7 @@
                         "rotten_flesh:16",
                         "potato:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30452,7 +30452,7 @@
                         "lime_dye:16",
                         "slime_block:16"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30469,7 +30469,7 @@
                         "magma_cream:16",
                         "magma_block:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30486,7 +30486,7 @@
                         "beef:64",
                         "leather:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30503,7 +30503,7 @@
                         "mutton:64",
                         "white_wool:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30520,7 +30520,7 @@
                         "string:64",
                         "cobweb:8"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30537,7 +30537,7 @@
                         "bone:64",
                         "bow:1"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30554,7 +30554,7 @@
                         "bone:64",
                         "stone_sword:1"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30571,7 +30571,7 @@
                         "obsidian:64",
                         "ender_eye:16"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30588,7 +30588,7 @@
                         "green_dye:64",
                         "tnt:16"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30605,7 +30605,7 @@
                         "prismarine_shard:64",
                         "cooked_cod:16"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30622,7 +30622,7 @@
                         "feather:64",
                         "chicken:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30639,7 +30639,7 @@
                         "pumpkin:16",
                         "iron_block:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30656,7 +30656,7 @@
                         "blaze_rod:64",
                         "magma_block:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30673,7 +30673,7 @@
                         "WITHER_ASSEMBLER:4",
                         "VOID_INGOT:4"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30690,7 +30690,7 @@
                         "VOID_INGOT:32",
                         "dragon_breath:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30707,7 +30707,7 @@
                         "honey_block:16",
                         "honeycomb_block:16"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30724,7 +30724,7 @@
                         "pumpkin:64",
                         "emerald:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 },
                 {
                     "outputs": [
@@ -30741,7 +30741,7 @@
                         "glass:64",
                         "redstone_block:64"
                     ],
-                    "energy": 20000
+                    "energy": -20000
                 }
             ],
             "BASIC_COBBLE_GEN": [
@@ -32154,9 +32154,10 @@
             "GEO_MINER": [
                 {
                     "outputs": [
-                        "ENDER_ESSENCE:1"
+                        "END_ESSENCE:1"
                     ],
                     "inputs": [],
+                    "conditions": ["end"],
                     "time": 140,
                     "energy": -336
                 }
@@ -32193,7 +32194,7 @@
                     "outputs": [
                         "COPPER_SINGULARITY:1"
                     ],
-                    "energy": 180000,
+                    "energy": -180000,
                     "time": 15000
                 },
                 {
@@ -32203,7 +32204,7 @@
                     "outputs": [
                         "ZINC_SINGULARITY:1"
                     ],
-                    "energy": 180000,
+                    "energy": -180000,
                     "time": 15000
                 },
                 {
@@ -32213,7 +32214,7 @@
                     "outputs": [
                         "TIN_SINGULARITY:1"
                     ],
-                    "energy": 180000,
+                    "energy": -180000,
                     "time": 15000
                 },
                 {
@@ -32223,7 +32224,7 @@
                     "outputs": [
                         "ALUMINUM_SINGULARITY:1"
                     ],
-                    "energy": 180000,
+                    "energy": -180000,
                     "time": 15000
                 },
                 {
@@ -32233,7 +32234,7 @@
                     "outputs": [
                         "SILVER_SINGULARITY:1"
                     ],
-                    "energy": 180000,
+                    "energy": -180000,
                     "time": 15000
                 },
                 {
@@ -32243,7 +32244,7 @@
                     "outputs": [
                         "MAGNESIUM_SINGULARITY:1"
                     ],
-                    "energy": 180000,
+                    "energy": -180000,
                     "time": 15000
                 },
                 {
@@ -32253,7 +32254,7 @@
                     "outputs": [
                         "LEAD_SINGULARITY:1"
                     ],
-                    "energy": 180000,
+                    "energy": -180000,
                     "time": 15000
                 },
                 {
@@ -32263,7 +32264,7 @@
                     "outputs": [
                         "GOLD_SINGULARITY:1"
                     ],
-                    "energy": 120000,
+                    "energy": -120000,
                     "time": 10000
                 },
                 {
@@ -32273,7 +32274,7 @@
                     "outputs": [
                         "IRON_SINGULARITY:1"
                     ],
-                    "energy": 120000,
+                    "energy": -120000,
                     "time": 10000
                 },
                 {
@@ -32283,7 +32284,7 @@
                     "outputs": [
                         "DIAMOND_SINGULARITY:1"
                     ],
-                    "energy": 30000,
+                    "energy": -30000,
                     "time": 2500
                 },
                 {
@@ -32293,7 +32294,7 @@
                     "outputs": [
                         "EMERALD_SINGULARITY:1"
                     ],
-                    "energy": 30000,
+                    "energy": -30000,
                     "time": 2500
                 },
                 {
@@ -32303,7 +32304,7 @@
                     "outputs": [
                         "NETHERITE_SINGULARITY:1"
                     ],
-                    "energy": 12000,
+                    "energy": -12000,
                     "time": 1000
                 },
                 {
@@ -32313,7 +32314,7 @@
                     "outputs": [
                         "COAL_SINGULARITY:1"
                     ],
-                    "energy": 90000,
+                    "energy": -90000,
                     "time": 7500
                 },
                 {
@@ -32323,7 +32324,7 @@
                     "outputs": [
                         "REDSTONE_SINGULARITY:1"
                     ],
-                    "energy": 90000,
+                    "energy": -90000,
                     "time": 7500
                 },
                 {
@@ -32333,7 +32334,7 @@
                     "outputs": [
                         "LAPIS_SINGULARITY:1"
                     ],
-                    "energy": 90000,
+                    "energy": -90000,
                     "time": 7500
                 },
                 {
@@ -32343,7 +32344,7 @@
                     "outputs": [
                         "QUARTZ_SINGULARITY:1"
                     ],
-                    "energy": 90000,
+                    "energy": -90000,
                     "time": 7500
                 },
                 {
@@ -32353,7 +32354,7 @@
                     "outputs": [
                         "INFINITY_SINGULARITY:1"
                     ],
-                    "energy": 6000,
+                    "energy": -6000,
                     "time": 500
                 }
             ],
@@ -32365,7 +32366,7 @@
                     "outputs": [
                         "COPPER_SINGULARITY:1"
                     ],
-                    "energy": 56400,
+                    "energy": -56400,
                     "time": 470
                 },
                 {
@@ -32375,7 +32376,7 @@
                     "outputs": [
                         "ZINC_SINGULARITY:1"
                     ],
-                    "energy": 56400,
+                    "energy": -56400,
                     "time": 470
                 },
                 {
@@ -32385,7 +32386,7 @@
                     "outputs": [
                         "TIN_SINGULARITY:1"
                     ],
-                    "energy": 56400,
+                    "energy": -56400,
                     "time": 470
                 },
                 {
@@ -32395,7 +32396,7 @@
                     "outputs": [
                         "ALUMINUM_SINGULARITY:1"
                     ],
-                    "energy": 56400,
+                    "energy": -56400,
                     "time": 470
                 },
                 {
@@ -32405,7 +32406,7 @@
                     "outputs": [
                         "SILVER_SINGULARITY:1"
                     ],
-                    "energy": 56400,
+                    "energy": -56400,
                     "time": 470
                 },
                 {
@@ -32415,7 +32416,7 @@
                     "outputs": [
                         "MAGNESIUM_SINGULARITY:1"
                     ],
-                    "energy": 56400,
+                    "energy": -56400,
                     "time": 470
                 },
                 {
@@ -32425,7 +32426,7 @@
                     "outputs": [
                         "LEAD_SINGULARITY:1"
                     ],
-                    "energy": 56400,
+                    "energy": -56400,
                     "time": 470
                 },
                 {
@@ -32435,7 +32436,7 @@
                     "outputs": [
                         "GOLD_SINGULARITY:1"
                     ],
-                    "energy": 38400,
+                    "energy": -38400,
                     "time": 320
                 },
                 {
@@ -32445,7 +32446,7 @@
                     "outputs": [
                         "IRON_SINGULARITY:1"
                     ],
-                    "energy": 38400,
+                    "energy": -38400,
                     "time": 320
                 },
                 {
@@ -32455,7 +32456,7 @@
                     "outputs": [
                         "DIAMOND_SINGULARITY:1"
                     ],
-                    "energy": 9600,
+                    "energy": -9600,
                     "time": 80
                 },
                 {
@@ -32465,7 +32466,7 @@
                     "outputs": [
                         "EMERALD_SINGULARITY:1"
                     ],
-                    "energy": 9600,
+                    "energy": -9600,
                     "time": 80
                 },
                 {
@@ -32475,7 +32476,7 @@
                     "outputs": [
                         "NETHERITE_SINGULARITY:1"
                     ],
-                    "energy": 4800,
+                    "energy": -4800,
                     "time": 40
                 },
                 {
@@ -32485,7 +32486,7 @@
                     "outputs": [
                         "COAL_SINGULARITY:1"
                     ],
-                    "energy": 28800,
+                    "energy": -28800,
                     "time": 240
                 },
                 {
@@ -32495,7 +32496,7 @@
                     "outputs": [
                         "REDSTONE_SINGULARITY:1"
                     ],
-                    "energy": 28800,
+                    "energy": -28800,
                     "time": 240
                 },
                 {
@@ -32505,7 +32506,7 @@
                     "outputs": [
                         "LAPIS_SINGULARITY:1"
                     ],
-                    "energy": 28800,
+                    "energy": -28800,
                     "time": 240
                 },
                 {
@@ -32515,7 +32516,7 @@
                     "outputs": [
                         "QUARTZ_SINGULARITY:1"
                     ],
-                    "energy": 28800,
+                    "energy": -28800,
                     "time": 240
                 },
                 {
@@ -32525,7 +32526,7 @@
                     "outputs": [
                         "INFINITY_SINGULARITY:1"
                     ],
-                    "energy": 2400,
+                    "energy": -2400,
                     "time": 20
                 }
             ],
@@ -34137,7 +34138,7 @@
             "GEO_QUARRY": [
                 {
                     "outputs": [
-                        "ENDER_ESSENCE:1"
+                        "END_ESSENCE:1"
                     ],
                     "conditions": [
                         "end"
@@ -34679,16 +34680,6 @@
                 },
                 {
                     "outputs": [
-                        "gravel:1"
-                    ],
-                    "inputs": [
-                        "BASIC_STRAINER:1"
-                    ],
-                    "time": 480,
-                    "energy": 0
-                },
-                {
-                    "outputs": [
                         "quartz:1"
                     ],
                     "inputs": [
@@ -34839,16 +34830,6 @@
                 },
                 {
                     "outputs": [
-                        "gravel:1"
-                    ],
-                    "inputs": [
-                        "ADVANCED_STRAINER:1"
-                    ],
-                    "time": 120,
-                    "energy": 0
-                },
-                {
-                    "outputs": [
                         "quartz:1"
                     ],
                     "inputs": [
@@ -34980,16 +34961,6 @@
                 {
                     "outputs": [
                         "sand:1"
-                    ],
-                    "inputs": [
-                        "REINFORCED_STRAINER:1"
-                    ],
-                    "time": 30,
-                    "energy": 0
-                },
-                {
-                    "outputs": [
-                        "gravel:1"
                     ],
                     "inputs": [
                         "REINFORCED_STRAINER:1"

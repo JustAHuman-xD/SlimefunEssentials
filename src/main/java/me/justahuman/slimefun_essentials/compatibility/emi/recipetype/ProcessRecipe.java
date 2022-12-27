@@ -72,10 +72,8 @@ public class ProcessRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        int offsetX = getDisplayWidth() / 2 - ((hasEnergy() ? EmiUtils.chargeWidth + EmiUtils.padding: 0) + (hasInputs() ? EmiUtils.slotWidth * this.inputs.size() + EmiUtils.padding * this.inputs.size() : EmiUtils.slotWidth + EmiUtils.padding) + (EmiUtils.arrowWidth + EmiUtils.padding) + (hasOutputs() ? EmiUtils.bigSlotWidth * this.outputs.size() : 0)) /2;
+        int offsetX = (getDisplayWidth() - EmiUtils.conditionWidth * this.conditions.size() - EmiUtils.padding * this.conditions.size() - (hasEnergy() ? EmiUtils.chargeWidth + EmiUtils.padding : 0) - (hasInputs() ? EmiUtils.slotWidth * this.inputs.size() + EmiUtils.padding * this.inputs.size() : EmiUtils.slotWidth + EmiUtils.padding) - (EmiUtils.arrowWidth + EmiUtils.padding) - EmiUtils.bigSlotWidth * this.outputs.size()) /2;
         final int offsetYCondition = (getDisplayHeight() - EmiUtils.conditionHeight) / 2;
-        final int offsetYCondition1 = (getDisplayHeight() - (EmiUtils.conditionHeight * 2 + EmiUtils.padding)) / 2;
-        final int offsetYCondition2 = (getDisplayHeight() - (EmiUtils.conditionHeight * 2 + EmiUtils.padding)) / 2;
         final int offsetYCharge = (getDisplayHeight() - EmiUtils.chargeHeight) / 2;
         final int offsetYSlot = (getDisplayHeight() - EmiUtils.slotHeight) / 2;
         final int offsetYBig = (getDisplayHeight() - EmiUtils.bigSlotHeight) / 2;
@@ -84,21 +82,11 @@ public class ProcessRecipe implements EmiRecipe {
         
         //Display Conditions
         if (hasConditions()) {
-            final int row1 = this.conditions.size() % 2 == 0 ? this.conditions.size() / 2 : this.conditions.size() / 2 + 1;
-            final int row2 = this.conditions.size() / 2;
-            int i = 1;
             for (EmiCondition emiCondition : this.conditions) {
                 final String conditionId = emiCondition.id();
                 final EmiTexture emiTexture = emiCondition.texture();
                 final List<TooltipComponent> tooltip = List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.condition." + conditionId))));
-                final int offsetY;
-                if (row2 > 0) {
-                    offsetY = row1 - i >= 0 ? offsetYCondition1 : offsetYCondition2;
-                } else {
-                    offsetY = offsetYCondition;
-                }
-                widgets.addTexture(emiTexture, offsetX, offsetY).tooltip((mx, my) -> tooltip);
-                i++;
+                widgets.addTexture(emiTexture, offsetX, offsetYCondition).tooltip((mx, my) -> tooltip);
                 offsetX += EmiUtils.conditionWidth + EmiUtils.padding;
             }
         }
