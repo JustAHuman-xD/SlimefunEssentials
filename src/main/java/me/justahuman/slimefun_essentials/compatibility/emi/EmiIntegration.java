@@ -183,7 +183,7 @@ public class EmiIntegration implements EmiPlugin {
         String toReturn = "multiblocks";
         if (Utils.isClothConfigEnabled()) {
             final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-            toReturn = modConfig.useMachineDefaults() ? "machines" : "multiblocks";
+            toReturn = modConfig.isMachineDefaults() ? "machines" : "multiblocks";
         }
         return toReturn;
     }
@@ -192,7 +192,7 @@ public class EmiIntegration implements EmiPlugin {
         String toReturn = "machines";
         if (Utils.isClothConfigEnabled()) {
             final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-            toReturn = ! modConfig.useMachineDefaults() ? "machines" : "multiblocks";
+            toReturn = ! modConfig.isMachineDefaults() ? "machines" : "multiblocks";
         }
         return toReturn;
     }

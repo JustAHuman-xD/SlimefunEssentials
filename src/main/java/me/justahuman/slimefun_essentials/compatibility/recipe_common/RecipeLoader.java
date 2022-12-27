@@ -245,52 +245,131 @@ public class RecipeLoader {
         if (Utils.isClothConfigEnabled()) {
             final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
             
-            if (modConfig.enableInfinityExpansion()) {
-                addonList.add("infinity_expansion");
-            }
-
-            if (modConfig.enableSpiritsUnchained()) {
-                addonList.add("spirits_unchained");
-            }
-
-            if (modConfig.enableElectricSpawners()) {
+            if (modConfig.isElectricSpawnersEnabled()) {
                 addonList.add("electric_spawners");
             }
-
-            if (modConfig.enableEcoPower()) {
-                addonList.add("eco_power");
-            }
-
-            if (modConfig.enableExoticGarden()) {
-                addonList.add("exotic_garden");
-            }
-
-            if (modConfig.enableHotbarPets()) {
-                addonList.add("hotbar_pets");
-            }
-
-            if (modConfig.enableExtraGear()) {
+            if (modConfig.isExtraGearEnabled()) {
                 addonList.add("extra_gear");
             }
-
-            if (modConfig.enableLuckyBlocks()) {
-                addonList.add("lucky_blocks");
+            if (modConfig.isEcoPowerEnabled()) {
+                addonList.add("eco_power");
             }
-
-            if (modConfig.enableSoulJars()) {
+            if (modConfig.isSoulJarsEnabled()) {
                 addonList.add("soul_jars");
             }
-
-            if (modConfig.enableSlimyTreeTaps()) {
+            if (modConfig.isTranscendenceEnabled()) {
+                addonList.add("transcendence");
+            }
+            if (modConfig.isSpiritsUnchainedEnabled()) {
+                addonList.add("spirits_unchained");
+            }
+            if (modConfig.isHotbarPetsEnabled()) {
+                addonList.add("hotbar_pets");
+            }
+            if (modConfig.isDankTech2Enabled()) {
+                addonList.add("dank_tech_2");
+            }
+            if (modConfig.isLuckyBlocksEnabled()) {
+                addonList.add("lucky_blocks");
+            }
+            if (modConfig.isSlimyTreeTapsEnabled()) {
                 addonList.add("slimy_tree_taps");
             }
-
-            if (modConfig.enableDankTech()) {
-                addonList.add("dank_tech");
+            if (modConfig.isExoticGardenEnabled()) {
+                addonList.add("exotic_garden");
             }
-
-            if (modConfig.enableTranscendence()) {
-                addonList.add("transcendence");
+            if (modConfig.isInfinityExpansionEnabled()) {
+                addonList.add("infinity_expansion");
+            }
+            if (modConfig.isGlobalWarmingEnabled()) {
+                addonList.add("global_warming");
+            }
+            if (modConfig.isMiniblocksEnabled()) {
+                addonList.add("miniblocks");
+            }
+            if (modConfig.isNetworksEnabled()) {
+                addonList.add("networks");
+            }
+            if (modConfig.isCrystamaeHistoriaEnabled()) {
+                addonList.add("crystamae_historia");
+            }
+            if (modConfig.isExtraToolsEnabled()) {
+                addonList.add("extra_tools");
+            }
+            if (modConfig.isFoxyMachinesEnabled()) {
+                addonList.add("foxy_machines");
+            }
+            if (modConfig.isRelicsOfCthoniaEnabled()) {
+                addonList.add("relics_of_cthonia");
+            }
+            if (modConfig.isFnAmplificationsEnabled()) {
+                addonList.add("fn_amplifications");
+            }
+            if (modConfig.isSimpleMaterialGeneratorsEnabled()) {
+                addonList.add("simple_material_generators");
+            }
+            if (modConfig.isDynaTechEnabled()) {
+                addonList.add("dyna_tech");
+            }
+            if (modConfig.isDyeBenchEnabled()) {
+                addonList.add("dye_bench");
+            }
+            if (modConfig.isSupremeEnabled()) {
+                addonList.add("supreme");
+            }
+            if (modConfig.isWilderNetherEnabled()) {
+                addonList.add("wilder_nether");
+            }
+            if (modConfig.isCompressionCraftEnabled()) {
+                addonList.add("compression_craft");
+            }
+            if (modConfig.isVillagerUtilEnabled()) {
+                addonList.add("villager_util");
+            }
+            if (modConfig.isMobCapturerEnabled()) {
+                addonList.add("mob_capturer");
+            }
+            if (modConfig.isEmcTechEnabled()) {
+                addonList.add("emc_tech");
+            }
+            if (modConfig.isFlowerTechEnabled()) {
+                addonList.add("flower_power");
+            }
+            if (modConfig.isSlimeTinkerEnabled()) {
+                addonList.add("slime_tinker");
+            }
+            if (modConfig.isGalactifunEnabled()) {
+                addonList.add("galactifun");
+            }
+            if (modConfig.isFluffyMachinesEnabled()) {
+                addonList.add("fluffy_machines");
+            }
+            if (modConfig.isAlchimiaVitaeEnabled()) {
+                addonList.add("alchimia_vitae");
+            }
+            if (modConfig.isSlimefunWarfareEnabled()) {
+                addonList.add("slimefun_warfare");
+            }
+            if (modConfig.isLiquidEnabled()) {
+                addonList.add("liquid");
+            }
+            if (modConfig.isLiteXpansionEnabled()) {
+                addonList.add("lite_xpansion");
+            }
+            if (modConfig.isSimpleUtilsEnabled()) {
+                addonList.add("simple_utils");
+            }
+            if (modConfig.isElementManipulationEnabled()) {
+                addonList.add("element_manipulation");
+            }
+            if (modConfig.isNetheopoiesisEnabled()) {
+                addonList.add("netheopoiesis");
+            }
+            if (modConfig.isSimpleStorageEnabled()) {
+                addonList.add("simple_storage");
+            }
+            if (modConfig.isSlimyRepairEnabled()) {
+                addonList.add("slimy_repair");
             }
         }
 
