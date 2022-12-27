@@ -34317,7 +34317,7 @@
                         "coal:1"
                     ],
                     "time": 100,
-                    "energy": 3000
+                    "energy": -3000
                 },
                 {
                     "inputs": [],
@@ -34325,7 +34325,7 @@
                         "iron_ingot:1"
                     ],
                     "time": 100,
-                    "energy": 3000
+                    "energy": -3000
                 },
                 {
                     "inputs": [],
@@ -34333,7 +34333,7 @@
                         "gold_ingot:1"
                     ],
                     "time": 100,
-                    "energy": 3000
+                    "energy": -3000
                 },
                 {
                     "inputs": [],
@@ -34341,7 +34341,7 @@
                         "copper_ingot:1"
                     ],
                     "time": 100,
-                    "energy": 3000
+                    "energy": -3000
                 },
                 {
                     "inputs": [],
@@ -34349,7 +34349,7 @@
                         "redstone:1"
                     ],
                     "time": 100,
-                    "energy": 3000
+                    "energy": -3000
                 },
                 {
                     "inputs": [],
@@ -34357,7 +34357,7 @@
                         "lapis_lazuli:1"
                     ],
                     "time": 100,
-                    "energy": 3000
+                    "energy": -3000
                 },
                 {
                     "inputs": [],
@@ -34365,7 +34365,7 @@
                         "emerald:1"
                     ],
                     "time": 100,
-                    "energy": 3000
+                    "energy": -3000
                 },
                 {
                     "inputs": [],
@@ -34373,7 +34373,7 @@
                         "diamond:1"
                     ],
                     "time": 100,
-                    "energy": 3000
+                    "energy": -3000
                 }
             ],
             "ADVANCED_QUARRY": [
@@ -34383,7 +34383,7 @@
                         "coal:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34391,7 +34391,7 @@
                         "iron_ingot:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34399,7 +34399,7 @@
                         "gold_ingot:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34407,7 +34407,7 @@
                         "copper_ingot:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34415,7 +34415,7 @@
                         "redstone:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34423,7 +34423,7 @@
                         "lapis_lazuli:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34431,7 +34431,7 @@
                         "emerald:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34439,7 +34439,7 @@
                         "diamond:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34447,7 +34447,7 @@
                         "quartz:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34455,7 +34455,7 @@
                         "netherite_ingot:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 },
                 {
                     "inputs": [],
@@ -34463,7 +34463,7 @@
                         "netherrack:2"
                     ],
                     "time": 100,
-                    "energy": 9000
+                    "energy": -9000
                 }
             ],
             "VOID_QUARRY": [
@@ -34473,7 +34473,7 @@
                         "coal:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34481,7 +34481,7 @@
                         "iron_ingot:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34489,7 +34489,7 @@
                         "gold_ingot:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34497,7 +34497,7 @@
                         "copper_ingot:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34505,7 +34505,7 @@
                         "redstone:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34513,7 +34513,7 @@
                         "lapis_lazuli:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34521,7 +34521,7 @@
                         "emerald:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34529,7 +34529,7 @@
                         "diamond:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34537,7 +34537,7 @@
                         "quartz:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34545,7 +34545,7 @@
                         "netherite_ingot:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 },
                 {
                     "inputs": [],
@@ -34553,7 +34553,7 @@
                         "netherrack:6"
                     ],
                     "time": 100,
-                    "energy": 36000
+                    "energy": -36000
                 }
             ],
             "INFINITY_QUARRY": [
@@ -34563,7 +34563,7 @@
                         "coal:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34571,7 +34571,7 @@
                         "iron_ingot:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34579,7 +34579,7 @@
                         "gold_ingot:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34587,7 +34587,7 @@
                         "copper_ingot:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34595,7 +34595,7 @@
                         "redstone:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34603,7 +34603,7 @@
                         "lapis_lazuli:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34611,7 +34611,7 @@
                         "emerald:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34619,7 +34619,7 @@
                         "diamond:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34627,7 +34627,7 @@
                         "quartz:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34635,7 +34635,7 @@
                         "netherite_ingot:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 },
                 {
                     "inputs": [],
@@ -34643,7 +34643,7 @@
                         "netherrack:64"
                     ],
                     "time": 100,
-                    "energy": 360000
+                    "energy": -360000
                 }
             ],
             "[WATERLOGGED]STRAINER_BASE": [
