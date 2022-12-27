@@ -21,6 +21,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,7 +54,7 @@ public class RecipeLoader {
     // Loading
     private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();
     private static final InputStream dataStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("data.json");
-    private static final JsonObject jsonObject = dataStream != null ? GSON.fromJson(new InputStreamReader(dataStream), JsonObject.class) : null;
+    private static final JsonObject jsonObject = dataStream != null ? GSON.fromJson(new InputStreamReader(dataStream, StandardCharsets.UTF_8), JsonObject.class) : null;
 
 
     public static void load() {
