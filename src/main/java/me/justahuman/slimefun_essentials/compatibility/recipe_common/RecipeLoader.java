@@ -96,7 +96,7 @@ public class RecipeLoader {
             for (String slimefunId : itemIds) {
                 final JsonObject item = itemsObject.getAsJsonObject(slimefunId);
                 if (item != null) {
-                    items.put(slimefunId, new TypeStack(getType(item), deserializeItem(item)));
+                    items.put(slimefunId, new TypeStack(getType(item, "process"), deserializeItem(item)));
                 }
             }
         }
@@ -105,7 +105,7 @@ public class RecipeLoader {
             for (String multiblockId : multiblocksObject.keySet()) {
                 final JsonObject multiblock = multiblocksObject.getAsJsonObject(multiblockId);
                 if (multiblock != null) {
-                    multiblocks.put(multiblockId, new TypeStack(getType(multiblock), deserializeItem(multiblock)));
+                    multiblocks.put(multiblockId, new TypeStack(getType(multiblock, "multiblock"), deserializeItem(multiblock)));
                 }
             }
         }
@@ -114,7 +114,7 @@ public class RecipeLoader {
             for (String recipeTypeId : recipeTypesObject.keySet()) {
                 final JsonObject recipeType = recipeTypesObject.getAsJsonObject(recipeTypeId);
                 if (recipeType != null) {
-                    recipeTypes.put(recipeTypeId, new TypeStack(getType(recipeType), deserializeItem(recipeType)));
+                    recipeTypes.put(recipeTypeId, new TypeStack(getType(recipeType, "process"), deserializeItem(recipeType)));
                 }
             }
         }
@@ -391,7 +391,7 @@ public class RecipeLoader {
         workstationId = clearConditions(workstationId);
         
         if (multiblocks.containsKey(workstationId)) {
-            return "multiblock";
+            return multiblocks.get(workstationId).type();
         } else if (items.containsKey(workstationId)) {
             return items.get(workstationId).type();
         } else if (recipeTypes.containsKey(workstationId)) {
@@ -454,8 +454,8 @@ public class RecipeLoader {
         return null;
     }
     
-    private static String getType(JsonObject itemObject) {
-        return JsonHelper.hasString(itemObject, "type") ? itemObject.get("type").getAsString() : "process";
+    private static String getType(JsonObject itemObject, String defaultType) {
+        return JsonHelper.hasString(itemObject, "type") ? itemObject.get("type").getAsString() : defaultType;
     }
 
     private static ItemStack deserializeItem(JsonObject itemObject) {
