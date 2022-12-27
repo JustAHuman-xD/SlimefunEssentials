@@ -1,18 +1,23 @@
 {
-  "emi.category.slimefun_essentials.3by3": "%s",
+  "emi.category.slimefun_essentials.3x3": "%s",
   "emi.category.slimefun_essentials.multiblock": "%s",
   "emi.category.slimefun_essentials.ancient_altar": "%s",
   "emi.category.slimefun_essentials.smeltery": "%s",
-  "emi.category.slimefun_essentials.machine": "%s",
-  "emi.category.slimefun_essentials.break": "Specialized Block Breaking",
-  "emi.category.slimefun_essentials.trade": "Trading",
-  "emi.category.slimefun_essentials.kill": "Kill Mob",
+  "emi.category.slimefun_essentials.process": "%s",
+  "emi.category.slimefun_essentials.reactor": "%s",
 
   "slimefun_essentials.missing_entity": "Missing Entity!",
 
   "slimefun_essentials.recipe.time": "%s Seconds (%s Ticks)",
   "slimefun_essentials.recipe.energy.use": "%sJ Used",
   "slimefun_essentials.recipe.energy.generate": "%sJ Generated",
+  "slimefun_essentials.recipe.condition.day": "This workstation must be exposed to the Sun to process this Recipe!",
+  "slimefun_essentials.recipe.condition.night": "This workstation must be exposed to the Moon to process this Recipe!",
+  "slimefun_essentials.recipe.condition.obstructed": "This workstation must be obstructed from the Sky to process this Recipe!",
+  "slimefun_essentials.recipe.condition.waterlogged": "This workstation must be waterlogged to process this Recipe!",
+  "slimefun_essentials.recipe.condition.overworld": "This workstation must be placed in the overworld to process this Recipe!",
+  "slimefun_essentials.recipe.condition.nether": "This workstation must be placed in the nether to process this Recipe!",
+  "slimefun_essentials.recipe.condition.end": "This workstation must be placed in the end to process this Recipe!",
 
   "text.autoconfig.slimefun_essentials.title": "Slimefun To EMI Config Options!",
   "text.autoconfig.slimefun_essentials.category.general": "General Settings",

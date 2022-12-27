@@ -6,8 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lombok.Getter;
-import me.justahuman.slimefun_essentials.Utils;
 import me.justahuman.slimefun_essentials.config.ModConfig;
+import me.justahuman.slimefun_essentials.core.Utils;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
@@ -22,26 +22,31 @@ import net.minecraft.util.registry.Registry;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class RecipeLoader {
     // Storage
     @Getter
-    protected static final Set<String> specialCases = new HashSet<>(Arrays.asList("3X3_", "MULTIBLOCK_"));
+    protected static final Map<String, ConditionContainer> conditionMap = new HashMap<>(Map.of(
+            "day", new ConditionContainer(Utils.WIDGETS, "day", 57, 0, 13, 13),
+            "night", new ConditionContainer(Utils.WIDGETS, "night", 70, 0, 13, 13),
+            "obstructed", new ConditionContainer(Utils.WIDGETS, "obstructed", 83, 0, 13, 13),
+            "waterlogged", new ConditionContainer(Utils.WIDGETS, "waterlogged", 96, 0, 13, 13),
+            "overworld", new ConditionContainer(Utils.WIDGETS, "overworld", 109, 0, 13, 13),
+            "nether", new ConditionContainer(Utils.WIDGETS, "nether", 122, 0, 13, 13),
+            "end", new ConditionContainer(Utils.WIDGETS, "end", 135, 0, 13, 13)
+    ));
     @Getter
-    protected static final LinkedHashMap<String, ItemStack> items = new LinkedHashMap<>();
+    protected static final LinkedHashMap<String, TypeStack> items = new LinkedHashMap<>();
     @Getter
-    protected static final Map<String, ItemStack> recipeTypes = new HashMap<>();
+    protected static final Map<String, TypeStack> recipeTypes = new HashMap<>();
     @Getter
-    protected static final Map<String, ItemStack> multiblocks = new HashMap<>();
+    protected static final Map<String, TypeStack> multiblocks = new HashMap<>();
     @Getter
     protected static final Map<String, CategoryContainer> categories = new HashMap<>();
 
@@ -90,7 +95,7 @@ public class RecipeLoader {
             for (String slimefunId : itemIds) {
                 final JsonObject item = itemsObject.getAsJsonObject(slimefunId);
                 if (item != null) {
-                    items.put(slimefunId, deserializeItem(item));
+                    items.put(slimefunId, new TypeStack(getType(item), deserializeItem(item)));
                 }
             }
         }
@@ -99,7 +104,7 @@ public class RecipeLoader {
             for (String multiblockId : multiblocksObject.keySet()) {
                 final JsonObject multiblock = multiblocksObject.getAsJsonObject(multiblockId);
                 if (multiblock != null) {
-                    multiblocks.put(multiblockId, deserializeItem(multiblock));
+                    multiblocks.put(multiblockId, new TypeStack(getType(multiblock), deserializeItem(multiblock)));
                 }
             }
         }
@@ -108,7 +113,7 @@ public class RecipeLoader {
             for (String recipeTypeId : recipeTypesObject.keySet()) {
                 final JsonObject recipeType = recipeTypesObject.getAsJsonObject(recipeTypeId);
                 if (recipeType != null) {
-                    recipeTypes.put(recipeTypeId, deserializeItem(recipeType));
+                    recipeTypes.put(recipeTypeId, new TypeStack(getType(recipeType), deserializeItem(recipeType)));
                 }
             }
         }
@@ -148,9 +153,11 @@ public class RecipeLoader {
                     //Define important Variables
                     final List<CustomMultiStack> inputs = new ArrayList<>();
                     final List<CustomMultiStack> outputs = new ArrayList<>();
-                    final StringBuilder uniqueId = new StringBuilder().append("slimefun_essentials:/").append(workstationId.toLowerCase());
-                    final JsonArray recipeInputs = recipe.getAsJsonArray("inputs");
-                    final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs");
+                    final List<ConditionContainer> conditions = new ArrayList<>();
+                    final StringBuilder uniqueId = new StringBuilder().append("slimefun_essentials:/").append(clearConditions(workstationId).toLowerCase());
+                    final JsonArray recipeInputs = recipe.getAsJsonArray("inputs") != null ? recipe.getAsJsonArray("inputs") : new JsonArray();
+                    final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs")!= null ? recipe.getAsJsonArray("outputs") : new JsonArray();
+                    final JsonArray recipeConditions = recipe.getAsJsonArray("conditions")!= null ? recipe.getAsJsonArray("conditions") : new JsonArray();
                     final Integer ticks = recipe.get("time") != null ? recipe.get("time").getAsInt() : 0;
                     final Integer energy = recipe.get("energy") != null ? recipe.get("energy").getAsInt() : 0;
 
@@ -197,6 +204,22 @@ public class RecipeLoader {
                             outputs.add(new CustomMultiStack(Collections.singletonList(output), amount));
                         }
                     }
+                    
+                    //Fill Conditions
+                    
+                    //Global Workstation Conditions
+                    for (String conditionKey : conditionMap.keySet()) {
+                        final String globalKey = "[" + conditionKey.toUpperCase() + "]";
+                        if (workstationId.contains(globalKey)) {
+                            conditions.add(conditionMap.get(conditionKey));
+                        }
+                    }
+                    
+                    //Per Recipe Conditions
+                    for (JsonElement jsonElement : recipeConditions) {
+                        final String condition = jsonElement.getAsString();
+                        conditions.add(conditionMap.getOrDefault(condition, new ConditionContainer(Utils.WIDGETS, "error", 0, 243, 13, 13)));
+                    }
 
                     //Remove any parts of the String that cannot be an Identifier
                     for (char x : recipe.toString().toLowerCase().toCharArray()) {
@@ -205,7 +228,7 @@ public class RecipeLoader {
                         }
                     }
 
-                    final RecipeContainer recipeContainer = new RecipeContainer(new Identifier(uniqueId.toString()), getCategoryId(workstationId),inputs, outputs, ticks, energy);
+                    final RecipeContainer recipeContainer = new RecipeContainer(new Identifier(uniqueId.toString()), getCategoryId(workstationId),inputs, outputs, ticks, energy, conditions);
 
                     if (! categoryContainer.getRecipes().contains(recipeContainer)) {
                         final List<RecipeContainer> recipeContainers = categoryContainer.getRecipes();
@@ -221,6 +244,10 @@ public class RecipeLoader {
         final List<String> addonList = new ArrayList<>(Collections.singletonList("core"));
         if (Utils.isClothConfigEnabled()) {
             final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+            
+            if (modConfig.enableInfinityExpansion()) {
+                addonList.add("infinity_expansion");
+            }
 
             if (modConfig.enableSpiritsUnchained()) {
                 addonList.add("spirits_unchained");
@@ -269,55 +296,54 @@ public class RecipeLoader {
 
         return addonList;
     }
+    
+    private static String clearConditions(String toClear) {
+        for (String conditionId : conditionMap.keySet()) {
+            conditionId = "[" + conditionId.toUpperCase() + "]";
+            if (toClear.contains(conditionId)) {
+                toClear = toClear.replace(conditionId, "");
+            }
+        }
+        return toClear;
+    }
 
     private static String getCategoryId(String workstationId) {
+        workstationId = clearConditions(workstationId);
+        
         if (multiblocks.containsKey(workstationId)) {
             return "multiblock";
-        } else if (workstationId.contains("ANCIENT_ALTAR")) {
-            return "ancient_altar";
-        } else if (workstationId.contains("TRADE")) {
-            return "trade";
-        } else if (workstationId.contains("KILL")) {
-            return "kill";
-        } else if (workstationId.contains("USE")) {
-            return "use";
-        } else if (workstationId.contains("SMELTERY")) {
-            return "smeltery";
-        } else if (workstationId.contains("MULTIBLOCK")) {
-            return "multiblock";
-        } else if (workstationId.contains("3X3")) {
-            return "3by3";
-        } else if (items.containsKey(workstationId) || recipeTypes.containsKey(workstationId)) {
-            return "machine";
+        } else if (items.containsKey(workstationId)) {
+            return items.get(workstationId).type();
+        } else if (recipeTypes.containsKey(workstationId)) {
+            return recipeTypes.get(workstationId).type();
         }
+        Utils.log(workstationId);
         return "error";
     }
 
     private static ItemStack getWorkstationStack(String workstationId) {
-        for (String specialCase : specialCases) {
-            if (workstationId.contains(specialCase)) {
-                workstationId = workstationId.substring(workstationId.indexOf(specialCase) + specialCase.length());
-            }
-        }
+        workstationId = clearConditions(workstationId);
+        
         if (multiblocks.containsKey(workstationId)) {
-            return multiblocks.get(workstationId);
-        } if (items.containsKey(workstationId)) {
-            return items.get(workstationId);
+            return multiblocks.get(workstationId).itemStack();
+        } else if (items.containsKey(workstationId)) {
+            return items.get(workstationId).itemStack();
         } else if (recipeTypes.containsKey(workstationId)) {
-            return recipeTypes.get(workstationId);
+            return recipeTypes.get(workstationId).itemStack();
         }
-        return new ItemStack(Items.AIR);
+        
+        return new ItemStack(Items.BARRIER);
     }
 
     private static Object getStackFromId(String id) {
         final String first = id.substring(0, id.indexOf(":"));
         final String second = id.substring(id.indexOf(":") + 1);
         if (items.containsKey(first)) {
-            final ItemStack item = items.get(first).copy();
+            final ItemStack item = items.get(first).itemStack().copy();
             item.setCount(Integer.parseInt(second));
             return item;
         } else if (multiblocks.containsKey(first)) {
-            final ItemStack item = multiblocks.get(first).copy();
+            final ItemStack item = multiblocks.get(first).itemStack().copy();
             item.setCount(Integer.parseInt(second));
             return item;
         }
@@ -346,6 +372,10 @@ public class RecipeLoader {
         }
 
         return null;
+    }
+    
+    private static String getType(JsonObject itemObject) {
+        return JsonHelper.hasString(itemObject, "type") ? itemObject.get("type").getAsString() : "process";
     }
 
     private static ItemStack deserializeItem(JsonObject itemObject) {

@@ -1,6 +1,7 @@
 package me.justahuman.slimefun_essentials;
 
 import me.justahuman.slimefun_essentials.config.ModConfig;
+import me.justahuman.slimefun_essentials.core.Utils;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
