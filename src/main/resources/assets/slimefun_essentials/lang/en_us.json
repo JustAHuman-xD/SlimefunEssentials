@@ -18,6 +18,8 @@
   "slimefun_essentials.recipe.condition.overworld": "This workstation must be placed in the overworld to process this Recipe!",
   "slimefun_essentials.recipe.condition.nether": "This workstation must be placed in the nether to process this Recipe!",
   "slimefun_essentials.recipe.condition.end": "This workstation must be placed in the end to process this Recipe!",
+  "slimefun_essentials.recipe.condition.place": "Place the inputs around the Workstation to process this Recipe",
+  "slimefun_essentials.recipe.condition.dragon_egg": "This workstation must have the dragon egg placed above it to process this Recipe!",
 
   "text.autoconfig.slimefun_essentials.title": "Slimefun To EMI Config Options!",
   "text.autoconfig.slimefun_essentials.category.general": "General Settings",

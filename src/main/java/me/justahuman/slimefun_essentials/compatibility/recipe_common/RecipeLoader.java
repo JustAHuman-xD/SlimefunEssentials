@@ -46,10 +46,14 @@ public class RecipeLoader {
             "waterlogged", new ConditionContainer(Utils.WIDGETS, "waterlogged", 96, 0, 13, 13),
             "overworld", new ConditionContainer(Utils.WIDGETS, "overworld", 109, 0, 13, 13),
             "nether", new ConditionContainer(Utils.WIDGETS, "nether", 122, 0, 13, 13),
-            "end", new ConditionContainer(Utils.WIDGETS, "end", 135, 0, 13, 13)
+            "end", new ConditionContainer(Utils.WIDGETS, "end", 135, 0, 13, 13),
+            "place", new ConditionContainer(Utils.WIDGETS, "place", 148, 0, 13, 13),
+            "dragon_egg", new ConditionContainer(Utils.WIDGETS, "dragon_egg", 161, 0, 13, 13)
     ));
     @Getter
     protected static final LinkedHashMap<String, TypeStack> items = new LinkedHashMap<>();
+    @Getter
+    protected static final Map<String, TypeStack> placeholders = new HashMap<>();
     @Getter
     protected static final Map<String, TypeStack> recipeTypes = new HashMap<>();
     @Getter
@@ -95,6 +99,7 @@ public class RecipeLoader {
         final JsonObject itemsObject = sectionObject.getAsJsonObject("items");
         final JsonObject multiblocksObject = sectionObject.getAsJsonObject("multiblocks");
         final JsonObject recipeTypesObject = sectionObject.getAsJsonObject("recipe_types");
+        final JsonObject placeholdersObject = sectionObject.getAsJsonObject("placeholders");
 
         if (itemsObject != null && ! itemsObject.keySet().isEmpty()) {
             final List<String> itemIds = new ArrayList<>(itemsObject.keySet());
@@ -121,6 +126,15 @@ public class RecipeLoader {
                 final JsonObject recipeType = recipeTypesObject.getAsJsonObject(recipeTypeId);
                 if (recipeType != null) {
                     recipeTypes.put(recipeTypeId, new TypeStack(getType(recipeType, "process"), deserializeItem(recipeType)));
+                }
+            }
+        }
+    
+        if (placeholdersObject != null && ! placeholdersObject.keySet().isEmpty()) {
+            for (String placeholderId : placeholdersObject.keySet()) {
+                final JsonObject placeholder = placeholdersObject.getAsJsonObject(placeholderId);
+                if (placeholder != null) {
+                    placeholders.put(placeholderId, new TypeStack(getType(placeholder, "process"), deserializeItem(placeholder)));
                 }
             }
         }
@@ -184,7 +198,7 @@ public class RecipeLoader {
                                         amount = itemStack.getCount();
                                         itemStack.setCount(1);
                                     }
-                                    if (input instanceof Collection collection) {
+                                    if (input instanceof Collection<?> collection) {
                                         multiples.addAll(collection);
                                     } else {
                                         multiples.add(input);
@@ -426,18 +440,29 @@ public class RecipeLoader {
     }
 
     private static Object getStackFromId(String id) {
-        final String first = id.substring(0, id.indexOf(":"));
-        final String second = id.substring(id.indexOf(":") + 1);
+        String first;
+        String second;
+        try {
+            first = id.substring(0, id.indexOf(":"));
+            second = id.substring(id.indexOf(":") + 1);
+        } catch (IndexOutOfBoundsException ignored) {
+            Utils.log("Invalid Stack Id: " + id);
+            first = "barrier";
+            second = "1";
+        }
         if (items.containsKey(first)) {
             final ItemStack item = items.get(first).itemStack().copy();
+            item.setCount(Integer.parseInt(second));
+            return item;
+        } else if (placeholders.containsKey(first)) {
+            final ItemStack item = placeholders.get(first).itemStack().copy();
             item.setCount(Integer.parseInt(second));
             return item;
         } else if (multiblocks.containsKey(first)) {
             final ItemStack item = multiblocks.get(first).itemStack().copy();
             item.setCount(Integer.parseInt(second));
             return item;
-        }
-        else {
+        } else {
             if (first.equals("entity")) {
                 if (second.equals("all")) {
                     final Set<Entity> entities = new HashSet<>();
