@@ -10,6 +10,9 @@ import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.justahuman.slimefun_essentials.core.Utils;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -23,12 +26,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class RecipeLoader {
     // Storage
@@ -178,7 +184,11 @@ public class RecipeLoader {
                                         amount = itemStack.getCount();
                                         itemStack.setCount(1);
                                     }
-                                    multiples.add(input);
+                                    if (input instanceof Collection collection) {
+                                        multiples.addAll(collection);
+                                    } else {
+                                        multiples.add(input);
+                                    }
                                 }
                             }
                             inputs.add(new CustomMultiStack(multiples, amount));
@@ -429,6 +439,18 @@ public class RecipeLoader {
         }
         else {
             if (first.equals("entity")) {
+                if (second.equals("all")) {
+                    final Set<Entity> entities = new HashSet<>();
+                    for (EntityType<?> entityType : Registry.ENTITY_TYPE) {
+                        if (entityType.create(MinecraftClient.getInstance().world) instanceof LivingEntity) {
+                            entities.add(entityType.create(MinecraftClient.getInstance().world));
+                        }
+                    }
+                    return entities;
+                }
+                if (second.equals("player")) {
+                    return EntityType.PLAYER.create(MinecraftClient.getInstance().world);
+                }
                 return Registry.ENTITY_TYPE.get(new Identifier("minecraft:" + second)).create(MinecraftClient.getInstance().world);
             } else if (first.equals("fluid")) {
                 return Registry.FLUID.get(new Identifier("minecraft:" + second));
