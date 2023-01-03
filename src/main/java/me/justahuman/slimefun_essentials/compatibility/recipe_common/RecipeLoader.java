@@ -60,13 +60,14 @@ public class RecipeLoader {
     protected static final Map<String, TypeStack> multiblocks = new HashMap<>();
     @Getter
     protected static final Map<String, CategoryContainer> categories = new HashMap<>();
+    @Getter
+    protected static final Map<String, CopyContainer> toCopy = new HashMap<>();
 
     // Loading
     private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();
     private static final InputStream dataStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("data.json");
     private static final JsonObject jsonObject = dataStream != null ? GSON.fromJson(new InputStreamReader(dataStream, StandardCharsets.UTF_8), JsonObject.class) : null;
-
-
+    
     public static void load() {
         if (jsonObject == null || ! items.isEmpty()) {
             return;
@@ -79,6 +80,32 @@ public class RecipeLoader {
 
         for (String addon : enabledAddons) {
             loadRecipes(addon);
+        }
+        
+        for (String copyToId : toCopy.keySet()) {
+            final CopyContainer copyContainer = toCopy.get(copyToId);
+            final String copyFromId = copyContainer.copyFromId();
+            final String inputChange = copyContainer.inputs();
+            final String outputChange = copyContainer.outputs();
+            final String timeChange = copyContainer.time();
+            
+            final CategoryContainer copyToContainer = categories.get(copyToId);
+            final CategoryContainer copyFromContainer = categories.get(copyFromId);
+            final List<RecipeContainer> newRecipes = new ArrayList<>();
+            final List<RecipeContainer> copyRecipes = copyFromContainer.getRecipes();
+            
+            for (RecipeContainer recipeContainer : copyRecipes) {
+                final String other = recipeContainer.id().getPath().replace("/" + clearConditions(copyFromId).toLowerCase(), "");
+                final String type = recipeContainer.type();
+                final List<CustomMultiStack> inputs = change(inputChange, recipeContainer.inputs());
+                final List<CustomMultiStack> outputs = change(outputChange, recipeContainer.outputs());
+                final List<ConditionContainer> conditions = recipeContainer.conditions();
+                final float time = change(timeChange, recipeContainer.time());
+                final int energy = copyToContainer.getWorkstation().energy();
+                final Identifier uniqueId = new Identifier("slimefun_essentials:/" + clearConditions(copyToId).toLowerCase() + other);
+                newRecipes.add(new RecipeContainer(uniqueId, type, inputs, outputs, time, energy, conditions));
+            }
+            copyToContainer.setRecipes(newRecipes);
         }
     }
 
@@ -149,231 +176,241 @@ public class RecipeLoader {
             for (String workstationId : workstationList) {
 
                 final ItemStack workstationStack = getWorkstationStack(workstationId);
-                final JsonArray recipes = totalRecipes.getAsJsonArray(workstationId);
+                final JsonElement workstationRecipes = totalRecipes.get(workstationId);
 
-                if (recipes == null || workstationStack == null) {
+                if (workstationRecipes == null || workstationStack == null) {
                     continue;
                 }
 
                 final String categoryId = "slimefun_essentials:" + getCategoryId(workstationId).toLowerCase();
-                final CategoryContainer categoryContainer;
-
-                if (categories.containsKey(categoryId + workstationId)) {
-                    categoryContainer = categories.get(categoryId + workstationId);
-                } else {
-                    categoryContainer = new CategoryContainer(new Identifier(categoryId), workstationStack, new ArrayList<>());
-                    categories.put(categoryId + workstationId, categoryContainer);
+                final boolean existingContainer = categories.containsKey(workstationId);
+                CategoryContainer categoryContainer = existingContainer ? categories.get(workstationId) : new CategoryContainer(new Identifier(categoryId), new Workstation(workstationStack, 0), new ArrayList<>());
+                
+                if (workstationRecipes instanceof JsonObject workstationObject) {
+                    final int energy = existingContainer ? categoryContainer.getWorkstation().energy() : workstationObject.get("energy").getAsInt();
+                    if (!existingContainer) {
+                        categoryContainer = new CategoryContainer(new Identifier(categoryId), new Workstation(workstationStack, energy), new ArrayList<>());
+                    }
+                    
+                    if (workstationObject.has("copy")) {
+                        final String copyFromId = workstationObject.get("copy").getAsString();
+                        final String inputs = workstationObject.has("inputs") ? workstationObject.get("inputs").getAsString() : null;
+                        final String outputs = workstationObject.has("outputs") ? workstationObject.get("outputs").getAsString() : null;
+                        final String time = workstationObject.has("time") ? workstationObject.get("time").getAsString() : null;
+                        toCopy.put(workstationId, new CopyContainer(copyFromId, inputs, outputs, time));
+                        categories.put(workstationId, categoryContainer);
+                        continue;
+                    }
+                    
+                    final JsonArray workstationArray = workstationObject.getAsJsonArray("recipes");
+                    for (JsonElement recipeElement : workstationArray) {
+                        if (! (recipeElement instanceof JsonObject recipe)) {
+                            continue;
+                        }
+    
+                        final StringBuilder uniqueId = new StringBuilder().append("slimefun_essentials:/").append(clearConditions(workstationId).toLowerCase());
+                        final JsonArray recipeInputs = recipe.getAsJsonArray("inputs") != null ? recipe.getAsJsonArray("inputs") : new JsonArray();
+                        final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs")!= null ? recipe.getAsJsonArray("outputs") : new JsonArray();
+                        final JsonArray recipeConditions = recipe.getAsJsonArray("conditions")!= null ? recipe.getAsJsonArray("conditions") : new JsonArray();
+                        final int time = recipe.get("time").getAsInt();
+                        
+                        handleRecipe(categoryContainer, workstationId, uniqueId, recipe.toString().toLowerCase(), recipeInputs, recipeOutputs, recipeConditions, time, energy);
+                    }
+                } else if (workstationRecipes instanceof JsonArray workstationArray) {
+                    for (JsonElement recipeElement : workstationArray) {
+                        if (! (recipeElement instanceof JsonObject recipe)) {
+                            continue;
+                        }
+                        
+                        final StringBuilder uniqueId = new StringBuilder().append("slimefun_essentials:/").append(clearConditions(workstationId).toLowerCase());
+                        final JsonArray recipeInputs = recipe.getAsJsonArray("inputs") != null ? recipe.getAsJsonArray("inputs") : new JsonArray();
+                        final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs")!= null ? recipe.getAsJsonArray("outputs") : new JsonArray();
+                        final JsonArray recipeConditions = recipe.getAsJsonArray("conditions")!= null ? recipe.getAsJsonArray("conditions") : new JsonArray();
+                        final float time = recipe.get("time") != null ? recipe.get("time").getAsInt() / 20F : 0;
+                        final int energy = recipe.get("energy") != null ? (int) (recipe.get("energy").getAsInt() / time) : 0;
+                        handleRecipe(categoryContainer, workstationId, uniqueId, recipe.toString().toLowerCase(), recipeInputs, recipeOutputs, recipeConditions, time, energy);
+                    }
                 }
-
-                for (JsonElement recipeElement : recipes) {
-
-                    if (! (recipeElement instanceof JsonObject recipe)) {
-                        continue;
-                    }
-
-                    //Define important Variables
-                    final List<CustomMultiStack> inputs = new ArrayList<>();
-                    final List<CustomMultiStack> outputs = new ArrayList<>();
-                    final List<ConditionContainer> conditions = new ArrayList<>();
-                    final StringBuilder uniqueId = new StringBuilder().append("slimefun_essentials:/").append(clearConditions(workstationId).toLowerCase());
-                    final JsonArray recipeInputs = recipe.getAsJsonArray("inputs") != null ? recipe.getAsJsonArray("inputs") : new JsonArray();
-                    final JsonArray recipeOutputs = recipe.getAsJsonArray("outputs")!= null ? recipe.getAsJsonArray("outputs") : new JsonArray();
-                    final JsonArray recipeConditions = recipe.getAsJsonArray("conditions")!= null ? recipe.getAsJsonArray("conditions") : new JsonArray();
-                    final Integer ticks = recipe.get("time") != null ? recipe.get("time").getAsInt() : 0;
-                    final Integer energy = recipe.get("energy") != null ? recipe.get("energy").getAsInt() : 0;
-
-                    if (recipeInputs == null || recipeOutputs == null) {
-                        continue;
-                    }
-
-                    //Fill Inputs
-                    for (JsonElement jsonElement : recipeInputs) {
-                        long amount = 0;
-                        if (jsonElement instanceof JsonArray jsonArray) {
-                            final List<Object> multiples = new ArrayList<>();
-                            for (JsonElement subJsonElement : jsonArray) {
-                                final Object input = getStackFromElement(subJsonElement, false);
-                                if (input != null) {
-                                    if (input instanceof ItemStack itemStack) {
-                                        amount = itemStack.getCount();
-                                        itemStack.setCount(1);
-                                    }
-                                    if (input instanceof Collection<?> collection) {
-                                        multiples.addAll(collection);
-                                    } else {
-                                        multiples.add(input);
-                                    }
-                                }
-                            }
-                            inputs.add(new CustomMultiStack(multiples, amount));
+    
+                categories.put(workstationId, categoryContainer);
+            }
+        }
+    }
+    
+    private static void handleRecipe(CategoryContainer categoryContainer, String workstationId, StringBuilder uniqueId, String toAddToId, JsonArray recipeInputs, JsonArray recipeOutputs, JsonArray recipeConditions, float time, int energy) {
+        //Define important Variables
+        final List<CustomMultiStack> inputs = new ArrayList<>();
+        final List<CustomMultiStack> outputs = new ArrayList<>();
+        final List<ConditionContainer> conditions = new ArrayList<>();
+        
+        if (recipeInputs == null || recipeOutputs == null) {
+            return;
+        }
+    
+        //Fill Conditions
+    
+        //Global Workstation Conditions
+        for (String conditionKey : conditionMap.keySet()) {
+            final String globalKey = "[" + conditionKey.toUpperCase() + "]";
+            if (workstationId.contains(globalKey)) {
+                conditions.add(conditionMap.get(conditionKey));
+            }
+        }
+    
+        //Per Recipe Conditions
+        for (JsonElement jsonElement : recipeConditions) {
+            final String condition = jsonElement.getAsString();
+            conditions.add(conditionMap.getOrDefault(condition, new ConditionContainer(Utils.WIDGETS, "error", 0, 243, 13, 13)));
+        }
+    
+        //Remove any parts of the String that cannot be an Identifier
+        for (char x : toAddToId.toCharArray()) {
+            if (Character.isLetterOrDigit(x)) {
+                uniqueId.append(x);
+            }
+        }
+    
+        //Fill Inputs
+        for (JsonElement jsonElement : recipeInputs) {
+            long amount = 0;
+            if (jsonElement instanceof JsonArray jsonArray) {
+                final List<Object> multiples = new ArrayList<>();
+                for (JsonElement subJsonElement : jsonArray) {
+                    final Object input = getStackFromElement(subJsonElement, false);
+                    if (input != null) {
+                        if (input instanceof ItemStack itemStack) {
+                            amount = itemStack.getCount();
+                            itemStack.setCount(1);
+                        }
+                        if (input instanceof Collection<?> collection) {
+                            multiples.addAll(collection);
                         } else {
-                            final Object input = getStackFromElement(jsonElement, true);
-                            if (input != null) {
-                                if (input instanceof ItemStack itemStack) {
-                                    amount = itemStack.getCount();
-                                }
-                                inputs.add(new CustomMultiStack(Collections.singletonList(input), amount));
-                            }
+                            multiples.add(input);
                         }
                     }
-
-                    //Fill Outputs
-                    for (JsonElement jsonElement : recipeOutputs) {
-                        long amount = 0;
-                        final Object output = getStackFromElement(jsonElement, false);
-                        if (output != null) {
-                            if (output instanceof ItemStack itemStack) {
-                                amount = itemStack.getCount();
-                                itemStack.setCount(1);
-                            }
-                            outputs.add(new CustomMultiStack(Collections.singletonList(output), amount));
-                        }
+                }
+                inputs.add(new CustomMultiStack(multiples, amount));
+            } else {
+                final Object input = getStackFromElement(jsonElement, true);
+                if (input != null) {
+                    if (input instanceof ItemStack itemStack) {
+                        amount = itemStack.getCount();
                     }
-                    
-                    //Fill Conditions
-                    
-                    //Global Workstation Conditions
-                    for (String conditionKey : conditionMap.keySet()) {
-                        final String globalKey = "[" + conditionKey.toUpperCase() + "]";
-                        if (workstationId.contains(globalKey)) {
-                            conditions.add(conditionMap.get(conditionKey));
-                        }
-                    }
-                    
-                    //Per Recipe Conditions
-                    for (JsonElement jsonElement : recipeConditions) {
-                        final String condition = jsonElement.getAsString();
-                        conditions.add(conditionMap.getOrDefault(condition, new ConditionContainer(Utils.WIDGETS, "error", 0, 243, 13, 13)));
-                    }
-
-                    //Remove any parts of the String that cannot be an Identifier
-                    for (char x : recipe.toString().toLowerCase().toCharArray()) {
-                        if (Character.isLetterOrDigit(x)) {
-                            uniqueId.append(x);
-                        }
-                    }
-
-                    final RecipeContainer recipeContainer = new RecipeContainer(new Identifier(uniqueId.toString()), getCategoryId(workstationId),inputs, outputs, ticks, energy, conditions);
-
-                    if (! categoryContainer.getRecipes().contains(recipeContainer)) {
-                        final List<RecipeContainer> recipeContainers = categoryContainer.getRecipes();
-                        recipeContainers.add(recipeContainer);
-                        categoryContainer.setRecipes(recipeContainers);
-                    }
+                    inputs.add(new CustomMultiStack(Collections.singletonList(input), amount));
                 }
             }
+        }
+    
+        //Fill Outputs
+        for (JsonElement jsonElement : recipeOutputs) {
+            long amount = 0;
+            if (jsonElement instanceof JsonArray outputArray) {
+                int i = 0;
+                for (JsonElement subJsonElement : outputArray) {
+                    uniqueId.append(i);
+                    final List<CustomMultiStack> subOutputs = new ArrayList<>();
+                    final Object output = getStackFromElement(subJsonElement, false);
+                    if (output != null) {
+                        if (output instanceof ItemStack itemStack) {
+                            amount = itemStack.getCount();
+                            itemStack.setCount(1);
+                        }
+                        subOutputs.add(new CustomMultiStack(Collections.singletonList(output), amount));
+                        registerRecipe(categoryContainer, uniqueId, getCategoryId(workstationId), inputs, subOutputs, time, energy, conditions);
+                    }
+                    i++;
+                }
+                return;
+            } else {
+                final Object output = getStackFromElement(jsonElement, false);
+                if (output instanceof ItemStack itemStack) {
+                    amount = itemStack.getCount();
+                    itemStack.setCount(1);
+                }
+                outputs.add(new CustomMultiStack(Collections.singletonList(output), amount));
+            }
+        }
+    
+        registerRecipe(categoryContainer, uniqueId, getCategoryId(workstationId), inputs, outputs, time, energy, conditions);
+    }
+    
+    private static void registerRecipe(CategoryContainer categoryContainer, StringBuilder uniqueId, String categoryId, List<CustomMultiStack>inputs, List<CustomMultiStack> outputs, float time, int energy, List<ConditionContainer> conditions) {
+        final RecipeContainer recipeContainer = new RecipeContainer(new Identifier(uniqueId.toString()), categoryId,inputs, outputs, time, energy, conditions);
+    
+        if (! categoryContainer.getRecipes().contains(recipeContainer)) {
+            final List<RecipeContainer> recipeContainers = categoryContainer.getRecipes();
+            recipeContainers.add(recipeContainer);
+            categoryContainer.setRecipes(recipeContainers);
         }
     }
 
     private static List<String> getEnabledAddons() {
-        final List<String> addonList = new ArrayList<>(Collections.singletonList("core"));
+        final List<String> addonList = new ArrayList<>(Collections.singletonList("slimefun"));
         if (Utils.isClothConfigEnabled()) {
             final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-            
-            if (modConfig.isElectricSpawnersEnabled()) {
-                addonList.add("electric_spawners");
-            }
-            if (modConfig.isExtraGearEnabled()) {
-                addonList.add("extra_gear");
-            }
-            if (modConfig.isEcoPowerEnabled()) {
-                addonList.add("eco_power");
-            }
-            if (modConfig.isSoulJarsEnabled()) {
-                addonList.add("soul_jars");
-            }
-            if (modConfig.isTranscendenceEnabled()) {
-                addonList.add("transcendence");
-            }
-            if (modConfig.isSpiritsUnchainedEnabled()) {
-                addonList.add("spirits_unchained");
-            }
-            if (modConfig.isHotbarPetsEnabled()) {
-                addonList.add("hotbar_pets");
-            }
-            if (modConfig.isDankTech2Enabled()) {
-                addonList.add("dank_tech_2");
-            }
-            if (modConfig.isLuckyBlocksEnabled()) {
-                addonList.add("lucky_blocks");
-            }
-            if (modConfig.isSlimyTreeTapsEnabled()) {
-                addonList.add("slimy_tree_taps");
-            }
-            if (modConfig.isExoticGardenEnabled()) {
-                addonList.add("exotic_garden");
-            }
-            if (modConfig.isInfinityExpansionEnabled()) {
-                addonList.add("infinity_expansion");
-            }
-            if (modConfig.isGlobalWarmingEnabled()) {
-                addonList.add("global_warming");
-            }
-            if (modConfig.isMiniblocksEnabled()) {
-                addonList.add("miniblocks");
-            }
-            if (modConfig.isNetworksEnabled()) {
-                addonList.add("networks");
-            }
-            if (modConfig.isCrystamaeHistoriaEnabled()) {
-                addonList.add("crystamae_historia");
-            }
-            if (modConfig.isExtraToolsEnabled()) {
-                addonList.add("extra_tools");
-            }
-            if (modConfig.isFoxyMachinesEnabled()) {
-                addonList.add("foxy_machines");
-            }
-            if (modConfig.isRelicsOfCthoniaEnabled()) {
-                addonList.add("relics_of_cthonia");
-            }
-            if (modConfig.isFnAmplificationsEnabled()) {
-                addonList.add("fn_amplifications");
-            }
-            if (modConfig.isSimpleMaterialGeneratorsEnabled()) {
-                addonList.add("simple_material_generators");
-            }
-            if (modConfig.isDynaTechEnabled()) {
-                addonList.add("dyna_tech");
-            }
-            if (modConfig.isDyeBenchEnabled()) {
-                addonList.add("dye_bench");
-            }
-            if (modConfig.isSupremeEnabled()) {
-                addonList.add("supreme");
-            }
-            if (modConfig.isWilderNetherEnabled()) {
-                addonList.add("wilder_nether");
+    
+            if (modConfig.isAlchimiaVitaeEnabled()) {
+                addonList.add("alchimia_vitae");
             }
             if (modConfig.isCompressionCraftEnabled()) {
                 addonList.add("compression_craft");
             }
-            if (modConfig.isVillagerUtilEnabled()) {
-                addonList.add("villager_util");
+            if (modConfig.isCrystamaeHistoriaEnabled()) {
+                addonList.add("crystamae_historia");
             }
-            if (modConfig.isMobCapturerEnabled()) {
-                addonList.add("mob_capturer");
+            if (modConfig.isDankTech2Enabled()) {
+                addonList.add("dank_tech_2");
+            }
+            if (modConfig.isDyeBenchEnabled()) {
+                addonList.add("dye_bench");
+            }
+            if (modConfig.isDynaTechEnabled()) {
+                addonList.add("dyna_tech");
+            }
+            if (modConfig.isEcoPowerEnabled()) {
+                addonList.add("eco_power");
+            }
+            if (modConfig.isElectricSpawnersEnabled()) {
+                addonList.add("electric_spawners");
+            }
+            if (modConfig.isElementManipulationEnabled()) {
+                addonList.add("element_manipulation");
             }
             if (modConfig.isEmcTechEnabled()) {
                 addonList.add("emc_tech");
             }
-            if (modConfig.isFlowerTechEnabled()) {
+            if (modConfig.isExoticGardenEnabled()) {
+                addonList.add("exotic_garden");
+            }
+            if (modConfig.isExtraGearEnabled()) {
+                addonList.add("extra_gear");
+            }
+            if (modConfig.isExtraToolsEnabled()) {
+                addonList.add("extra_tools");
+            }
+            if (modConfig.isFlowerPowerEnabled()) {
                 addonList.add("flower_power");
-            }
-            if (modConfig.isSlimeTinkerEnabled()) {
-                addonList.add("slime_tinker");
-            }
-            if (modConfig.isGalactifunEnabled()) {
-                addonList.add("galactifun");
             }
             if (modConfig.isFluffyMachinesEnabled()) {
                 addonList.add("fluffy_machines");
             }
-            if (modConfig.isAlchimiaVitaeEnabled()) {
-                addonList.add("alchimia_vitae");
+            if (modConfig.isFnAmplificationsEnabled()) {
+                addonList.add("fn_amplifications");
             }
-            if (modConfig.isSlimefunWarfareEnabled()) {
-                addonList.add("slimefun_warfare");
+            if (modConfig.isFoxyMachinesEnabled()) {
+                addonList.add("foxy_machines");
+            }
+            if (modConfig.isGalactifunEnabled()) {
+                addonList.add("galactifun");
+            }
+            if (modConfig.isGlobalWarmingEnabled()) {
+                addonList.add("global_warming");
+            }
+            if (modConfig.isHotbarPetsEnabled()) {
+                addonList.add("hotbar_pets");
+            }
+            if (modConfig.isInfinityExpansionEnabled()) {
+                addonList.add("infinity_expansion");
             }
             if (modConfig.isLiquidEnabled()) {
                 addonList.add("liquid");
@@ -381,20 +418,62 @@ public class RecipeLoader {
             if (modConfig.isLiteXpansionEnabled()) {
                 addonList.add("lite_xpansion");
             }
-            if (modConfig.isSimpleUtilsEnabled()) {
-                addonList.add("simple_utils");
+            if (modConfig.isLuckyBlocksEnabled()) {
+                addonList.add("lucky_blocks");
             }
-            if (modConfig.isElementManipulationEnabled()) {
-                addonList.add("element_manipulation");
+            if (modConfig.isMiniblocksEnabled()) {
+                addonList.add("miniblocks");
+            }
+            if (modConfig.isMobCapturerEnabled()) {
+                addonList.add("mob_capturer");
             }
             if (modConfig.isNetheopoiesisEnabled()) {
                 addonList.add("netheopoiesis");
             }
+            if (modConfig.isNetworksEnabled()) {
+                addonList.add("networks");
+            }
+            if (modConfig.isRelicsOfCthoniaEnabled()) {
+                addonList.add("relics_of_cthonia");
+            }
+            if (modConfig.isSimpleMaterialGeneratorsEnabled()) {
+                addonList.add("simple_material_generators");
+            }
             if (modConfig.isSimpleStorageEnabled()) {
                 addonList.add("simple_storage");
             }
+            if (modConfig.isSimpleUtilsEnabled()) {
+                addonList.add("simple_utils");
+            }
+            if (modConfig.isSlimeTinkerEnabled()) {
+                addonList.add("slime_tinker");
+            }
+            if (modConfig.isSlimefunWarfareEnabled()) {
+                addonList.add("slimefun_warfare");
+            }
             if (modConfig.isSlimyRepairEnabled()) {
                 addonList.add("slimy_repair");
+            }
+            if (modConfig.isSlimyTreeTapsEnabled()) {
+                addonList.add("slimy_tree_taps");
+            }
+            if (modConfig.isSoulJarsEnabled()) {
+                addonList.add("soul_jars");
+            }
+            if (modConfig.isSpiritsUnchainedEnabled()) {
+                addonList.add("spirits_unchained");
+            }
+            if (modConfig.isSupremeEnabled()) {
+                addonList.add("supreme");
+            }
+            if (modConfig.isTranscendenceEnabled()) {
+                addonList.add("transcendence");
+            }
+            if (modConfig.isVillagerUtilEnabled()) {
+                addonList.add("villager_util");
+            }
+            if (modConfig.isWilderNetherEnabled()) {
+                addonList.add("wilder_nether");
             }
         }
 
@@ -521,5 +600,41 @@ public class RecipeLoader {
         } catch (CommandSyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    private static float change(String changeBy, float toChange) {
+        if (changeBy == null) {
+            return toChange;
+        }
+        final String changeWith = changeBy.substring(0, 1);
+        final int changeAmount = Integer.parseInt(changeBy.substring(1));
+        if (changeWith.equals("/")) {
+            return toChange / changeAmount;
+        } else if (changeWith.equals("*")) {
+            return toChange * changeAmount;
+        } else {
+            return toChange;
+        }
+    }
+    
+    private static List<CustomMultiStack> change(String changeBy, List<CustomMultiStack> toChange) {
+        if (changeBy == null) {
+            return toChange;
+        }
+        final String changeWith = changeBy.substring(0, 1);
+        final int changeAmount = Integer.parseInt(changeBy.substring(1));
+        final List<CustomMultiStack> newStacks = new ArrayList<>();
+        for (CustomMultiStack oldStack : toChange) {
+            final long amount;
+            if (changeWith.equals("/")) {
+                amount = oldStack.amount() / changeAmount;
+            } else if (changeWith.equals("*")) {
+                amount = oldStack.amount() * changeAmount;
+            } else {
+                amount = oldStack.amount() / changeAmount;
+            }
+            newStacks.add(new CustomMultiStack(oldStack.stacks(), amount));
+        }
+        return newStacks;
     }
 }

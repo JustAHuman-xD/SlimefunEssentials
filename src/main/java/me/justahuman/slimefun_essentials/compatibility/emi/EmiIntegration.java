@@ -64,16 +64,17 @@ public class EmiIntegration implements EmiPlugin {
 
         for (String categoryId : categories.keySet()) {
             final CategoryContainer categoryContainer = categories.get(categoryId);
-            final EmiRecipeCategory emiRecipeCategory = new Category(categoryContainer.getId(), EmiStack.of(categoryContainer.getWorkstation()).comparison(original -> original.copy().nbt(true).build()).copy(), categoryContainer.getWorkstation().getName());
+            final EmiRecipeCategory emiRecipeCategory = new Category(categoryContainer.getId(), EmiStack.of(categoryContainer.getWorkstation().itemStack()).comparison(original -> original.copy().nbt(true).build()).copy(), categoryContainer.getWorkstation().itemStack().getName());
             emiRegistry.addCategory(emiRecipeCategory);
-            emiRegistry.addWorkstation(emiRecipeCategory, EmiStack.of(categoryContainer.getWorkstation()).comparison(original -> original.copy().nbt(true).build()).copy());
+            emiRegistry.addWorkstation(emiRecipeCategory, EmiStack.of(categoryContainer.getWorkstation().itemStack()).comparison(original -> original.copy().nbt(true).build()).copy());
 
             for (RecipeContainer recipeContainer : categoryContainer.getRecipes()) {
                 final List<CustomMultiStack> customInputs = recipeContainer.inputs();
                 final List<CustomMultiStack> customOutputs = recipeContainer.outputs();
                 final List<ConditionContainer> customConditions = recipeContainer.conditions();
-                final Integer energy = recipeContainer.energy();
-                final Integer ticks = recipeContainer.ticks();
+                final float time = recipeContainer.time();
+                final int energy = (int) (recipeContainer.energy() * time);
+                final int ticks = (int) (time * 20);
                 final Identifier id = recipeContainer.id();
                 final String recipeType = recipeContainer.type();
 
