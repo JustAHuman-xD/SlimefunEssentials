@@ -207,31 +207,19 @@ public class EmiIntegration implements EmiPlugin {
     private EmiRecipe getRecipe(String type, EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs, Integer ticks, Integer energy) {
         final EmiRecipe recipe;
         switch (type) {
-            case "ancient_altar":
-                recipe = new AncientAltarRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
-            case "machine":
+            case "ancient_altar" -> recipe = new AncientAltarRecipe(emiRecipeCategory, id, inputs, outputs);
+            case "machine" -> {
                 if (ticks == 0 || energy == 0) {
                     recipe = new OtherRecipe(emiRecipeCategory, id, inputs, outputs);
                 } else {
                     recipe = new MachineRecipe(emiRecipeCategory, id, inputs, outputs, ticks, energy);
                 }
-                break;
-            case "trade":
-                recipe = new TradeRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
-            case "kill":
-                recipe = new KillRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
-            case "smeltery":
-                recipe = new SmelteryRecipe(emiRecipeCategory, id, inputs, outputs, ticks, energy);
-                break;
-            case "3by3":
-                recipe = new ThreeByThreeRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
-            default:
-                recipe = new MultiblockRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
+            }
+            case "trade" -> recipe = new TradeRecipe(emiRecipeCategory, id, inputs, outputs);
+            case "kill" -> recipe = new KillRecipe(emiRecipeCategory, id, inputs, outputs);
+            case "smeltery" -> recipe = new SmelteryRecipe(emiRecipeCategory, id, inputs, outputs, ticks, energy);
+            case "3by3" -> recipe = new ThreeByThreeRecipe(emiRecipeCategory, id, inputs, outputs);
+            default -> recipe = new MultiblockRecipe(emiRecipeCategory, id, inputs, outputs);
         }
         return recipe;
     }

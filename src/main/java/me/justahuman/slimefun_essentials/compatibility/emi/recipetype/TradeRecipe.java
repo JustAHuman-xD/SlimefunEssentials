@@ -6,13 +6,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefun_essentials.compatibility.emi.EmiUtils;
-import me.justahuman.slimefun_essentials.compatibility.emi.misc.EntityEmiStack;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -23,30 +17,12 @@ public class TradeRecipe implements EmiRecipe {
     private final Identifier id;
     private final List<EmiIngredient> inputs;
     private final List<EmiStack> outputs;
-    private final EmiStack inputStack;
-    private final Text name;
 
     public TradeRecipe(EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs) {
         this.emiRecipeCategory = emiRecipeCategory;
         this.id = id;
         this.inputs = inputs;
         this.outputs = outputs;
-        EntityType<?> type = EntityType.PIGLIN;
-        MinecraftClient client = MinecraftClient.getInstance();
-        Entity entity = type.create(client.world);
-        if (entity != null) {
-            Box box = entity.getBoundingBox();
-            double len = box.getAverageSideLength();
-            if (len > 1.05) {
-                len = (len + Math.sqrt(len)) / 2.0;
-            }
-            name = entity.getName();
-            double scale = 1.05 / len * 8.0;
-            inputStack = EntityEmiStack.ofScaled(entity, scale);
-        } else {
-            inputStack = EmiStack.EMPTY;
-            name = Text.translatable("sftoemi.missing_entity");
-        }
     }
 
     @Override
