@@ -83,6 +83,7 @@ public class RecipeLoader {
         }
         
         for (String copyToId : toCopy.keySet()) {
+            Utils.log(copyToId);
             final CopyContainer copyContainer = toCopy.get(copyToId);
             final String copyFromId = copyContainer.copyFromId();
             final String inputChange = copyContainer.inputs();
@@ -609,7 +610,7 @@ public class RecipeLoader {
         final String changeWith = changeBy.substring(0, 1);
         final int changeAmount = Integer.parseInt(changeBy.substring(1));
         if (changeWith.equals("/")) {
-            return toChange / changeAmount;
+            return (((int) toChange * 2 / changeAmount) / 2F);
         } else if (changeWith.equals("*")) {
             return toChange * changeAmount;
         } else {
