@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import dev.emi.emi.EmiStackSerializer;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -15,7 +14,6 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.stack.EmptyEmiStack;
 import dev.emi.emi.bom.BoM;
-
 import me.justahuman.slimefun_essentials.Utils;
 import me.justahuman.slimefun_essentials.compatibility.emi.misc.Category;
 import me.justahuman.slimefun_essentials.compatibility.emi.misc.EntityEmiStack;
@@ -29,15 +27,13 @@ import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.SmelteryRe
 import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.ThreeByThreeRecipe;
 import me.justahuman.slimefun_essentials.compatibility.emi.recipetype.TradeRecipe;
 import me.justahuman.slimefun_essentials.config.ModConfig;
-
 import me.shedaniel.autoconfig.AutoConfig;
-
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -207,31 +203,19 @@ public class EmiIntegration implements EmiPlugin {
     private EmiRecipe getRecipe(String type, EmiRecipeCategory emiRecipeCategory, Identifier id, List<EmiIngredient> inputs, List<EmiStack> outputs, Integer ticks, Integer energy) {
         final EmiRecipe recipe;
         switch (type) {
-            case "ancient_altar":
-                recipe = new AncientAltarRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
-            case "machine":
+            case "ancient_altar" -> recipe = new AncientAltarRecipe(emiRecipeCategory, id, inputs, outputs);
+            case "machine" -> {
                 if (ticks == 0 || energy == 0) {
                     recipe = new OtherRecipe(emiRecipeCategory, id, inputs, outputs);
                 } else {
                     recipe = new MachineRecipe(emiRecipeCategory, id, inputs, outputs, ticks, energy);
                 }
-                break;
-            case "trade":
-                recipe = new TradeRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
-            case "kill":
-                recipe = new KillRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
-            case "smeltery":
-                recipe = new SmelteryRecipe(emiRecipeCategory, id, inputs, outputs, ticks, energy);
-                break;
-            case "3by3":
-                recipe = new ThreeByThreeRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
-            default:
-                recipe = new MultiblockRecipe(emiRecipeCategory, id, inputs, outputs);
-                break;
+            }
+            case "trade" -> recipe = new TradeRecipe(emiRecipeCategory, id, inputs, outputs);
+            case "kill" -> recipe = new KillRecipe(emiRecipeCategory, id, inputs, outputs);
+            case "smeltery" -> recipe = new SmelteryRecipe(emiRecipeCategory, id, inputs, outputs, ticks, energy);
+            case "3by3" -> recipe = new ThreeByThreeRecipe(emiRecipeCategory, id, inputs, outputs);
+            default -> recipe = new MultiblockRecipe(emiRecipeCategory, id, inputs, outputs);
         }
         return recipe;
     }
@@ -284,14 +268,14 @@ public class EmiIntegration implements EmiPlugin {
             return multiblocks.get(first).comparison(original -> original.copy().nbt(true).build()).copy().setAmount(Integer.parseInt(second));
         } else {
             if (first.equals("entity")) {
-                return new EntityEmiStack(Registry.ENTITY_TYPE.get(new Identifier("minecraft:" + second)).create(MinecraftClient.getInstance().world));
+                return new EntityEmiStack(Registries.ENTITY_TYPE.get(new Identifier("minecraft:" + second)).create(MinecraftClient.getInstance().world));
             } else if (first.equals("fluid")) {
-                return EmiStack.of(Registry.FLUID.get(new Identifier("minecraft:" + second)));
+                return EmiStack.of(Registries.FLUID.get(new Identifier("minecraft:" + second)));
             } else if (first.contains("#")) {
-                final TagKey<Item> tagKey = TagKey.of(Registry.ITEM_KEY, new Identifier("minecraft", first.substring(1)));
+                final TagKey<Item> tagKey = TagKey.of(Registries.ITEM.getKey(), new Identifier("minecraft", first.substring(1)));
                 return EmiIngredient.of(tagKey);
             } else {
-                return EmiStack.of(Registry.ITEM.get(new Identifier("minecraft:" + first.toLowerCase()))).copy().setAmount(Integer.parseInt(second));
+                return EmiStack.of(Registries.ITEM.get(new Identifier("minecraft:" + first.toLowerCase()))).copy().setAmount(Integer.parseInt(second));
             }
         }
     }
