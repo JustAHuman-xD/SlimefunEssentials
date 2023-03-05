@@ -1,89 +1,144 @@
 package me.justahuman.slimefun_essentials.config;
 
+import lombok.Getter;
+import me.justahuman.slimefun_essentials.Utils;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
-@Config(name = "slimefun_essentials")
+@Config(name = Utils.ID)
 public
 class ModConfig implements ConfigData {
+    //General Options
+    @Getter
     @ConfigEntry.Category("general")
-    @ConfigEntry.Gui.Tooltip
-    boolean useMachineDefaults = false;
+    boolean machineDefaults = false;
+    
+    //Addon Options
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableInfinityExpansion = false;
+    boolean alchimiaVitaeEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableSpiritsUnchained = false;
+    boolean compressionCraftEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableEcoPower = false;
+    boolean crystamaeHistoriaEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableElectricSpawners = false;
+    boolean dankTech2Enabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableExoticGarden = false;
+    boolean dyeBenchEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableExtraGear = false;
+    boolean dynaTechEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableHotbarPets = false;
+    boolean ecoPowerEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableLuckyBlocks = false;
+    boolean electricSpawnersEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableSlimyTreeTaps = false;
+    boolean elementManipulationEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableSoulJars = false;
+    boolean emcTechEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableDankTech = false;
+    boolean exoticGardenEnabled = false;
+    @Getter
     @ConfigEntry.Category("addons")
-    @ConfigEntry.Gui.Tooltip
-    boolean enableTranscendence = false;
-
-    public boolean useMachineDefaults() {
-        return useMachineDefaults;
-    }
-    public boolean enableInfinityExpansion() {
-        return enableInfinityExpansion;
-    }
-    public boolean enableElectricSpawners() {
-        return enableElectricSpawners;
-    }
-    public boolean enableEcoPower() {
-        return enableEcoPower;
-    }
-    public boolean enableExoticGarden() {
-        return enableExoticGarden;
-    }
-    public boolean enableExtraGear() {
-        return enableExtraGear;
-    }
-    public boolean enableHotbarPets() {
-        return enableHotbarPets;
-    }
-    public boolean enableLuckyBlocks() {
-        return enableLuckyBlocks;
-    }
-    public boolean enableSlimyTreeTaps() {
-        return enableSlimyTreeTaps;
-    }
-    public boolean enableSoulJars() {
-        return enableSoulJars;
-    }
-    public boolean enableSpiritsUnchained() {
-        return enableSpiritsUnchained;
-    }
-    public boolean enableDankTech() {
-        return enableDankTech;
-    }
-    public boolean enableTranscendence() {
-        return enableTranscendence;
-    }
+    boolean extraGearEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean extraToolsEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean flowerPowerEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean fluffyMachinesEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean fnAmplificationsEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean foxyMachinesEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean galactifunEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean globalWarmingEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean hotbarPetsEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean infinityExpansionEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean liquidEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean liteXpansionEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean luckyBlocksEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean miniblocksEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean mobCapturerEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean netheopoiesisEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean networksEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean relicsOfCthoniaEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean simpleMaterialGeneratorsEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean simpleStorageEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean simpleUtilsEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean slimeTinkerEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean slimefunWarfareEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean slimyRepairEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean slimyTreeTapsEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean soulJarsEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean spiritsUnchainedEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean supremeEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean transcendenceEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean villagerUtilEnabled = false;
+    @Getter
+    @ConfigEntry.Category("addons")
+    boolean wilderNetherEnabled = false;
 }
