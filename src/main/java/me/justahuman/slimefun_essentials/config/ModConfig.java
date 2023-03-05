@@ -12,7 +12,8 @@ class ModConfig implements ConfigData {
     //General Options
     @Getter
     @ConfigEntry.Category("general")
-    boolean machineDefaults = false;
+    @ConfigEntry.Gui.Tooltip
+    boolean itemGroupEnabled = true;
     
     //Addon Options
     @Getter

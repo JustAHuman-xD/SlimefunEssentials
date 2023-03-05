@@ -1,8 +1,16 @@
 package me.justahuman.slimefun_essentials;
 
+import com.google.gson.JsonObject;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +22,22 @@ public class Utils {
     public static final String ID = "slimefun_essentials";
     private static final Logger logger = LoggerFactory.getLogger(ID);
     private static final String errorMessage = "[SFE] Failed to load data";
+    
+    public static Identifier newIdentifier(String namespace) {
+        return new Identifier(ID, namespace);
+    }
 
     public static boolean isClothConfigEnabled() {
         return FabricLoader.getInstance().isModLoaded("cloth-config2");
+    }
+    
+    public static boolean isItemGroupEnabled() {
+        if (isClothConfigEnabled()) {
+            final ModConfig modConfig = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+            return modConfig.isItemGroupEnabled();
+        }
+        
+        return true;
     }
     
     public static List<String> getEnabledAddons() {
@@ -153,6 +174,28 @@ public class Utils {
         }
         
         return addonList;
+    }
+    
+    public static ItemStack deserializeItem(JsonObject itemObject) {
+        final ItemStack itemStack = new ItemStack(Registries.ITEM.get(new Identifier(itemObject.get("item").getAsString())));
+        itemStack.setCount(JsonHelper.getInt(itemObject, "amount", 1));
+        if (JsonHelper.hasString(itemObject, "nbt")) {
+            itemStack.setNbt(parseNbt(itemObject));
+        }
+        
+        return itemStack;
+    }
+    
+    public static NbtCompound parseNbt(JsonObject json) {
+        return parseNbt(JsonHelper.getString(json, "nbt"));
+    }
+    
+    public static NbtCompound parseNbt(String nbt) {
+        try {
+            return StringNbtReader.parse(nbt);
+        } catch (CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     public static void log(String message) {

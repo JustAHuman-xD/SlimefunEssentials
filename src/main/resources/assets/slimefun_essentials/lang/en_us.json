@@ -1,7 +1,10 @@
 {
+  "itemGroup.slimefun_essentials.slimefun": "Slimefun",
+
   "text.autoconfig.slimefun_essentials.title": "Slimefun Essentials Config Options!",
   "text.autoconfig.slimefun_essentials.category.general": "General Settings",
-
+  "text.autoconfig.slimefun_essentials.option.itemGroupEnabled": "Enable Creative Inventory Item Group",
+  "text.autoconfig.slimefun_essentials.option.itemGroupEnabled.@Tooltip": "",
 
   "text.autoconfig.slimefun_essentials.category.addons": "Toggle Addons",
   "text.autoconfig.slimefun_essentials.option.alchimiaVitaeEnabled": "AlchimiaVita Compatibility Enabled",

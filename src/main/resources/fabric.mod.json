@@ -21,7 +21,7 @@
       "me.justahuman.slimefun_essentials.SlimefunEssentials"
     ],
     "emi": [
-      "me.justahuman.slimefun_essentials.compatibility.emi.EmiIntegration"
+      "me.justahuman.slimefun_essentials.compat.emi.EmiIntegration"
     ],
     "modmenu": [
       "me.justahuman.slimefun_essentials.config.ModMenuIntegration"

@@ -1,11 +1,14 @@
 package me.justahuman.slimefun_essentials;
 
+import me.justahuman.slimefun_essentials.client.ItemGroups;
+import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -14,9 +17,12 @@ public class SlimefunEssentials implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-
         if (Utils.isClothConfigEnabled()) {
             AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
+        }
+        
+        if (Utils.isItemGroupEnabled()) {
+            ItemGroups.register();
         }
     
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
@@ -27,7 +33,17 @@ public class SlimefunEssentials implements ClientModInitializer {
     
             @Override
             public void reload(ResourceManager manager) {
-            
+                ResourceLoader.clear();
+                
+                // Load all the Items
+                for (Resource resource : manager.findResources("slimefun/items", path -> path.getPath().endsWith(".json")).values()) {
+                    ResourceLoader.loadItems(resource);
+                }
+                
+                // Load all the Recipes
+                for (Resource resource : manager.findResources("slimefun/recipes", path -> path.getPath().endsWith(".json")).values()) {
+                    ResourceLoader.loadRecipes(resource);
+                }
             }
         });
     }
