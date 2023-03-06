@@ -1,4 +1,4 @@
-package me.justahuman.slimefun_essentials;
+package me.justahuman.slimefun_essentials.utils;
 
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

@@ -1,8 +1,8 @@
 package me.justahuman.slimefun_essentials;
 
-import me.justahuman.slimefun_essentials.client.ItemGroups;
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.config.ModConfig;
+import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -19,10 +19,6 @@ public class SlimefunEssentials implements ClientModInitializer {
     public void onInitializeClient() {
         if (Utils.isClothConfigEnabled()) {
             AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
-        }
-        
-        if (Utils.isItemGroupEnabled()) {
-            ItemGroups.register();
         }
     
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
@@ -43,6 +39,11 @@ public class SlimefunEssentials implements ClientModInitializer {
                 // Load all the Recipes
                 for (Resource resource : manager.findResources("slimefun/recipes", path -> path.getPath().endsWith(".json")).values()) {
                     ResourceLoader.loadRecipes(resource);
+                }
+                
+                // Load all the Item Groups
+                for (Resource resource : manager.findResources("slimefun", path -> path.getPath().endsWith("item_groups.json")).values()) {
+                    ResourceLoader.loadItemGroups(resource);
                 }
             }
         });

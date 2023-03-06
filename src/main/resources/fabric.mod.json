@@ -27,6 +27,10 @@
       "me.justahuman.slimefun_essentials.config.ModMenuIntegration"
     ]
   },
+  "mixins": [
+    "slimefun_essentials.mixins.json"
+  ],
+  "accessWidener": "slimefun_essentials.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.10",
     "fabric": "*",

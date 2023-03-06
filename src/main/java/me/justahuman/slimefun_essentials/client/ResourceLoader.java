@@ -1,11 +1,14 @@
 package me.justahuman.slimefun_essentials.client;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import lombok.NonNull;
-import me.justahuman.slimefun_essentials.Utils;
+import me.justahuman.slimefun_essentials.utils.Utils;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.ItemStackSet;
 import net.minecraft.resource.Resource;
 
 import java.io.IOException;
@@ -13,17 +16,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ResourceLoader {
     private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();
-    private static final Map<String, ItemStack> SLIMEFUN_ITEMS = new HashMap<>();
-    private static final ItemStack SLIMEFUN_HEAD = new ItemStack(Items.PLAYER_HEAD);
-    private static final String SLIMEFUN_HEAD_NBT = "{SkullOwner:{Id:[I;586957903,-571390605,-2106958415,202465300],Properties:{textures:[{Value:\"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGVjZmRjYjgyZGFlZGJiMjRhYTczN2Q2MzhiN2VmOWNkNGFmYjhjNGFiNzcwMDMyMzE0OTY3NjY3NGM2ODkyZCJ9fX0=\"}]}},display:{Name:'{\"text\":\"\"}'}}";
-    static {
-        SLIMEFUN_HEAD.setNbt(Utils.parseNbt(SLIMEFUN_HEAD_NBT));
-    }
+    private static final Map<String, ItemStack> SLIMEFUN_ITEMS = new LinkedHashMap<>();
     
     /**
      * Clears all loaded Slimefun Items & Recipes
@@ -33,41 +32,77 @@ public class ResourceLoader {
     }
     
     /**
+     * Takes an {@link InputStream} from a given {@link Resource} and gets a {@link JsonObject} from it
+     *
+     * @param resource The {@link Resource} that contains the {@link JsonObject}
+     *
+     * @return The {@link JsonObject} from the {@link Resource}
+     */
+    public static JsonObject jsonObjectFromResource(Resource resource) {
+        try {
+            InputStream inputStream = resource.getInputStream();
+            return GSON.fromJson(new InputStreamReader(inputStream, StandardCharsets.UTF_8), JsonObject.class);
+        } catch(IOException e) {
+            Utils.error(e);
+            return new JsonObject();
+        }
+    }
+    
+    /**
      * Load the given Items from an {@link Resource}
      *
      * @param resource The {@link Resource} that contains Slimefun Items
      */
     public static void loadItems(Resource resource) {
-        final InputStream inputStream;
-        try {
-            inputStream = resource.getInputStream();
-        } catch(IOException e) {
-            Utils.error(e);
-            return;
-        }
-        
-        final JsonObject items = GSON.fromJson(new InputStreamReader(inputStream, StandardCharsets.UTF_8), JsonObject.class);
+        final JsonObject items = jsonObjectFromResource(resource);
         for (String id : items.keySet()) {
-            SLIMEFUN_ITEMS.put(id, Utils.deserializeItem(items.getAsJsonObject(id)));
+            final JsonElement itemElement = items.get(id);
+            if (!(itemElement instanceof JsonObject itemObject) || !itemObject.has("item") || !itemObject.has("nbt")) {
+                continue;
+            }
+            
+            SLIMEFUN_ITEMS.put(id, Utils.deserializeItem(itemObject));
         }
     }
     
     /**
      * Load the given Recipes from an {@link Resource}
      *
-     * @param resource the resource that contains slimefun recipes
+     * @param resource The {@link Resource} that contains slimefun recipes
      */
     public static void loadRecipes(Resource resource) {
         // TODO handle recipes
     }
     
     /**
-     * Returns the Player Head with the Slimefun Logo, this is most likely temporary
-     * @return {@link ResourceLoader#SLIMEFUN_HEAD}
+     * Load the {@link ItemGroup}s from item_groups.json
+     *
+     * @param resource The {@link Resource} that contains the {@link ItemGroup}s
      */
-    @NonNull
-    public static ItemStack getSlimefunHead() {
-        return SLIMEFUN_HEAD;
+    public static void loadItemGroups(Resource resource) {
+        ItemGroups.reset();
+        
+        final JsonObject itemGroups = jsonObjectFromResource(resource);
+        for (String id : itemGroups.keySet()) {
+            Utils.log(id);
+            final JsonObject groupObject = itemGroups.getAsJsonObject(id);
+            final JsonElement iconElement = groupObject.get("icon");
+            if (!(iconElement instanceof JsonPrimitive iconPrimitive) || !iconPrimitive.isString() || !SLIMEFUN_ITEMS.containsKey(iconPrimitive.getAsString())) {
+                continue;
+            }
+            Utils.log("Icon: " + iconPrimitive.getAsString());
+            final ItemStack icon = SLIMEFUN_ITEMS.get(iconPrimitive.getAsString());
+            final Set<ItemStack> entries = ItemStackSet.create();
+            for (JsonElement entryElement : groupObject.getAsJsonArray("stacks")) {
+                if (!(entryElement instanceof JsonPrimitive entryPrimitive) || !entryPrimitive.isString() || !SLIMEFUN_ITEMS.containsKey(entryPrimitive.getAsString())) {
+                    continue;
+                }
+                
+                entries.add(SLIMEFUN_ITEMS.get(entryPrimitive.getAsString()));
+            }
+            Utils.log("Entries: " + entries);
+            ItemGroups.addItemGroup(id, icon, entries);
+        }
     }
     
     /**

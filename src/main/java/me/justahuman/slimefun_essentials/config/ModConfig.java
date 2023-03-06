@@ -1,7 +1,7 @@
 package me.justahuman.slimefun_essentials.config;
 
 import lombok.Getter;
-import me.justahuman.slimefun_essentials.Utils;
+import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
