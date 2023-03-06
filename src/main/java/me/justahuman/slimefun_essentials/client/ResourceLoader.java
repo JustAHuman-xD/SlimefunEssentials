@@ -15,8 +15,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,6 +67,8 @@ public class ResourceLoader {
             
             SLIMEFUN_ITEMS.put(id, Utils.deserializeItem(itemObject));
         }
+        
+        sortItems();
     }
     
     /**
@@ -84,13 +90,12 @@ public class ResourceLoader {
         
         final JsonObject itemGroups = jsonObjectFromResource(resource);
         for (String id : itemGroups.keySet()) {
-            Utils.log(id);
             final JsonObject groupObject = itemGroups.getAsJsonObject(id);
             final JsonElement iconElement = groupObject.get("icon");
             if (!(iconElement instanceof JsonPrimitive iconPrimitive) || !iconPrimitive.isString() || !SLIMEFUN_ITEMS.containsKey(iconPrimitive.getAsString())) {
                 continue;
             }
-            Utils.log("Icon: " + iconPrimitive.getAsString());
+            
             final ItemStack icon = SLIMEFUN_ITEMS.get(iconPrimitive.getAsString());
             final Set<ItemStack> entries = ItemStackSet.create();
             for (JsonElement entryElement : groupObject.getAsJsonArray("stacks")) {
@@ -100,7 +105,7 @@ public class ResourceLoader {
                 
                 entries.add(SLIMEFUN_ITEMS.get(entryPrimitive.getAsString()));
             }
-            Utils.log("Entries: " + entries);
+            
             ItemGroups.addItemGroup(id, icon, entries);
         }
     }
@@ -113,5 +118,20 @@ public class ResourceLoader {
     @NonNull
     public static Map<String, ItemStack> getSlimefunItems() {
         return Collections.unmodifiableMap(SLIMEFUN_ITEMS);
+    }
+    
+    private static void sortItems() {
+        final Map<String, ItemStack> sortedSlimefunItems = new HashMap<>();
+        final List<String> ids = new ArrayList<>(SLIMEFUN_ITEMS.keySet());
+        ids.sort(Comparator.naturalOrder());
+        
+        for (String id : ids) {
+            sortedSlimefunItems.put(id, SLIMEFUN_ITEMS.get(id));
+        }
+        
+        SLIMEFUN_ITEMS.clear();
+        SLIMEFUN_ITEMS.putAll(sortedSlimefunItems);
+        sortedSlimefunItems.clear();
+        ids.clear();
     }
 }
