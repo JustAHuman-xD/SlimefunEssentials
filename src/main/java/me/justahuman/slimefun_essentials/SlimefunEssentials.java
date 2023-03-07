@@ -7,10 +7,13 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class SlimefunEssentials implements ClientModInitializer {
@@ -21,10 +24,18 @@ public class SlimefunEssentials implements ClientModInitializer {
             AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
         }
     
+        FabricLoader.getInstance().getModContainer(Utils.ID)
+                .map(container -> ResourceManagerHelper.registerBuiltinResourcePack(
+                        Utils.newIdentifier("one_item_group"),
+                        container,
+                        Text.literal("SFE: OneItemGroup"),
+                        ResourcePackActivationType.NORMAL
+                )).filter(success -> !success).ifPresent(success -> Utils.warn("Could not register built-in resource pack with custom name."));
+    
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public Identifier getFabricId() {
-                return new Identifier(Utils.ID, "reload_listener");
+                return Utils.newIdentifier("reload_listener");
             }
     
             @Override
@@ -37,13 +48,13 @@ public class SlimefunEssentials implements ClientModInitializer {
                 }
                 
                 // Load all the Recipes
-                for (Resource resource : manager.findResources("slimefun/recipes", path -> path.getPath().endsWith(".json")).values()) {
-                    ResourceLoader.loadRecipes(resource);
+                for (Resource resource : manager.findResources("slimefun/item_groups", path -> path.getPath().endsWith(".json")).values()) {
+                    ResourceLoader.loadItemGroups(resource);
                 }
                 
                 // Load all the Item Groups
-                for (Resource resource : manager.findResources("slimefun", path -> path.getPath().endsWith("item_groups.json")).values()) {
-                    ResourceLoader.loadItemGroups(resource);
+                for (Resource resource : manager.findResources("slimefun/categories", path -> path.getPath().endsWith(".json")).values()) {
+                    ResourceLoader.loadCategories(resource);
                 }
             }
         });

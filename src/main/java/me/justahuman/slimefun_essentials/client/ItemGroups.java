@@ -8,20 +8,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemStackSet;
 import net.minecraft.util.Identifier;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class ItemGroups {
     private static final Map<Identifier, ItemGroup> ITEM_GROUPS = new HashMap<>();
-    private static final Collection<ItemStack> emptyDisplayStacks = ItemStackSet.create();
-    private static final Set<ItemStack> emptySearchStacks = ItemStackSet.create();
     
     public static void reset() {
         for (ItemGroup itemGroup : ITEM_GROUPS.values()) {
-            ((ItemGroupAccessor) itemGroup).setDisplayStacks(emptyDisplayStacks);
-            ((ItemGroupAccessor) itemGroup).setSearchTabStacks(emptySearchStacks);
+            ((ItemGroupAccessor) itemGroup).setDisplayStacks(ItemStackSet.create());
+            ((ItemGroupAccessor) itemGroup).setSearchTabStacks(ItemStackSet.create());
         }
     }
     

@@ -202,6 +202,10 @@ public class Utils {
         logger.info(message);
     }
     
+    public static void warn(String warning) {
+        logger.warn(warning);
+    }
+    
     public static void error(Exception exception) {
         logger.error(errorMessage);
         exception.printStackTrace();

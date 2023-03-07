@@ -29,7 +29,7 @@ public class ResourceLoader {
     private static final Map<String, ItemStack> SLIMEFUN_ITEMS = new LinkedHashMap<>();
     
     /**
-     * Clears all loaded Slimefun Items & Recipes
+     * Clears all loaded Slimefun Items, ItemGroups, and Categories
      */
     public static void clear() {
         SLIMEFUN_ITEMS.clear();
@@ -53,7 +53,7 @@ public class ResourceLoader {
     }
     
     /**
-     * Load the given Items from an {@link Resource}
+     * Load the Items from a given {@link Resource}
      *
      * @param resource The {@link Resource} that contains Slimefun Items
      */
@@ -72,16 +72,7 @@ public class ResourceLoader {
     }
     
     /**
-     * Load the given Recipes from an {@link Resource}
-     *
-     * @param resource The {@link Resource} that contains slimefun recipes
-     */
-    public static void loadRecipes(Resource resource) {
-        // TODO handle recipes
-    }
-    
-    /**
-     * Load the {@link ItemGroup}s from item_groups.json
+     * Load the {@link ItemGroup}s from a given {@link Resource}
      *
      * @param resource The {@link Resource} that contains the {@link ItemGroup}s
      */
@@ -92,11 +83,11 @@ public class ResourceLoader {
         for (String id : itemGroups.keySet()) {
             final JsonObject groupObject = itemGroups.getAsJsonObject(id);
             final JsonElement iconElement = groupObject.get("icon");
-            if (!(iconElement instanceof JsonPrimitive iconPrimitive) || !iconPrimitive.isString() || !SLIMEFUN_ITEMS.containsKey(iconPrimitive.getAsString())) {
+            if (!(iconElement instanceof JsonObject iconObject)|| !iconObject.has("item") || !iconObject.has("nbt")) {
                 continue;
             }
             
-            final ItemStack icon = SLIMEFUN_ITEMS.get(iconPrimitive.getAsString());
+            final ItemStack icon = Utils.deserializeItem(iconObject);
             final Set<ItemStack> entries = ItemStackSet.create();
             for (JsonElement entryElement : groupObject.getAsJsonArray("stacks")) {
                 if (!(entryElement instanceof JsonPrimitive entryPrimitive) || !entryPrimitive.isString() || !SLIMEFUN_ITEMS.containsKey(entryPrimitive.getAsString())) {
@@ -108,6 +99,15 @@ public class ResourceLoader {
             
             ItemGroups.addItemGroup(id, icon, entries);
         }
+    }
+    
+    /**
+     * Load the Category from a given {@link Resource}
+     *
+     * @param resource The {@link Resource} that contains an EMI Category for a Slimefun Item
+     */
+    public static void loadCategories(Resource resource) {
+        // TODO handle categories
     }
     
     /**
