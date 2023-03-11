@@ -11,11 +11,11 @@ import java.util.Set;
 @Mixin(ItemGroup.class)
 public interface ItemGroupAccessor {
     @Accessor("icon")
-    public void setIcon(ItemStack icon);
+    void setIcon(ItemStack icon);
     
     @Accessor("displayStacks")
-    public void setDisplayStacks(Collection<ItemStack> displayStacks);
+    void setDisplayStacks(Collection<ItemStack> displayStacks);
     
     @Accessor("searchTabStacks")
-    public void setSearchTabStacks(Set<ItemStack> searchTabStacks);
+    void setSearchTabStacks(Set<ItemStack> searchTabStacks);
 }
