@@ -18,17 +18,16 @@ public class ReactorRecipe extends ProcessRecipe {
     public ReactorRecipe(EmiRecipeCategory category, List<EmiIngredient> inputs, List<EmiStack> outputs, Integer energy, Integer time) {
         super(category, inputs, outputs, null, energy, time, null);
         Utils.fillInputs(inputs, 4);
-        Utils.fillOutputs(outputs, 1);
     }
     
     @Override
     public int getWidgetsWidth() {
-        return (EmiUtils.slot + EmiUtils.arrowWidth) * 2 + EmiUtils.padding * 4 + EmiUtils.bigSlot;
+        return (EmiUtils.slot + EmiUtils.arrowWidth) * 2 + EmiUtils.padding * 4 + (hasOutputs() ? EmiUtils.bigSlot : EmiUtils.chargeWidth);
     }
     
     @Override
     public int getWidgetsHeight() {
-        return EmiUtils.slot * 2 + EmiUtils.bigSlot;
+        return EmiUtils.slot * 2 + (hasOutputs() ? EmiUtils.bigSlot : EmiUtils.slot);
     }
     
     @Override
@@ -50,11 +49,16 @@ public class ReactorRecipe extends ProcessRecipe {
             widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetY);
         }
         offsetX += EmiUtils.arrowWidth + EmiUtils.padding;
-        widgets.addSlot(outputs.get(0), offsetX, offsetY).output(true);
-        if (hasEnergy()) {
-            addEnergyDisplay(widgets, offsetX + (EmiUtils.bigSlot - EmiUtils.chargeWidth) / 2, offsetY - EmiUtils.chargeHeight - EmiUtils.padding);
+        
+        if (hasOutputs()) {
+            widgets.addSlot(outputs.get(0), offsetX, offsetY).output(true);
         }
-        offsetX += EmiUtils.bigSlot + EmiUtils.padding;
+        
+        if (hasEnergy()) {
+            addEnergyDisplay(widgets, offsetX + (hasOutputs() ? (EmiUtils.bigSlot - EmiUtils.chargeWidth) / 2 : 0), offsetY + (hasOutputs() ? -EmiUtils.chargeHeight - EmiUtils.padding : EmiUtils.padding));
+            offsetX += (hasOutputs() ? EmiUtils.bigSlot  : EmiUtils.chargeWidth) + + EmiUtils.padding;
+        }
+        
         if (hasTime()) {
             final int sfTicks = Math.max(1, this.time / 10 / (hasSpeed() ? this.speed : 1));
             final int millis =  sfTicks * 500;
