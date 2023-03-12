@@ -173,13 +173,21 @@ public class Utils {
     }
     
     public static void fillInputs(List<EmiIngredient> list, int size) {
-        for (int i = list.size(); i <= size; i++) {
+        if (list.size() == size) {
+            return;
+        }
+        
+        for (int i = list.size(); i < size; i++) {
             list.add(EmiStack.EMPTY);
         }
     }
     
     public static void fillOutputs(List<EmiStack> list, int size) {
-        for (int i = list.size(); i <= size; i++) {
+        if (list.size() == size) {
+            return;
+        }
+        
+        for (int i = list.size(); i < size; i++) {
             list.add(EmiStack.EMPTY);
         }
     }

@@ -118,8 +118,8 @@ public class ProcessRecipe implements EmiRecipe {
     
         // Display Time
         if (hasTime()) {
-            final int sfTicks = this.time / 10 / (hasSpeed() ? this.speed : 1);
-            final int millis =  sfTicks * 2000;
+            final int sfTicks = Math.max(1, this.time / 10 / (hasSpeed() ? this.speed : 1));
+            final int millis =  sfTicks * 500;
             widgets.addFillingArrow(offsetX, offsetYArrow, millis).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", EmiUtils.numberFormat.format(sfTicks / 2f), EmiUtils.numberFormat.format(sfTicks * 10))))));
         } else {
             widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetYArrow);
@@ -138,8 +138,9 @@ public class ProcessRecipe implements EmiRecipe {
     }
     
     protected void addEnergyDisplay(WidgetHolder widgets, int offsetX, int offsetYCharge) {
+        final int totalEnergy = this.energy * Math.max(1, this.time / 10 / (hasSpeed() ? this.speed : 1));
         widgets.addTexture(EmiUtils.EMPTY_CHARGE, offsetX, offsetYCharge);
-        widgets.addAnimatedTexture(this.energy > 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, offsetX, offsetYCharge, 1000, false, this.energy <= 0, this.energy <= 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (this.energy > 0 ? "generate" : "use"), EmiUtils.numberFormat.format(Math.abs(this.energy)))))));
+        widgets.addAnimatedTexture(totalEnergy >= 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, offsetX, offsetYCharge, 1000, false, totalEnergy < 0, totalEnergy < 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (totalEnergy >= 0 ? "generate" : "use"), EmiUtils.numberFormat.format(Math.abs(totalEnergy)))))));
     }
     
     protected boolean hasInputs() {

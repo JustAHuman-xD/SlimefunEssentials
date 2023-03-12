@@ -65,8 +65,8 @@ public class GridRecipe extends ProcessRecipe {
     
         // Display Time
         if (hasTime()) {
-            final int sfTicks = this.time / 10 / (hasSpeed() ? this.speed : 1);
-            final int millis =  sfTicks * 2000;
+            final int sfTicks = Math.max(1, this.time / 10 / (hasSpeed() ? this.speed : 1));
+            final int millis =  sfTicks * 500;
             widgets.addFillingArrow(offsetX, offsetYArrow, millis).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", EmiUtils.numberFormat.format(sfTicks / 2f), EmiUtils.numberFormat.format(sfTicks * 10))))));
         } else {
             widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetYArrow);

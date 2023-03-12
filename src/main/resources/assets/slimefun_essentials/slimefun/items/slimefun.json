@@ -1,4 +1,8 @@
 {
+    "ADVANCED_CIRCUIT_BOARD": {
+        "item": "minecraft:powered_rail",
+        "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"ADVANCED_CIRCUIT_BOARD\"},display:{Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"aqua\",\"text\":\"Advanced Circuit Board\"}],\"text\":\"\"}\u0027 }}"
+    },
     "ADVANCED_INDUSTRIAL_MINER": {
         "item": "minecraft:diamond_pickaxe",
         "nbt": "{Damage:0,HideFlags:2,PublicBukkitValues:{\"slimefun:slimefun_item\":\"ADVANCED_INDUSTRIAL_MINER\"},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"This Multiblock will mine any Ores\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"in a 11x11 area underneath it.\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Place a bucket of fuel or lava in\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"its chest to fuel this machine.\"}],\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"green\",\"text\":\"+ Silk Touch\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"red\",\"text\":\"Advanced Industrial Miner\"}],\"text\":\"\"}\u0027 }}"
@@ -154,6 +158,10 @@
     "BANDAGE": {
         "item": "minecraft:paper",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"BANDAGE\"},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"green\",\"text\":\"Level II - Medical Supply\"}],\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Restores 4 Hearts\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Extinguishes Fire\"}],\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"yellow\",\"text\":\"Right Click\"},{\"italic\":false,\"color\":\"gray\",\"text\":\" to use\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"red\",\"text\":\"Bandage\"}],\"text\":\"\"}\u0027 }}"
+    },
+    "BASIC_CIRCUIT_BOARD": {
+        "item": "minecraft:activator_rail",
+        "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"BASIC_CIRCUIT_BOARD\"},display:{Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"aqua\",\"text\":\"Basic Circuit Board\"}],\"text\":\"\"}\u0027 }}"
     },
     "BATTERY": {
         "item": "minecraft:player_head",
@@ -1414,10 +1422,6 @@
     "MONSTER_JERKY": {
         "item": "minecraft:rotten_flesh",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"MONSTER_JERKY\"},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":true,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"green\",\"text\":\"No longer hungry\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gold\",\"text\":\"Monster Jerky\"}],\"text\":\"\"}\u0027 }}"
-    },
-    "MULTIBLOCK": {
-        "item": "minecraft:bricks",
-        "nbt": "{display:{Name:'[{\"text\":\"Multiblock\",\"italic\":false,\"color\":\"aqua\"}]',Lore:['[{\"text\":\"Build the shown structure\",\"italic\":false,\"color\":\"gray\"}]','[{\"text\":\"as shown. It is not crafted.\",\"italic\":false,\"color\":\"gray\"}]'] }}"
     },
     "MULTIMETER": {
         "item": "minecraft:clock",

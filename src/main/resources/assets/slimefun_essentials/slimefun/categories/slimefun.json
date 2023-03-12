@@ -1,6 +1,6 @@
 {
     "ADVANCED_INDUSTRIAL_MINER": {
-        "type": "grid"
+        "type": "grid3"
     },
     "ANCIENT_ALTAR": {
         "type": "ancient_altar",
@@ -197,7 +197,7 @@
         ]
     },
     "ARMOR_FORGE": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["ENDER_LUMP_1:1", "ender_eye:1", "ENDER_LUMP_1:1", "obsidian:1", "", "obsidian:1"],
@@ -359,7 +359,7 @@
         ]
     },
     "AUTOMATED_PANNING_MACHINE": {
-        "type": "grid"
+        "type": "grid3"
     },
     "AUTO_ANVIL": {
         "speed": 1,
@@ -729,7 +729,7 @@
         ]
     },
     "COMPRESSOR": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": [
@@ -790,192 +790,24 @@
         "recipes": [
             {
                 "time": 80,
+                "inputs": ["clay_ball:1"],
+                "outputs": ["brick:1"]
+            }, {
+                "time": 80,
                 "inputs": [
                     ["deepslate_emerald_ore:1", "emerald_ore:1"]
                 ],
                 "outputs": ["emerald:1"]
             }, {
                 "time": 80,
-                "inputs": ["cobbled_deepslate:1"],
-                "outputs": ["deepslate:1"]
-            }, {
-                "time": 80,
-                "inputs": ["light_blue_terracotta:1"],
-                "outputs": ["light_blue_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["potato:1"],
-                "outputs": ["baked_potato:1"]
-            }, {
-                "time": 80,
-                "inputs": ["kelp:1"],
-                "outputs": ["dried_kelp:1"]
-            }, {
-                "time": 80,
-                "inputs": ["purple_terracotta:1"],
-                "outputs": ["purple_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["nether_quartz_ore:1"],
-                "outputs": ["quartz:1"]
-            }, {
-                "time": 80,
-                "inputs": ["stone:1"],
-                "outputs": ["smooth_stone:1"]
-            }, {
-                "time": 80,
-                "inputs": ["brown_terracotta:1"],
-                "outputs": ["brown_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["yellow_terracotta:1"],
-                "outputs": ["yellow_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["white_terracotta:1"],
-                "outputs": ["white_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": [
-                    ["chainmail_boots:1", "chainmail_chestplate:1", "chainmail_helmet:1", "chainmail_leggings:1", "iron_axe:1", "iron_boots:1", "iron_chestplate:1", "iron_helmet:1", "iron_hoe:1", "iron_horse_armor:1", "iron_leggings:1", "iron_pickaxe:1", "iron_shovel:1", "iron_sword:1"]
-                ],
-                "outputs": ["iron_nugget:1"]
-            }, {
-                "time": 80,
-                "inputs": [
-                    ["coal_ore:1", "deepslate_coal_ore:1"]
-                ],
-                "outputs": ["coal:1"]
-            }, {
-                "time": 80,
-                "inputs": ["cobblestone:1"],
-                "outputs": ["stone:1"]
-            }, {
-                "time": 80,
-                "inputs": ["salmon:1"],
-                "outputs": ["cooked_salmon:1"]
-            }, {
-                "time": 80,
-                "inputs": ["porkchop:1"],
-                "outputs": ["cooked_porkchop:1"]
-            }, {
-                "time": 80,
-                "inputs": ["ancient_debris:1"],
-                "outputs": ["netherite_scrap:1"]
-            }, {
-                "time": 80,
-                "inputs": ["wet_sponge:1"],
-                "outputs": ["sponge:1"]
-            }, {
-                "time": 80,
-                "inputs": ["deepslate_tiles:1"],
-                "outputs": ["cracked_deepslate_tiles:1"]
+                "inputs": ["mutton:1"],
+                "outputs": ["cooked_mutton:1"]
             }, {
                 "time": 80,
                 "inputs": [
                     ["copper_ore:1", "deepslate_copper_ore:1", "raw_copper:1"]
                 ],
                 "outputs": ["copper_ingot:1"]
-            }, {
-                "time": 80,
-                "inputs": ["basalt:1"],
-                "outputs": ["smooth_basalt:1"]
-            }, {
-                "time": 80,
-                "inputs": [
-                    ["deepslate_lapis_ore:1", "lapis_ore:1"]
-                ],
-                "outputs": ["lapis_lazuli:1"]
-            }, {
-                "time": 80,
-                "inputs": ["mutton:1"],
-                "outputs": ["cooked_mutton:1"]
-            }, {
-                "time": 80,
-                "inputs": ["lime_terracotta:1"],
-                "outputs": ["lime_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["polished_blackstone_bricks:1"],
-                "outputs": ["cracked_polished_blackstone_bricks:1"]
-            }, {
-                "time": 80,
-                "inputs": ["chicken:1"],
-                "outputs": ["cooked_chicken:1"]
-            }, {
-                "time": 80,
-                "inputs": [
-                    ["golden_axe:1", "golden_boots:1", "golden_chestplate:1", "golden_helmet:1", "golden_hoe:1", "golden_horse_armor:1", "golden_leggings:1", "golden_pickaxe:1", "golden_shovel:1", "golden_sword:1"]
-                ],
-                "outputs": ["gold_nugget:1"]
-            }, {
-                "time": 80,
-                "inputs": ["cactus:1"],
-                "outputs": ["green_dye:1"]
-            }, {
-                "time": 80,
-                "inputs": ["sandstone:1"],
-                "outputs": ["smooth_sandstone:1"]
-            }, {
-                "time": 80,
-                "inputs": ["beef:1"],
-                "outputs": ["cooked_beef:1"]
-            }, {
-                "time": 80,
-                "inputs": [
-                    ["deepslate_gold_ore:1", "gold_ore:1", "nether_gold_ore:1", "raw_gold:1"]
-                ],
-                "outputs": ["gold_ingot:1"]
-            }, {
-                "time": 80,
-                "inputs": ["pink_terracotta:1"],
-                "outputs": ["pink_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["sea_pickle:1"],
-                "outputs": ["lime_dye:1"]
-            }, {
-                "time": 80,
-                "inputs": ["quartz_block:1"],
-                "outputs": ["smooth_quartz:1"]
-            }, {
-                "time": 80,
-                "inputs": ["red_sandstone:1"],
-                "outputs": ["smooth_red_sandstone:1"]
-            }, {
-                "time": 80,
-                "inputs": [
-                    ["deepslate_redstone_ore:1", "redstone_ore:1"]
-                ],
-                "outputs": ["redstone:1"]
-            }, {
-                "time": 80,
-                "inputs": ["nether_bricks:1"],
-                "outputs": ["cracked_nether_bricks:1"]
-            }, {
-                "time": 80,
-                "inputs": [
-                    ["deepslate_iron_ore:1", "iron_ore:1", "raw_iron:1"]
-                ],
-                "outputs": ["iron_ingot:1"]
-            }, {
-                "time": 80,
-                "inputs": ["gray_terracotta:1"],
-                "outputs": ["gray_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["magenta_terracotta:1"],
-                "outputs": ["magenta_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": [
-                    ["deepslate_diamond_ore:1", "diamond_ore:1"]
-                ],
-                "outputs": ["diamond:1"]
-            }, {
-                "time": 80,
-                "inputs": ["chorus_fruit:1"],
-                "outputs": ["popped_chorus_fruit:1"]
             }, {
                 "time": 80,
                 "inputs": ["blue_terracotta:1"],
@@ -986,26 +818,164 @@
                 "outputs": ["cooked_rabbit:1"]
             }, {
                 "time": 80,
+                "inputs": ["basalt:1"],
+                "outputs": ["smooth_basalt:1"]
+            }, {
+                "time": 80,
+                "inputs": ["nether_quartz_ore:1"],
+                "outputs": ["quartz:1"]
+            }, {
+                "time": 80,
+                "inputs": ["yellow_terracotta:1"],
+                "outputs": ["yellow_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["cod:1"],
+                "outputs": ["cooked_cod:1"]
+            }, {
+                "time": 80,
+                "inputs": ["clay:1"],
+                "outputs": ["terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["deepslate_bricks:1"],
+                "outputs": ["cracked_deepslate_bricks:1"]
+            }, {
+                "time": 80,
+                "inputs": ["orange_terracotta:1"],
+                "outputs": ["orange_glazed_terracotta:1"]
+            }, {
+                "time": 80,
                 "inputs": [
-                    ["red_sand:1", "sand:1"]
+                    ["golden_axe:1", "golden_boots:1", "golden_chestplate:1", "golden_helmet:1", "golden_hoe:1", "golden_horse_armor:1", "golden_leggings:1", "golden_pickaxe:1", "golden_shovel:1", "golden_sword:1"]
                 ],
-                "outputs": ["glass:1"]
+                "outputs": ["gold_nugget:1"]
+            }, {
+                "time": 80,
+                "inputs": ["lime_terracotta:1"],
+                "outputs": ["lime_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["chorus_fruit:1"],
+                "outputs": ["popped_chorus_fruit:1"]
+            }, {
+                "time": 80,
+                "inputs": ["magenta_terracotta:1"],
+                "outputs": ["magenta_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["cobblestone:1"],
+                "outputs": ["stone:1"]
+            }, {
+                "time": 80,
+                "inputs": ["gray_terracotta:1"],
+                "outputs": ["gray_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": [
+                    ["deepslate_iron_ore:1", "iron_ore:1", "raw_iron:1"]
+                ],
+                "outputs": ["iron_ingot:1"]
+            }, {
+                "time": 80,
+                "inputs": [
+                    ["chainmail_boots:1", "chainmail_chestplate:1", "chainmail_helmet:1", "chainmail_leggings:1", "iron_axe:1", "iron_boots:1", "iron_chestplate:1", "iron_helmet:1", "iron_hoe:1", "iron_horse_armor:1", "iron_leggings:1", "iron_pickaxe:1", "iron_shovel:1", "iron_sword:1"]
+                ],
+                "outputs": ["iron_nugget:1"]
+            }, {
+                "time": 80,
+                "inputs": ["pink_terracotta:1"],
+                "outputs": ["pink_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["polished_blackstone_bricks:1"],
+                "outputs": ["cracked_polished_blackstone_bricks:1"]
+            }, {
+                "time": 80,
+                "inputs": ["brown_terracotta:1"],
+                "outputs": ["brown_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["wet_sponge:1"],
+                "outputs": ["sponge:1"]
+            }, {
+                "time": 80,
+                "inputs": ["sea_pickle:1"],
+                "outputs": ["lime_dye:1"]
+            }, {
+                "time": 80,
+                "inputs": ["purple_terracotta:1"],
+                "outputs": ["purple_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["green_terracotta:1"],
+                "outputs": ["green_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["nether_bricks:1"],
+                "outputs": ["cracked_nether_bricks:1"]
+            }, {
+                "time": 80,
+                "inputs": [
+                    ["deepslate_lapis_ore:1", "lapis_ore:1"]
+                ],
+                "outputs": ["lapis_lazuli:1"]
+            }, {
+                "time": 80,
+                "inputs": ["ancient_debris:1"],
+                "outputs": ["netherite_scrap:1"]
+            }, {
+                "time": 80,
+                "inputs": [
+                    ["deepslate_diamond_ore:1", "diamond_ore:1"]
+                ],
+                "outputs": ["diamond:1"]
             }, {
                 "time": 80,
                 "inputs": ["cyan_terracotta:1"],
                 "outputs": ["cyan_glazed_terracotta:1"]
             }, {
                 "time": 80,
-                "inputs": ["stone_bricks:1"],
-                "outputs": ["cracked_stone_bricks:1"]
+                "inputs": ["netherrack:1"],
+                "outputs": ["nether_brick:1"]
             }, {
                 "time": 80,
-                "inputs": ["clay_ball:1"],
-                "outputs": ["brick:1"]
+                "inputs": [
+                    ["coal_ore:1", "deepslate_coal_ore:1"]
+                ],
+                "outputs": ["coal:1"]
             }, {
                 "time": 80,
-                "inputs": ["deepslate_bricks:1"],
-                "outputs": ["cracked_deepslate_bricks:1"]
+                "inputs": ["deepslate_tiles:1"],
+                "outputs": ["cracked_deepslate_tiles:1"]
+            }, {
+                "time": 80,
+                "inputs": ["stone:1"],
+                "outputs": ["smooth_stone:1"]
+            }, {
+                "time": 80,
+                "inputs": [
+                    ["red_sand:1", "sand:1"]
+                ],
+                "outputs": ["glass:1"]
+            }, {
+                "time": 80,
+                "inputs": [
+                    ["deepslate_redstone_ore:1", "redstone_ore:1"]
+                ],
+                "outputs": ["redstone:1"]
+            }, {
+                "time": 80,
+                "inputs": ["beef:1"],
+                "outputs": ["cooked_beef:1"]
+            }, {
+                "time": 80,
+                "inputs": ["light_blue_terracotta:1"],
+                "outputs": ["light_blue_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["cobbled_deepslate:1"],
+                "outputs": ["deepslate:1"]
             }, {
                 "time": 80,
                 "inputs": [
@@ -1014,36 +984,66 @@
                 "outputs": ["charcoal:1"]
             }, {
                 "time": 80,
-                "inputs": ["light_gray_terracotta:1"],
-                "outputs": ["light_gray_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["orange_terracotta:1"],
-                "outputs": ["orange_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["black_terracotta:1"],
-                "outputs": ["black_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["green_terracotta:1"],
-                "outputs": ["green_glazed_terracotta:1"]
-            }, {
-                "time": 80,
-                "inputs": ["clay:1"],
-                "outputs": ["terracotta:1"]
+                "inputs": ["porkchop:1"],
+                "outputs": ["cooked_porkchop:1"]
             }, {
                 "time": 80,
                 "inputs": ["red_terracotta:1"],
                 "outputs": ["red_glazed_terracotta:1"]
             }, {
                 "time": 80,
-                "inputs": ["cod:1"],
-                "outputs": ["cooked_cod:1"]
+                "inputs": [
+                    ["deepslate_gold_ore:1", "gold_ore:1", "nether_gold_ore:1", "raw_gold:1"]
+                ],
+                "outputs": ["gold_ingot:1"]
             }, {
                 "time": 80,
-                "inputs": ["netherrack:1"],
-                "outputs": ["nether_brick:1"]
+                "inputs": ["salmon:1"],
+                "outputs": ["cooked_salmon:1"]
+            }, {
+                "time": 80,
+                "inputs": ["chicken:1"],
+                "outputs": ["cooked_chicken:1"]
+            }, {
+                "time": 80,
+                "inputs": ["stone_bricks:1"],
+                "outputs": ["cracked_stone_bricks:1"]
+            }, {
+                "time": 80,
+                "inputs": ["red_sandstone:1"],
+                "outputs": ["smooth_red_sandstone:1"]
+            }, {
+                "time": 80,
+                "inputs": ["kelp:1"],
+                "outputs": ["dried_kelp:1"]
+            }, {
+                "time": 80,
+                "inputs": ["cactus:1"],
+                "outputs": ["green_dye:1"]
+            }, {
+                "time": 80,
+                "inputs": ["potato:1"],
+                "outputs": ["baked_potato:1"]
+            }, {
+                "time": 80,
+                "inputs": ["light_gray_terracotta:1"],
+                "outputs": ["light_gray_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["white_terracotta:1"],
+                "outputs": ["white_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["quartz_block:1"],
+                "outputs": ["smooth_quartz:1"]
+            }, {
+                "time": 80,
+                "inputs": ["black_terracotta:1"],
+                "outputs": ["black_glazed_terracotta:1"]
+            }, {
+                "time": 80,
+                "inputs": ["sandstone:1"],
+                "outputs": ["smooth_sandstone:1"]
             }
         ]
     },
@@ -1753,7 +1753,7 @@
         "copy": "ELECTRIFIED_CRUCIBLE"
     },
     "ENHANCED_CRAFTING_TABLE": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["", "oak_log:1", "", "", "oak_log:1", "", "", "oak_log:1"],
@@ -1818,6 +1818,9 @@
             }, {
                 "inputs": ["", "MAGIC_LUMP_2:1", "", "MAGIC_LUMP_2:1", "book:1", "MAGIC_LUMP_2:1", "", "MAGIC_LUMP_2:1"],
                 "outputs": ["MAGICAL_BOOK_COVER:1"]
+            }, {
+                "inputs": ["lapis_block:1", "lapis_block:1", "lapis_block:1", "redstone_block:1", "BASIC_CIRCUIT_BOARD:1", "redstone_block:1", "lapis_block:1", "lapis_block:1", "lapis_block:1"],
+                "outputs": ["ADVANCED_CIRCUIT_BOARD:1"]
             }, {
                 "inputs": ["", "", "", "stone:1", "bowl:1", "stone:1", "stone:1", "stone:1", "stone:1"],
                 "outputs": ["GOLD_PAN:1"]
@@ -2674,7 +2677,7 @@
         ]
     },
     "GRIND_STONE": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["blaze_rod:1"],
@@ -2789,10 +2792,10 @@
         "copy": "HEATED_PRESSURE_CHAMBER"
     },
     "INDUSTRIAL_MINER": {
-        "type": "grid"
+        "type": "grid3"
     },
     "JUICER": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["apple:1"],
@@ -2833,7 +2836,7 @@
         "copy": "LAVA_GENERATOR"
     },
     "MAGIC_WORKBENCH": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["cookie:1", "ELYTRA_SCALE:1"],
@@ -3065,7 +3068,7 @@
         ]
     },
     "MAKESHIFT_SMELTERY": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["IRON_DUST:1"],
@@ -3102,7 +3105,7 @@
         "recipes": [
             {
                 "time": 36000,
-                "inputs": ["nether_star:1"],
+                "inputs": ["nether_star:1", "NETHER_ICE_COOLANT_CELL:64", "NETHER_ICE_COOLANT_CELL:8"],
                 "outputs": []
             }
         ]
@@ -3120,15 +3123,15 @@
         "recipes": [
             {
                 "time": 12000,
-                "inputs": ["NEPTUNIUM:1"],
+                "inputs": ["NEPTUNIUM:1", "REACTOR_COLLANT_CELL:24"],
                 "outputs": ["PLUTONIUM:1"]
             }, {
                 "time": 24000,
-                "inputs": ["URANIUM:1"],
+                "inputs": ["URANIUM:1", "REACTOR_COLLANT_CELL:48"],
                 "outputs": ["NEPTUNIUM:1"]
             }, {
                 "time": 30000,
-                "inputs": ["BOOSTED_URANIUM:1"],
+                "inputs": ["BOOSTED_URANIUM:1", "REACTOR_COLLANT_CELL:60"],
                 "outputs": []
             }
         ]
@@ -3138,7 +3141,7 @@
         "energy": -14
     },
     "ORE_CRUSHER": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": [
@@ -3248,7 +3251,7 @@
         ]
     },
     "ORE_WASHER": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["SIFTED_ORE:1"],
@@ -3290,7 +3293,7 @@
         ]
     },
     "PRESSURE_CHAMBER": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["CARBON_CHUNK:1"],
@@ -3317,71 +3320,71 @@
                 "inputs": ["charcoal:1"],
                 "outputs": ["bamboo:1"]
             }, {
+                "inputs": ["stripped_jungle_wood:1"],
+                "outputs": ["acacia_log:1"]
+            }, {
+                "inputs": ["crimson_stem:1"],
+                "outputs": ["warped_hyphae:1"]
+            }, {
+                "inputs": ["birch_log:1"],
+                "outputs": ["jungle_wood:1"]
+            }, {
+                "inputs": ["warped_stem:1"],
+                "outputs": ["stripped_oak_log:1"]
+            }, {
+                "inputs": ["stripped_warped_stem:1"],
+                "outputs": ["spruce_wood:1"]
+            }, {
+                "inputs": ["stripped_jungle_log:1"],
+                "outputs": ["oak_wood:1"]
+            }, {
+                "inputs": ["stripped_mangrove_log:1"],
+                "outputs": ["stripped_oak_wood:1"]
+            }, {
+                "inputs": ["spruce_log:1"],
+                "outputs": ["stripped_mangrove_wood:1"]
+            }, {
+                "inputs": ["stripped_acacia_wood:1"],
+                "outputs": ["stripped_dark_oak_wood:1"]
+            }, {
+                "inputs": ["stripped_crimson_hyphae:1"],
+                "outputs": ["stripped_dark_oak_log:1"]
+            }, {
+                "inputs": ["stripped_spruce_wood:1"],
+                "outputs": ["mangrove_wood:1"]
+            }, {
+                "inputs": ["birch_wood:1"],
+                "outputs": ["acacia_wood:1"]
+            }, {
                 "inputs": ["jungle_log:1"],
                 "outputs": ["stripped_crimson_stem:1"]
             }, {
-                "inputs": ["acacia_wood:1"],
-                "outputs": ["dark_oak_log:1"]
+                "inputs": ["stripped_warped_hyphae:1"],
+                "outputs": ["stripped_birch_log:1"]
             }, {
-                "inputs": ["stripped_mangrove_log:1"],
-                "outputs": ["stripped_warped_hyphae:1"]
+                "inputs": ["mangrove_log:1"],
+                "outputs": ["crimson_hyphae:1"]
             }, {
-                "inputs": ["warped_hyphae:1"],
-                "outputs": ["birch_wood:1"]
-            }, {
-                "inputs": ["stripped_birch_log:1"],
-                "outputs": ["stripped_spruce_log:1"]
-            }, {
-                "inputs": ["crimson_stem:1"],
-                "outputs": ["stripped_crimson_hyphae:1"]
-            }, {
-                "inputs": ["birch_log:1"],
-                "outputs": ["mangrove_wood:1"]
-            }, {
-                "inputs": ["oak_log:1"],
+                "inputs": ["stripped_birch_wood:1"],
                 "outputs": ["dark_oak_wood:1"]
             }, {
-                "inputs": ["stripped_jungle_wood:1"],
-                "outputs": ["mangrove_log:1"]
+                "inputs": ["oak_log:1"],
+                "outputs": ["stripped_acacia_log:1"]
             }, {
-                "inputs": ["acacia_log:1"],
-                "outputs": ["stripped_acacia_wood:1"]
-            }, {
-                "inputs": ["stripped_spruce_wood:1"],
-                "outputs": ["stripped_jungle_log:1"]
-            }, {
-                "inputs": ["stripped_dark_oak_log:1"],
-                "outputs": ["stripped_birch_wood:1"]
-            }, {
-                "inputs": ["crimson_hyphae:1"],
-                "outputs": ["stripped_oak_wood:1"]
-            }, {
-                "inputs": ["stripped_mangrove_wood:1"],
-                "outputs": ["stripped_dark_oak_wood:1"]
-            }, {
-                "inputs": ["spruce_log:1"],
-                "outputs": ["jungle_wood:1"]
-            }, {
-                "inputs": ["oak_wood:1"],
-                "outputs": ["spruce_wood:1"]
-            }, {
-                "inputs": ["stripped_warped_stem:1"],
-                "outputs": ["stripped_oak_log:1"]
-            }, {
-                "inputs": ["stripped_acacia_log:1"],
-                "outputs": ["warped_stem:1"]
+                "inputs": ["dark_oak_log:1"],
+                "outputs": ["stripped_spruce_log:1"]
             }, {
                 "inputs": ["spruce_planks:1"],
-                "outputs": ["crimson_planks:1"]
+                "outputs": ["acacia_planks:1"]
             }, {
-                "inputs": ["mangrove_planks:1"],
-                "outputs": ["jungle_planks:1"]
-            }, {
-                "inputs": ["dark_oak_planks:1"],
-                "outputs": ["birch_planks:1"]
+                "inputs": ["warped_planks:1"],
+                "outputs": ["dark_oak_planks:1"]
             }, {
                 "inputs": ["oak_planks:1"],
-                "outputs": ["warped_planks:1"]
+                "outputs": ["crimson_planks:1"]
+            }, {
+                "inputs": ["jungle_planks:1"],
+                "outputs": ["birch_planks:1"]
             }
         ]
     },
@@ -3443,7 +3446,7 @@
         ]
     },
     "SMELTERY": {
-        "type": "grid",
+        "type": "grid3",
         "recipes": [
             {
                 "inputs": ["IRON_DUST:1"],
@@ -3610,6 +3613,6 @@
         ]
     },
     "TABLE_SAW": {
-        "type": "grid"
+        "type": "grid3"
     }
 }
