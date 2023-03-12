@@ -1,16 +1,11 @@
 package me.justahuman.slimefun_essentials.utils;
 
-import com.google.gson.JsonObject;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.emi.emi.api.stack.EmiIngredient;
+import dev.emi.emi.api.stack.EmiStack;
 import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +15,12 @@ import java.util.List;
 
 public class Utils {
     public static final String ID = "slimefun_essentials";
+    public static final Identifier WIDGETS = new Identifier(ID, "textures/gui/widgets.png");
     private static final Logger logger = LoggerFactory.getLogger(ID);
     private static final String errorMessage = "[SFE] Failed to load data";
     
     public static Identifier newIdentifier(String namespace) {
-        return new Identifier(ID, namespace);
+        return new Identifier(ID, namespace.toLowerCase());
     }
 
     public static boolean isClothConfigEnabled() {
@@ -176,25 +172,15 @@ public class Utils {
         return addonList;
     }
     
-    public static ItemStack deserializeItem(JsonObject itemObject) {
-        final ItemStack itemStack = new ItemStack(Registries.ITEM.get(new Identifier(itemObject.get("item").getAsString())));
-        itemStack.setCount(JsonHelper.getInt(itemObject, "amount", 1));
-        if (JsonHelper.hasString(itemObject, "nbt")) {
-            itemStack.setNbt(parseNbt(itemObject));
+    public static void fillInputs(List<EmiIngredient> list, int size) {
+        for (int i = list.size(); i <= size; i++) {
+            list.add(EmiStack.EMPTY);
         }
-        
-        return itemStack;
     }
     
-    public static NbtCompound parseNbt(JsonObject json) {
-        return parseNbt(JsonHelper.getString(json, "nbt"));
-    }
-    
-    public static NbtCompound parseNbt(String nbt) {
-        try {
-            return StringNbtReader.parse(nbt);
-        } catch (CommandSyntaxException e) {
-            throw new RuntimeException(e);
+    public static void fillOutputs(List<EmiStack> list, int size) {
+        for (int i = list.size(); i <= size; i++) {
+            list.add(EmiStack.EMPTY);
         }
     }
     

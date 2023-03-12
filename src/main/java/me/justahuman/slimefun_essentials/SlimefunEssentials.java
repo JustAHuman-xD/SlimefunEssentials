@@ -47,6 +47,11 @@ public class SlimefunEssentials implements ClientModInitializer {
                     ResourceLoader.loadItems(resource);
                 }
                 
+                // Load all the Labels
+                for (Resource resource : manager.findResources("slimefun/labels", path -> path.getPath().endsWith(".json")).values()) {
+                    ResourceLoader.loadLabels(resource);
+                }
+                
                 // Load all the Recipes
                 for (Resource resource : manager.findResources("slimefun/item_groups", path -> path.getPath().endsWith(".json")).values()) {
                     ResourceLoader.loadItemGroups(resource);

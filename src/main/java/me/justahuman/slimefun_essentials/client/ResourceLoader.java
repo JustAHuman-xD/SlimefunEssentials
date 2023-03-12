@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import lombok.NonNull;
 import me.justahuman.slimefun_essentials.mixins.ItemGroupAccessor;
+import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
@@ -79,7 +80,7 @@ public class ResourceLoader {
                 continue;
             }
             
-            slimefunItems.put(id, Utils.deserializeItem(itemObject));
+            slimefunItems.put(id, JsonUtils.deserializeItem(itemObject));
         }
         
         sortItems();
@@ -99,7 +100,7 @@ public class ResourceLoader {
                 continue;
             }
             
-            final ItemStack icon = Utils.deserializeItem(iconObject);
+            final ItemStack icon = JsonUtils.deserializeItem(iconObject);
             final Collection<ItemStack> displayStacks = ItemStackSet.create();
             final Set<ItemStack> searchTabStacks = ItemStackSet.create();
             for (JsonElement entryElement : groupObject.getAsJsonArray("stacks")) {
@@ -116,12 +117,24 @@ public class ResourceLoader {
     }
     
     /**
-     * Load the Category from a given {@link Resource}
+     * Load the {@link SlimefunCategory} from a given {@link Resource}
      *
-     * @param resource The {@link Resource} that contains an EMI Category for a Slimefun Item
+     * @param resource The {@link Resource} that contains an {@link SlimefunCategory} for a Slimefun Item
      */
     public static void loadCategories(Resource resource) {
-        // TODO handle categories
+        final JsonObject slimefunCategories = jsonObjectFromResource(resource);
+        for (String id : slimefunCategories.keySet()) {
+            final JsonObject categoryObject = slimefunCategories.getAsJsonObject(id);
+            SlimefunCategory.deserialize(id, categoryObject);
+        }
+    }
+    
+    public static void loadLabels(Resource resource) {
+        final JsonObject slimefunLabels = jsonObjectFromResource(resource);
+        for (String id : slimefunLabels.keySet()) {
+            final JsonObject labelObject = slimefunLabels.getAsJsonObject(id);
+            SlimefunLabel.deserialize(id, labelObject);
+        }
     }
     
     public static void addItemGroup(String id, ItemStack icon, Collection<ItemStack> displayStacks, Set<ItemStack> searchTabStacks) {

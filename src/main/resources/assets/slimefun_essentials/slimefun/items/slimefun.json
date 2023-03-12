@@ -1415,6 +1415,10 @@
         "item": "minecraft:rotten_flesh",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"MONSTER_JERKY\"},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":true,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"green\",\"text\":\"No longer hungry\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gold\",\"text\":\"Monster Jerky\"}],\"text\":\"\"}\u0027 }}"
     },
+    "MULTIBLOCK": {
+        "item": "minecraft:bricks",
+        "nbt": "{display:{Name:'[{\"text\":\"Multiblock\",\"italic\":false,\"color\":\"aqua\"}]',Lore:['[{\"text\":\"Build the shown structure\",\"italic\":false,\"color\":\"gray\"}]','[{\"text\":\"as shown. It is not crafted.\",\"italic\":false,\"color\":\"gray\"}]'] }}"
+    },
     "MULTIMETER": {
         "item": "minecraft:clock",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"MULTIMETER\"},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Measures the Amount of stored\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Energy in a Block\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"yellow\",\"text\":\"Multimeter\"}],\"text\":\"\"}\u0027 }}"
