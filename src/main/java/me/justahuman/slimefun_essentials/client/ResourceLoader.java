@@ -41,12 +41,7 @@ public class ResourceLoader {
         slimefunItems.clear();
         
         for (Map.Entry<Identifier, ItemGroup> itemGroupEntry : itemGroups.entrySet()) {
-            final ItemGroup itemGroup = itemGroupEntry.getValue();
-            if (itemGroup instanceof ItemGroupAccessor itemGroupAccessor) {
-                itemGroupAccessor.setDisplayStacks(ItemStackSet.create());
-                itemGroupAccessor.setSearchTabStacks(ItemStackSet.create());
-                itemGroup.reloadSearchProvider();
-            }
+            // TODO all of this stuff
         }
     }
     
@@ -116,6 +111,16 @@ public class ResourceLoader {
         }
     }
     
+    public static void addItemGroup(String id, ItemStack icon, Collection<ItemStack> displayStacks, Set<ItemStack> searchTabStacks) {
+        final Identifier identifier = Utils.newIdentifier(id);
+        if (itemGroups.get(identifier) instanceof ItemGroupAccessor itemGroupAccessor) {
+            // TODO all of this stuff
+            return;
+        }
+        
+        itemGroups.put(identifier, FabricItemGroup.builder(Utils.newIdentifier(id)).icon(() -> icon).entries(((enabledFeatures, groupEntries, operatorEnabled) -> groupEntries.addAll(displayStacks))).build());
+    }
+    
     /**
      * Load the {@link SlimefunCategory} from a given {@link Resource}
      *
@@ -135,18 +140,6 @@ public class ResourceLoader {
             final JsonObject labelObject = slimefunLabels.getAsJsonObject(id);
             SlimefunLabel.deserialize(id, labelObject);
         }
-    }
-    
-    public static void addItemGroup(String id, ItemStack icon, Collection<ItemStack> displayStacks, Set<ItemStack> searchTabStacks) {
-        final Identifier identifier = Utils.newIdentifier(id);
-        if (itemGroups.get(identifier) instanceof ItemGroupAccessor itemGroupAccessor) {
-            itemGroupAccessor.setIcon(icon);
-            itemGroupAccessor.setDisplayStacks(displayStacks);
-            itemGroupAccessor.setSearchTabStacks(searchTabStacks);
-            return;
-        }
-        
-        itemGroups.put(identifier, FabricItemGroup.builder(Utils.newIdentifier(id)).icon(() -> icon).entries(((enabledFeatures, groupEntries, operatorEnabled) -> groupEntries.addAll(displayStacks))).build());
     }
     
     /**

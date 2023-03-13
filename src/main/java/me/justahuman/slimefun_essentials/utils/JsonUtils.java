@@ -16,12 +16,28 @@ public class JsonUtils {
         return jsonObject.get(key) instanceof JsonObject otherObject ? otherObject : defaultValue;
     }
     
+    public static JsonArray getArrayOrDefault(JsonObject jsonObject, String key, JsonArray defaultValue, boolean shouldSet) {
+        final JsonArray result = getArrayOrDefault(jsonObject, key, defaultValue);
+        if (shouldSet) {
+            jsonObject.add(key, result);
+        }
+        return result;
+    }
+    
     public static JsonArray getArrayOrDefault(JsonObject jsonObject, String key, JsonArray defaultValue) {
         return jsonObject.get(key) instanceof JsonArray jsonArray ? jsonArray : defaultValue;
     }
     
     public static String getStringOrDefault(JsonObject jsonObject, String key, String defaultValue) {
         return jsonObject.get(key) instanceof JsonPrimitive jsonPrimitive && jsonPrimitive.isString() ? jsonPrimitive.getAsString() : defaultValue;
+    }
+    
+    public static Boolean getBooleanOrDefault(JsonObject jsonObject, String key, Boolean defaultValue, boolean shouldSet) {
+        final Boolean result = getBooleanOrDefault(jsonObject, key, defaultValue);
+        if (shouldSet) {
+            jsonObject.addProperty(key, result);
+        }
+        return result;
     }
     
     public static Boolean getBooleanOrDefault(JsonObject jsonObject, String key, Boolean defaultValue) {

@@ -3,9 +3,8 @@ package me.justahuman.slimefun_essentials;
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.justahuman.slimefun_essentials.utils.Utils;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -20,10 +19,8 @@ public class SlimefunEssentials implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        if (Utils.isClothConfigEnabled()) {
-            AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
-        }
-    
+        ModConfig.loadConfig();
+        
         FabricLoader.getInstance().getModContainer(Utils.ID)
                 .map(container -> ResourceManagerHelper.registerBuiltinResourcePack(
                         Utils.newIdentifier("one_item_group"),
@@ -43,25 +40,53 @@ public class SlimefunEssentials implements ClientModInitializer {
                 ResourceLoader.clear();
                 
                 // Load all the Items
-                for (Resource resource : manager.findResources("slimefun/items", path -> path.getPath().endsWith(".json")).values()) {
+                for (Resource resource : manager.findResources("slimefun/items", SlimefunEssentials::filterResources).values()) {
                     ResourceLoader.loadItems(resource);
                 }
                 
                 // Load all the Labels
-                for (Resource resource : manager.findResources("slimefun/labels", path -> path.getPath().endsWith(".json")).values()) {
+                for (Resource resource : manager.findResources("slimefun/labels", SlimefunEssentials::filterResources).values()) {
                     ResourceLoader.loadLabels(resource);
                 }
                 
                 // Load all the Recipes
-                for (Resource resource : manager.findResources("slimefun/item_groups", path -> path.getPath().endsWith(".json")).values()) {
+                for (Resource resource : manager.findResources("slimefun/item_groups", SlimefunEssentials::filterResources).values()) {
                     ResourceLoader.loadItemGroups(resource);
                 }
                 
                 // Load all the Item Groups
-                for (Resource resource : manager.findResources("slimefun/categories", path -> path.getPath().endsWith(".json")).values()) {
+                for (Resource resource : manager.findResources("slimefun/categories", SlimefunEssentials::filterResources).values()) {
                     ResourceLoader.loadCategories(resource);
                 }
             }
         });
+        
+        if (ModConfig.shouldAutoToggleAddons()) {
+            ClientPlayNetworking.registerGlobalReceiver(Utils.ADDON_CHANNEL, ((client, handler, buf, sender) -> {
+            
+            }));
+        }
+        
+        if (ModConfig.shouldUseCustomTextures()) {
+            ClientPlayNetworking.registerGlobalReceiver(Utils.BLOCK_CHANNEL, ((client, handler, buf, sender) -> {
+        
+            }));
+        }
+    }
+    
+    public static boolean filterResources(Identifier identifier) {
+        final String path = identifier.getPath();
+        if (!path.endsWith(".json")) {
+            return false;
+        }
+    
+        final String addon = path.substring(path.lastIndexOf("/") + 1, path.indexOf(".json"));
+        for (String enabledAddon : ModConfig.getAddons()) {
+            if (enabledAddon.equalsIgnoreCase(addon)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

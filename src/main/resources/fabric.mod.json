@@ -3,7 +3,7 @@
   "id": "slimefun_essentials",
   "version": "${version}",
   "name": "Slimefun Essentials",
-  "description": "A Minecraft mod bringing new features and compatibility with the Slimefun4 Plugin!",
+  "description": "A Minecraft mod bringing new features and compatibility with the Slimefun4 Plugin!\nSupported Addons: Slimefun",
   "authors": [
     "JustAHuman_xD"
   ],
