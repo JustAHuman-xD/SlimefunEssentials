@@ -8,13 +8,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
 
 import java.io.File;
 import java.io.FileReader;
@@ -83,62 +78,32 @@ public class ModConfig {
         }
     }
     
-    public static Screen buildConfig(Screen parent) {
-        if (!Utils.isClothConfigEnabled()) {
-            return parent;
-        }
-        
-        final ConfigBuilder builder = ConfigBuilder.create()
-                .setParentScreen(parent)
-                .setTitle(Text.translatable("slimefun_essentials.title"));
-        
-        final ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-    
-        final ConfigCategory category = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.category"));
-        
-        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.item_groups"), itemGroupsEnabled)
-                .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.option.item_groups.tooltip"))
-                .setSaveConsumer(newValue -> itemGroupsEnabled = newValue)
-                .build());
-    
-        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.custom_textures"), useCustomTextures)
-                .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.option.custom_textures.tooltip"))
-                .setSaveConsumer(newValue -> useCustomTextures = newValue)
-                .build());
-    
-        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.auto_toggle_addons"), autoToggleAddons)
-                .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.option.auto_toggle_addons.tooltip"))
-                .setSaveConsumer(newValue -> autoToggleAddons = newValue)
-                .build());
-        
-        category.addEntry(entryBuilder.startStrList(Text.translatable("slimefun_essentials.option.addons"), addons)
-                .setDefaultValue(new ArrayList<>(List.of("Slimefun")))
-                .setTooltip(Text.translatable("slimefun_essentials.option.addons.tooltip"))
-                .setSaveConsumer(newValue -> addons = newValue)
-                .build());
-        
-        builder.setSavingRunnable(ModConfig::saveConfig);
-        
-        return builder.build();
-    }
-    
-    public static boolean isItemGroupsEnabled() {
+    public static boolean areItemGroupsEnabled() {
         return itemGroupsEnabled;
+    }
+    public static void setItemGroupsEnabled(boolean newValue) {
+        itemGroupsEnabled = newValue;
     }
     
     public static boolean shouldUseCustomTextures() {
         return useCustomTextures;
     }
+    public static void setUseCustomTextures(boolean newValue) {
+        useCustomTextures = newValue;
+    }
     
     public static boolean shouldAutoToggleAddons() {
         return autoToggleAddons;
     }
+    public static void setAutoToggleAddons(boolean newValue) {
+        autoToggleAddons = newValue;
+    }
     
     public static List<String> getAddons() {
         return addons;
+    }
+    public static void setAddons(List<String> newValue) {
+        addons = newValue;
     }
     
     public static File getConfigFile() {

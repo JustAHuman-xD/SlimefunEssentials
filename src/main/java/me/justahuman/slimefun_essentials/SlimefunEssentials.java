@@ -1,25 +1,39 @@
 package me.justahuman.slimefun_essentials;
 
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
+import me.justahuman.slimefun_essentials.compat.cloth_config.ConfigScreen;
 import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
 
 public class SlimefunEssentials implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
         ModConfig.loadConfig();
+        
+        if (Utils.isClothConfigEnabled()) {
+            final KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("slimefun_essentials.open_config", GLFW.GLFW_KEY_F1, "slimefun_essentials.title"));
+            ClientTickEvents.END_CLIENT_TICK.register(client -> {
+                if (keyBinding.isPressed()) {
+                    client.setScreen(ConfigScreen.buildScreen(client.currentScreen));
+                }
+            });
+        }
         
         FabricLoader.getInstance().getModContainer(Utils.ID)
                 .map(container -> ResourceManagerHelper.registerBuiltinResourcePack(
