@@ -4,35 +4,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import lombok.Getter;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SlimefunRecipe {
-    @Getter
-    private final Integer time;
-    @Getter
-    private final Integer energy;
-    @Getter
-    private final List<SlimefunRecipeComponent> inputs;
-    @Getter
-    private final List<SlimefunRecipeComponent> outputs;
-    @Getter
-    private final List<SlimefunLabel> labels;
-    
-    public SlimefunRecipe(Integer time, Integer energy, List<SlimefunRecipeComponent> inputs, List<SlimefunRecipeComponent> outputs, List<SlimefunLabel> labels) {
-        this.time = time;
-        this.energy = energy;
-        this.inputs = inputs;
-        this.outputs = outputs;
-        this.labels = labels;
-    }
-    
-    public static SlimefunRecipe deserialize(JsonObject recipeObject) {
+public record SlimefunRecipe(Integer time, Integer energy, List<SlimefunRecipeComponent> inputs, List<SlimefunRecipeComponent> outputs, List<SlimefunLabel> labels) {
+    public static SlimefunRecipe deserialize(JsonObject recipeObject, Integer workstationEnergy) {
         final Integer time = JsonUtils.getIntegerOrDefault(recipeObject, "time", null);
-        final Integer energy = JsonUtils.getIntegerOrDefault(recipeObject, "energy", null);
+        final Integer energy = JsonUtils.getIntegerOrDefault(recipeObject, "energy", workstationEnergy);
         final List<SlimefunRecipeComponent> inputs = new ArrayList<>();
         final List<SlimefunRecipeComponent> outputs = new ArrayList<>();
         final List<SlimefunLabel> labels = new ArrayList<>();
@@ -43,7 +23,7 @@ public class SlimefunRecipe {
                 inputs.add(inputRecipeElement);
             }
         }
-    
+        
         for (JsonElement outputElement : JsonUtils.getArrayOrDefault(recipeObject, "outputs", new JsonArray())) {
             final SlimefunRecipeComponent outputRecipeElement = SlimefunRecipeComponent.deserialize(outputElement);
             if (outputRecipeElement != null) {
@@ -52,7 +32,7 @@ public class SlimefunRecipe {
         }
         
         for (JsonElement labelElement : JsonUtils.getArrayOrDefault(recipeObject, "labels", new JsonArray())) {
-            if (!(labelElement instanceof JsonPrimitive jsonPrimitive) || !jsonPrimitive.isString()) {
+            if (! (labelElement instanceof JsonPrimitive jsonPrimitive) || ! jsonPrimitive.isString()) {
                 continue;
             }
             

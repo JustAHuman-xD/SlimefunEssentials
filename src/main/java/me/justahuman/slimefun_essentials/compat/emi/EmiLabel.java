@@ -4,6 +4,7 @@ import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.widget.TextureWidget;
 import me.justahuman.slimefun_essentials.client.SlimefunLabel;
+import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public class EmiLabel extends TextureWidget {
     }
     
     public EmiLabel(SlimefunLabel slimefunLabel, int x, int y) {
-        this(slimefunLabel.getId(), new EmiTexture(slimefunLabel.getIdentifier(), slimefunLabel.getU(), slimefunLabel.getV(), EmiUtils.label, EmiUtils.label), x, y);
+        this(slimefunLabel.id(), new EmiTexture(slimefunLabel.identifier(), slimefunLabel.u(), slimefunLabel.v(), TextureUtils.label, TextureUtils.label), x, y);
     }
 }

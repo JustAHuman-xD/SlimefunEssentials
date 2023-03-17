@@ -8,6 +8,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
+import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.SlimefunLabel;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipeComponent;
@@ -17,7 +18,6 @@ import me.justahuman.slimefun_essentials.compat.emi.recipes.ProcessRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.ReactorRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.SmelteryRecipe;
 import me.justahuman.slimefun_essentials.utils.Utils;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -32,42 +32,41 @@ public class EmiIntegration implements EmiPlugin {
     
     @Override
     public void register(EmiRegistry emiRegistry) {
-        for (Map.Entry<String, ItemStack> entry : ResourceLoader.getSlimefunItems().entrySet()) {
-            emiRegistry.setDefaultComparison(EmiStack.of(entry.getValue()), original -> original.copy().nbt(true).build());
+        for (Map.Entry<String, SlimefunItemStack> entry : ResourceLoader.getSlimefunItems().entrySet()) {
+            emiRegistry.setDefaultComparison(EmiStack.of(entry.getValue().itemStack()), original -> original.copy().nbt(true).build());
         }
         
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
-            final String workstationId = slimefunCategory.getId();
-            final String type = slimefunCategory.getType();
-            final Integer speed = slimefunCategory.getSpeed();
-            final Integer energy = slimefunCategory.getEnergy();
+            final String workstationId = slimefunCategory.id();
+            final String type = slimefunCategory.type();
+            final Integer speed = slimefunCategory.speed();
             final Identifier categoryIdentifier = Utils.newIdentifier(workstationId);
             final EmiStack workStation = emiStackFromId(workstationId + ":1");
             final SlimefunEmiCategory slimefunEmiCategory;
             if (slimefunCategories.containsKey(workstationId)) {
                 slimefunEmiCategory = slimefunCategories.get(workstationId);
             } else {
-                slimefunEmiCategory = new SlimefunEmiCategory(emiRegistry, categoryIdentifier, workStation, workStation.getItemStack().getName());
+                slimefunEmiCategory = new SlimefunEmiCategory(emiRegistry, categoryIdentifier, workStation);
                 slimefunCategories.put(workstationId, slimefunEmiCategory);
                 emiRegistry.addCategory(slimefunEmiCategory);
             }
             
-            for (SlimefunRecipe slimefunRecipe : slimefunCategory.getRecipes()) {
+            for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
                 final List<EmiIngredient> inputs = new ArrayList<>();
                 final List<EmiStack> outputs = new ArrayList<>();
-                final List<SlimefunLabel> labels = slimefunRecipe.getLabels();
-                final Integer time = slimefunRecipe.getTime();
-                final Integer recipeEnergy = slimefunRecipe.getEnergy();
+                final List<SlimefunLabel> labels = slimefunRecipe.labels();
+                final Integer time = slimefunRecipe.time();
+                final Integer recipeEnergy = slimefunRecipe.energy();
     
-                for (SlimefunRecipeComponent input : slimefunRecipe.getInputs()) {
+                for (SlimefunRecipeComponent input : slimefunRecipe.inputs()) {
                     inputs.add(emiIngredientFromComponent(input));
                 }
                 
-                for (SlimefunRecipeComponent output : slimefunRecipe.getOutputs()) {
+                for (SlimefunRecipeComponent output : slimefunRecipe.outputs()) {
                     outputs.add(emiStackFromComponent(output));
                 }
                 
-                final EmiRecipe emiRecipe = getEmiRecipe(type, slimefunEmiCategory, inputs, outputs, labels, recipeEnergy == null ? energy : recipeEnergy, time, speed);
+                final EmiRecipe emiRecipe = getEmiRecipe(type, slimefunEmiCategory, inputs, outputs, labels, recipeEnergy, time, speed);
                 emiRegistry.addRecipe(emiRecipe);
             }
         }
@@ -127,7 +126,7 @@ public class EmiIntegration implements EmiPlugin {
         }
         
         if (ResourceLoader.getSlimefunItems().containsKey(type)) {
-            return EmiStack.of(ResourceLoader.getSlimefunItems().get(type)).copy().setAmount(amount);
+            return EmiStack.of(ResourceLoader.getSlimefunItems().get(type).itemStack()).copy().setAmount(amount);
         }
         
         if (type.equals("entity")) {

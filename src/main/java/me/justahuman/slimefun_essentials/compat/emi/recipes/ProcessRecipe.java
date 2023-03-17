@@ -10,6 +10,7 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefun_essentials.client.SlimefunLabel;
 import me.justahuman.slimefun_essentials.compat.emi.EmiLabel;
 import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
+import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -36,14 +37,14 @@ public class ProcessRecipe implements EmiRecipe {
     }
     
     public int getWidgetsWidth() {
-        return (hasLabels() ? EmiUtils.label * this.labels.size() + EmiUtils.padding * this.labels.size() : 0) + (hasEnergy() ? EmiUtils.chargeWidth + EmiUtils.padding : 0) + (hasInputs() ? EmiUtils.slot * this.inputs.size() + EmiUtils.padding * this.inputs.size() : EmiUtils.slot + EmiUtils.padding) + (EmiUtils.arrowWidth + EmiUtils.padding) + (hasOutputs() ? EmiUtils.bigSlot * this.outputs.size() + EmiUtils.padding * (this.outputs.size() - 1): 0);
+        return TextureUtils.getProcessWidth(labels, inputs, outputs, energy);
     }
     
     public int getWidgetsHeight() {
         if (hasOutputs()) {
-            return EmiUtils.bigSlot;
+            return TextureUtils.bigSlot;
         } else {
-            return EmiUtils.slot;
+            return TextureUtils.slot;
         }
     }
     
@@ -70,12 +71,12 @@ public class ProcessRecipe implements EmiRecipe {
     
     @Override
     public int getDisplayWidth() {
-        return getWidgetsWidth() + EmiUtils.padding * 2;
+        return getWidgetsWidth() + TextureUtils.padding * 2;
     }
     
     @Override
     public int getDisplayHeight() {
-        return getWidgetsHeight() + EmiUtils.padding * 2;
+        return getWidgetsHeight() + TextureUtils.padding * 2;
     }
     
     @Override
@@ -85,35 +86,35 @@ public class ProcessRecipe implements EmiRecipe {
     
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final int offsetYLabel = (getDisplayHeight() - EmiUtils.label) / 2;
-        final int offsetYSlot = (getDisplayHeight() - EmiUtils.slot) / 2;
-        final int offsetYCharge = (getDisplayHeight() - EmiUtils.chargeHeight) / 2;
-        final int offsetYArrow = (getDisplayHeight() - EmiUtils.arrowHeight) / 2;
-        final int offsetYBig = (getDisplayHeight() - EmiUtils.bigSlot) / 2;
-        int offsetX = EmiUtils.padding;
+        final int offsetYLabel = (getDisplayHeight() - TextureUtils.label) / 2;
+        final int offsetYSlot = (getDisplayHeight() - TextureUtils.slot) / 2;
+        final int offsetYCharge = (getDisplayHeight() - TextureUtils.chargeHeight) / 2;
+        final int offsetYArrow = (getDisplayHeight() - TextureUtils.arrowHeight) / 2;
+        final int offsetYBig = (getDisplayHeight() - TextureUtils.bigSlot) / 2;
+        int offsetX = TextureUtils.padding;
         
         if (hasLabels()) {
             for (SlimefunLabel slimefunLabel : this.labels) {
                 widgets.add(new EmiLabel(slimefunLabel, offsetX, offsetYLabel));
-                offsetX += EmiUtils.label + EmiUtils.padding;
+                offsetX += TextureUtils.label + TextureUtils.padding;
             }
         }
     
         // Display Energy
         if (hasEnergy() && hasOutputs()) {
             addEnergyDisplay(widgets, offsetX, offsetYCharge);
-            offsetX += EmiUtils.chargeWidth + EmiUtils.padding;
+            offsetX += TextureUtils.chargeWidth + TextureUtils.padding;
         }
     
         //Display Inputs
         if (hasInputs()) {
             for (EmiIngredient input : this.inputs) {
                 widgets.addSlot(input, offsetX, offsetYSlot);
-                offsetX += EmiUtils.slot + EmiUtils.padding;
+                offsetX += TextureUtils.slot + TextureUtils.padding;
             }
         } else {
             widgets.addSlot((EmiIngredient) this.category.icon, offsetX, offsetYSlot);
-            offsetX += EmiUtils.slot + EmiUtils.padding;
+            offsetX += TextureUtils.slot + TextureUtils.padding;
         }
     
         // Display Time
@@ -124,13 +125,13 @@ public class ProcessRecipe implements EmiRecipe {
         } else {
             widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetYArrow);
         }
-        offsetX += EmiUtils.arrowWidth + EmiUtils.padding;
+        offsetX += TextureUtils.arrowWidth + TextureUtils.padding;
     
         // Display Outputs
         if (hasOutputs()) {
             for (EmiStack output : this.outputs) {
                 widgets.addSlot(output, offsetX, offsetYBig).output(true);
-                offsetX += EmiUtils.bigSlot + EmiUtils.padding;
+                offsetX += TextureUtils.bigSlot + TextureUtils.padding;
             }
         } else if (hasEnergy()) {
             addEnergyDisplay(widgets, offsetX, offsetYCharge);

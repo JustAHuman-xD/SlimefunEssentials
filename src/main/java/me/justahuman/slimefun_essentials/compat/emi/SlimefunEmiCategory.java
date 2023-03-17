@@ -9,10 +9,10 @@ import net.minecraft.util.Identifier;
 public class SlimefunEmiCategory extends EmiRecipeCategory {
     private final Text displayName;
     
-    public SlimefunEmiCategory(EmiRegistry emiRegistry, Identifier id, EmiStack workstation, Text displayName) {
+    public SlimefunEmiCategory(EmiRegistry emiRegistry, Identifier id, EmiStack workstation) {
         super(id, workstation);
         
-        this.displayName = displayName;
+        this.displayName = workstation.getItemStack().getName();
         emiRegistry.addWorkstation(this, workstation);
     }
     

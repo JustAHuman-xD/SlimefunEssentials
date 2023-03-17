@@ -9,6 +9,7 @@ import dev.emi.emi.api.widget.FillingArrowWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
 import me.justahuman.slimefun_essentials.compat.emi.ReverseFillingArrowWidget;
+import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 
@@ -22,25 +23,25 @@ public class ReactorRecipe extends ProcessRecipe {
     
     @Override
     public int getWidgetsWidth() {
-        return (EmiUtils.slot + EmiUtils.arrowWidth) * 2 + EmiUtils.padding * 4 + (hasOutputs() ? EmiUtils.bigSlot : EmiUtils.chargeWidth);
+        return (TextureUtils.slot + TextureUtils.arrowWidth) * 2 + TextureUtils.padding * 4 + (hasOutputs() ? TextureUtils.bigSlot : TextureUtils.chargeWidth);
     }
     
     @Override
     public int getWidgetsHeight() {
-        return EmiUtils.slot * 2 + (hasOutputs() ? EmiUtils.bigSlot : EmiUtils.slot);
+        return TextureUtils.slot * 2 + (hasOutputs() ? TextureUtils.bigSlot : TextureUtils.slot);
     }
     
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        int offsetX = EmiUtils.padding;
-        int offsetY = EmiUtils.padding;
+        int offsetX = TextureUtils.padding;
+        int offsetY = TextureUtils.padding;
         
         widgets.addSlot(inputs.get(0), offsetX, offsetY);
-        offsetY += EmiUtils.slot;
+        offsetY += TextureUtils.slot;
         widgets.addSlot(offsetX, offsetY);
-        offsetY += EmiUtils.slot;
+        offsetY += TextureUtils.slot;
         widgets.addSlot(offsetX, offsetY);
-        offsetX += EmiUtils.slot + EmiUtils.padding;
+        offsetX += TextureUtils.slot + TextureUtils.padding;
         if (hasTime()) {
             final int sfTicks = Math.max(1, this.time / 10 / (hasSpeed() ? this.speed : 1));
             final int millis =  sfTicks * 500;
@@ -48,15 +49,15 @@ public class ReactorRecipe extends ProcessRecipe {
         } else {
             widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetY);
         }
-        offsetX += EmiUtils.arrowWidth + EmiUtils.padding;
+        offsetX += TextureUtils.arrowWidth + TextureUtils.padding;
         
         if (hasOutputs()) {
             widgets.addSlot(outputs.get(0), offsetX, offsetY).output(true);
         }
         
         if (hasEnergy()) {
-            addEnergyDisplay(widgets, offsetX + (hasOutputs() ? (EmiUtils.bigSlot - EmiUtils.chargeWidth) / 2 : 0), offsetY + (hasOutputs() ? -EmiUtils.chargeHeight - EmiUtils.padding : EmiUtils.padding));
-            offsetX += (hasOutputs() ? EmiUtils.bigSlot  : EmiUtils.chargeWidth) + + EmiUtils.padding;
+            addEnergyDisplay(widgets, offsetX + (hasOutputs() ? (TextureUtils.bigSlot - TextureUtils.chargeWidth) / 2 : 0), offsetY + (hasOutputs() ? - TextureUtils.chargeHeight - TextureUtils.padding : TextureUtils.padding));
+            offsetX += (hasOutputs() ? TextureUtils.bigSlot  : TextureUtils.chargeWidth) + + TextureUtils.padding;
         }
         
         if (hasTime()) {
@@ -66,12 +67,12 @@ public class ReactorRecipe extends ProcessRecipe {
         } else {
             widgets.addTexture(EmiUtils.BACKWARDS_EMPTY_ARROW, offsetX, offsetY);
         }
-        offsetX += EmiUtils.arrowWidth + EmiUtils.padding;
-        offsetY = EmiUtils.padding;
+        offsetX += TextureUtils.arrowWidth + TextureUtils.padding;
+        offsetY = TextureUtils.padding;
         widgets.addSlot(inputs.get(1), offsetX, offsetY);
-        offsetY += EmiUtils.slot;
+        offsetY += TextureUtils.slot;
         widgets.addSlot(inputs.get(2), offsetX, offsetY);
-        offsetY += EmiUtils.slot;
+        offsetY += TextureUtils.slot;
         widgets.addSlot(inputs.get(3), offsetX, offsetY);
     }
 }

@@ -7,6 +7,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
+import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 
@@ -21,26 +22,26 @@ public class SmelteryRecipe extends ProcessRecipe {
     
     @Override
     public int getWidgetsWidth() {
-        return (hasEnergy() ? EmiUtils.chargeWidth + EmiUtils.padding : 0) + (hasInputs() ? EmiUtils.slot * 2 + EmiUtils.padding : EmiUtils.slot + EmiUtils.padding) + (EmiUtils.arrowWidth + EmiUtils.padding) + (hasOutputs() ? EmiUtils.bigSlot * this.outputs.size() + EmiUtils.padding * (this.outputs.size() - 1): 0);
+        return (hasEnergy() ? TextureUtils.chargeWidth + TextureUtils.padding : 0) + (hasInputs() ? TextureUtils.slot * 2 + TextureUtils.padding : TextureUtils.slot + TextureUtils.padding) + (TextureUtils.arrowWidth + TextureUtils.padding) + (hasOutputs() ? TextureUtils.bigSlot * this.outputs.size() + TextureUtils.padding * (this.outputs.size() - 1): 0);
     }
     
     @Override
     public int getWidgetsHeight() {
-        return EmiUtils.slot * 3;
+        return TextureUtils.slot * 3;
     }
     
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final int offsetYCharge = (getDisplayHeight() - EmiUtils.chargeHeight) / 2;
-        final int offsetYArrow = (getDisplayHeight() - EmiUtils.arrowHeight) / 2;
-        final int offsetYBig = (getDisplayHeight() - EmiUtils.bigSlot) / 2;
-        int offsetX = EmiUtils.padding;
-        int offsetY = EmiUtils.padding;
+        final int offsetYCharge = (getDisplayHeight() - TextureUtils.chargeHeight) / 2;
+        final int offsetYArrow = (getDisplayHeight() - TextureUtils.arrowHeight) / 2;
+        final int offsetYBig = (getDisplayHeight() - TextureUtils.bigSlot) / 2;
+        int offsetX = TextureUtils.padding;
+        int offsetY = TextureUtils.padding;
         
         // Display Energy
         if (hasEnergy() && hasOutputs()) {
             addEnergyDisplay(widgets, offsetX, offsetYCharge);
-            offsetX += EmiUtils.chargeWidth + EmiUtils.padding;
+            offsetX += TextureUtils.chargeWidth + TextureUtils.padding;
         }
     
     
@@ -48,13 +49,13 @@ public class SmelteryRecipe extends ProcessRecipe {
         for (int y = 1; y <= 3; y++) {
             for (int x = 1; x <= 2; x++) {
                 widgets.addSlot(inputs.get(i), offsetX, offsetY);
-                offsetX += EmiUtils.slot;
+                offsetX += TextureUtils.slot;
                 i++;
             }
-            offsetX -= EmiUtils.slot * 2;
-            offsetY += EmiUtils.slot;
+            offsetX -= TextureUtils.slot * 2;
+            offsetY += TextureUtils.slot;
         }
-        offsetX += EmiUtils.slot * 2 + EmiUtils.padding;
+        offsetX += TextureUtils.slot * 2 + TextureUtils.padding;
     
         // Display Time
         if (hasTime()) {
@@ -64,13 +65,13 @@ public class SmelteryRecipe extends ProcessRecipe {
         } else {
             widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetYArrow);
         }
-        offsetX += EmiUtils.arrowWidth + EmiUtils.padding;
+        offsetX += TextureUtils.arrowWidth + TextureUtils.padding;
     
         // Display Outputs
         if (hasOutputs()) {
             for (EmiStack output : this.outputs) {
                 widgets.addSlot(output, offsetX, offsetYBig).output(true);
-                offsetX += EmiUtils.bigSlot + EmiUtils.padding;
+                offsetX += TextureUtils.bigSlot + TextureUtils.padding;
             }
         } else if (hasEnergy()) {
             addEnergyDisplay(widgets, offsetX, offsetYCharge);

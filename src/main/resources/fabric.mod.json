@@ -20,11 +20,17 @@
     "client": [
       "me.justahuman.slimefun_essentials.SlimefunEssentials"
     ],
+    "modmenu": [
+      "me.justahuman.slimefun_essentials.config.ModMenuIntegration"
+    ],
     "emi": [
       "me.justahuman.slimefun_essentials.compat.emi.EmiIntegration"
     ],
-    "modmenu": [
-      "me.justahuman.slimefun_essentials.config.ModMenuIntegration"
+    "jei_mod_plugin": [
+      "me.justahuman.slimefun_essentials.compat.jei.JeiIntegration"
+    ],
+    "rei_client": [
+      "me.justahuman.slimefun_essentials.compat.rei.ReiIntegration"
     ]
   },
   "mixins": [

@@ -31,7 +31,7 @@ import java.util.Set;
 
 public class ResourceLoader {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
-    private static final Map<String, ItemStack> slimefunItems = new LinkedHashMap<>();
+    private static final Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
     private static final Map<Identifier, ItemGroup> itemGroups = new HashMap<>();
     
     /**
@@ -75,7 +75,7 @@ public class ResourceLoader {
                 continue;
             }
             
-            slimefunItems.put(id, JsonUtils.deserializeItem(itemObject));
+            slimefunItems.put(id, new SlimefunItemStack(id, JsonUtils.deserializeItem(itemObject)));
         }
         
         sortItems();
@@ -103,7 +103,7 @@ public class ResourceLoader {
                     continue;
                 }
                 
-                displayStacks.add(slimefunItems.get(entryPrimitive.getAsString()));
+                displayStacks.add(slimefunItems.get(entryPrimitive.getAsString()).itemStack());
             }
             searchTabStacks.addAll(displayStacks);
             
@@ -148,7 +148,7 @@ public class ResourceLoader {
      * @return {@link Map}
      */
     @NonNull
-    public static Map<String, ItemStack> getSlimefunItems() {
+    public static Map<String, SlimefunItemStack> getSlimefunItems() {
         return Collections.unmodifiableMap(slimefunItems);
     }
     
@@ -163,7 +163,7 @@ public class ResourceLoader {
     }
     
     private static void sortItems() {
-        final Map<String, ItemStack> sortedSlimefunItems = new HashMap<>();
+        final Map<String, SlimefunItemStack> sortedSlimefunItems = new LinkedHashMap<>();
         final List<String> ids = new ArrayList<>(slimefunItems.keySet());
         ids.sort(Comparator.naturalOrder());
         
