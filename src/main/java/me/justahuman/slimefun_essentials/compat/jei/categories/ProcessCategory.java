@@ -1,6 +1,6 @@
 package me.justahuman.slimefun_essentials.compat.jei.categories;
 
-import me.justahuman.slimefun_essentials.client.ResourceLoader;
+import me.justahuman.slimefun_essentials.api.IdInterpreter;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
@@ -18,17 +18,22 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.fabric.ingredients.fluid.JeiFluidIngredient;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class ProcessCategory implements IRecipeCategory<SlimefunRecipe> {
+public class ProcessCategory implements IRecipeCategory<SlimefunRecipe>, IdInterpreter<Object> {
     protected final IGuiHelper guiHelper;
     protected final SlimefunCategory slimefunCategory;
     protected final ItemStack catalyst;
@@ -85,65 +90,16 @@ public class ProcessCategory implements IRecipeCategory<SlimefunRecipe> {
     }
     
     @Override
-    @NotNull
     public void setRecipe(IRecipeLayoutBuilder builder, SlimefunRecipe recipe, IFocusGroup focuses) {
         int x = 0;
         for (SlimefunRecipeComponent input : recipe.inputs()) {
-            if (input.getMultiId() != null) {
-                List<ItemStack> items = new ArrayList<>();
-                List<SlimefunItemStack> slimefunItems = new ArrayList<>();
-                
-                for (String id : input.getMultiId()) {
-                    final Object stack = stackFromId(id);
-                    if (stack instanceof ItemStack itemStack) {
-                        items.add(itemStack);
-                    } else if (stack instanceof SlimefunItemStack slimefunItemStack) {
-                        slimefunItems.add(slimefunItemStack);
-                    }
-                }
-                
-                builder.addSlot(RecipeIngredientRole.INPUT, x, 0)
-                        .addItemStacks(items)
-                        .addIngredients(JeiIntegration.SLIMEFUN, slimefunItems);
-            } else {
-                final Object stack = stackFromId(input.getId());
-                final IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.INPUT, x, 0);
-                if (stack instanceof ItemStack itemStack) {
-                    slotBuilder.addItemStack(itemStack);
-                } else if (stack instanceof SlimefunItemStack slimefunItemStack) {
-                    slotBuilder.addIngredient(JeiIntegration.SLIMEFUN, slimefunItemStack);
-                }
-            }
+            addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, x, 0), input);
             x++;
         }
         
         x = 0;
         for (SlimefunRecipeComponent output : recipe.outputs()) {
-            if (output.getMultiId() != null) {
-                List<ItemStack> items = new ArrayList<>();
-                List<SlimefunItemStack> slimefunItems = new ArrayList<>();
-        
-                for (String id : output.getMultiId()) {
-                    final Object stack = stackFromId(id);
-                    if (stack instanceof ItemStack itemStack) {
-                        items.add(itemStack);
-                    } else if (stack instanceof SlimefunItemStack slimefunItemStack) {
-                        slimefunItems.add(slimefunItemStack);
-                    }
-                }
-        
-                builder.addSlot(RecipeIngredientRole.OUTPUT, x, 0)
-                        .addItemStacks(items)
-                        .addIngredients(JeiIntegration.SLIMEFUN, slimefunItems);
-            } else {
-                final Object stack = stackFromId(output.getId());
-                final IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.OUTPUT, x, 0);
-                if (stack instanceof ItemStack itemStack) {
-                    slotBuilder.addItemStack(itemStack);
-                } else if (stack instanceof SlimefunItemStack slimefunItemStack) {
-                    slotBuilder.addIngredient(JeiIntegration.SLIMEFUN, slimefunItemStack);
-                }
-            }
+            addIngredients(builder.addSlot(RecipeIngredientRole.OUTPUT, x, 0), output);
             x++;
         }
     }
@@ -153,58 +109,55 @@ public class ProcessCategory implements IRecipeCategory<SlimefunRecipe> {
     
     }
     
-    public Object stackFromId(String id) {
-        if (id.equals("")) {
-            return ItemStack.EMPTY;
+    public void addIngredients(IRecipeSlotBuilder slotBuilder, SlimefunRecipeComponent component) {
+        for (String id : component.getMultiId() != null ? component.getMultiId() : List.of(component.getId())) {
+            addIngredientObject(slotBuilder, interpretId(id, ItemStack.EMPTY));
+        }
+    }
+    
+    public void addIngredientObject(IRecipeSlotBuilder slotBuilder, Object ingredient) {
+        if (ingredient instanceof List<?> list) {
+            for (Object object : list) {
+                addIngredientObject(slotBuilder, object);
+            }
+        } else if (ingredient instanceof ItemStack itemStack) {
+            slotBuilder.addItemStack(itemStack);
+        } else if (ingredient instanceof SlimefunItemStack slimefunItemStack) {
+            slotBuilder.addIngredient(JeiIntegration.SLIMEFUN, slimefunItemStack);
+        } else if (ingredient instanceof JeiFluidIngredient fluidStack) {
+            slotBuilder.addFluidStack(fluidStack.getFluid(), fluidStack.getAmount());
+        }
+    }
+    
+    @Override
+    public Object fromTag(TagKey<Item> tagKey, int amount, Object defaultValue) {
+        Optional<RegistryEntryList.Named<Item>> optional = Registries.ITEM.getEntryList(tagKey);
+        if (optional.isEmpty()) {
+            return defaultValue;
         }
         
-        if (!id.contains(":")) {
-            Utils.warn("Invalid JeiIngredient Id: " + id);
-            return ItemStack.EMPTY;
-        }
+        return optional.get().stream().map(ItemStack::new).toList();
+    }
     
-        final String type = id.substring(0, id.indexOf(":"));
-        final String value = id.substring(id.indexOf(":") + 1);
-        int amount;
-        try {
-            amount = Integer.parseInt(value);
-        } catch (NumberFormatException ignored) {
-            amount = 1;
-        }
+    @Override
+    public Object fromItemStack(ItemStack itemStack, int amount, Object defaultValue) {
+        itemStack.setCount(amount);
+        return itemStack;
+    }
     
-        if (ResourceLoader.getSlimefunItems().containsKey(type)) {
-            return ResourceLoader.getSlimefunItems().get(type).copy().setAmount(amount);
-        }
+    @Override
+    public Object fromSlimefunItemStack(SlimefunItemStack slimefunItemStack, int amount, Object defaultValue) {
+        return slimefunItemStack.setAmount(amount);
+    }
     
-        if (type.equals("entity")) {
-            final Identifier identifier = new Identifier("minecraft:" + value);
-            if (! Registries.ENTITY_TYPE.containsId(identifier)) {
-                Utils.warn("Invalid JeiIngredient Entity Id: " + id);
-                return ItemStack.EMPTY;
-            }
-            // TODO: Entity Support
-            return ItemStack.EMPTY;
-        } else if (type.equals("fluid")) {
-            final Identifier identifier = new Identifier("minecraft:" + value);
-            if (!Registries.FLUID.containsId(identifier)) {
-                Utils.warn("Invalid JeiIngredient Fluid Id: " + id);
-                return ItemStack.EMPTY;
-            }
-            // TODO: Fluid Support
-            return ItemStack.EMPTY;
-        } else if (type.contains("#")) {
-            final Identifier identifier = new Identifier("minecraft:" + type.substring(1));
-            // TODO: Tag Support
-            return ItemStack.EMPTY;
-        } else {
-            final Identifier identifier = new Identifier("minecraft:" + type.toLowerCase());
-            if (!Registries.ITEM.containsId(identifier)) {
-                Utils.warn("Invalid JeiIngredient Item Id: " + id);
-                return ItemStack.EMPTY;
-            }
-            final ItemStack itemStack = Registries.ITEM.get(identifier).getDefaultStack().copy();
-            itemStack.setCount(amount);
-            return itemStack;
-        }
+    @Override
+    public Object fromFluid(Fluid fluid, int amount, Object defaultValue) {
+        return new JeiFluidIngredient(fluid, amount);
+    }
+    
+    @Override
+    public Object fromEntityType(EntityType<?> entityType, int amount, Object defaultValue) {
+        // TODO: add support for entities
+        return defaultValue;
     }
 }

@@ -33,36 +33,34 @@ public class EntityEmiStack extends EmiStack {
     private final @Nullable Entity entity;
     private final EntityEntry entry;
     private final double scale;
+    private final int amount;
     
-    public EntityEmiStack(EntityType<?> entityType) {
-        this.entity = entityType.create(MinecraftClient.getInstance().world);
-        this.entry = new EntityEntry(entity);
-        this.scale = 8.0f;
+    public EntityEmiStack(EntityType<?> entityType, int amount) {
+        this(entityType.create(MinecraftClient.getInstance().world), amount);
     }
     
-    public EntityEmiStack(@Nullable Entity entity) {
-        this.entity = entity;
-        this.entry = new EntityEntry(entity);
-        this.scale = 8.0f;
+    public EntityEmiStack(@Nullable Entity entity, int amount) {
+        this(entity, 8.0f, amount);
     }
     
-    protected EntityEmiStack(@Nullable Entity entity, double scale) {
+    protected EntityEmiStack(@Nullable Entity entity, double scale, int amount) {
         this.entity = entity;
         this.entry = new EntityEntry(entity);
         this.scale = scale;
+        this.amount = amount;
     }
     
     public static EntityEmiStack of(@Nullable Entity entity) {
-        return new EntityEmiStack(entity);
+        return new EntityEmiStack(entity, 1);
     }
     
     public static EntityEmiStack ofScaled(@Nullable Entity entity, double scale) {
-        return new EntityEmiStack(entity, scale);
+        return new EntityEmiStack(entity, scale, 1);
     }
     
     @Override
     public EmiStack copy() {
-        EntityEmiStack stack = new EntityEmiStack(entity);
+        EntityEmiStack stack = new EntityEmiStack(entity, scale, amount);
         stack.setRemainder(getRemainder().copy());
         stack.comparison = comparison;
         return stack;
@@ -130,7 +128,7 @@ public class EntityEmiStack extends EmiStack {
     
     @Override
     public Text getName() {
-        return entity != null ? entity.getName() : EmiPort.literal("yet another missingno");
+        return entity != null ? Text.literal(entity.getName().getString() + "x" + amount) : EmiPort.literal("yet another missingno");
     }
     
     public static void renderEntity(int x, int y, double size, Entity entity) {

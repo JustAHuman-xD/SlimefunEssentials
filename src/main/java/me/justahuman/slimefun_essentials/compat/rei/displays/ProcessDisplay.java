@@ -1,23 +1,28 @@
 package me.justahuman.slimefun_essentials.compat.rei.displays;
 
-import me.justahuman.slimefun_essentials.client.ResourceLoader;
+import me.justahuman.slimefun_essentials.api.IdInterpreter;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
+import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipeComponent;
+import me.justahuman.slimefun_essentials.compat.rei.ReiIntegration;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import net.minecraft.registry.Registries;
+import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcessDisplay implements Display {
+public class ProcessDisplay implements Display, IdInterpreter<EntryIngredient> {
     protected final SlimefunCategory slimefunCategory;
     protected final SlimefunRecipe slimefunRecipe;
     
@@ -57,64 +62,38 @@ public class ProcessDisplay implements Display {
         if (component.getMultiId() != null) {
             EntryIngredient.Builder builder = EntryIngredient.builder();
             for (String id : component.getMultiId()) {
-                builder.addAll(entryIngredientFromId(id));
+                builder.addAll(interpretId(id, EntryIngredient.empty()));
             }
             return builder.build();
         } else {
-            return entryIngredientFromId(component.getId());
+            return interpretId(component.getId(), EntryIngredient.empty());
         }
     }
     
-    public EntryIngredient entryIngredientFromId(String id) {
-        if (id.equals("")) {
-            return EntryIngredient.empty();
-        }
+    @Override
+    public EntryIngredient fromTag(TagKey<Item> tagKey, int amount, EntryIngredient defaultValue) {
+        return EntryIngredients.ofItemTag(tagKey);
+    }
     
-        if (!id.contains(":")) {
-            Utils.warn("Invalid ReiIngredient Id: " + id);
-            return EntryIngredient.empty();
-        }
+    @Override
+    public EntryIngredient fromItemStack(ItemStack itemStack, int amount, EntryIngredient defaultValue) {
+        itemStack.setCount(amount);
+        return EntryIngredients.of(itemStack);
+    }
     
-        final String type = id.substring(0, id.indexOf(":"));
-        final String value = id.substring(id.indexOf(":") + 1);
-        int amount;
-        try {
-            amount = Integer.parseInt(value);
-        } catch (NumberFormatException ignored) {
-            amount = 1;
-        }
-        
-        // TODO: Properly set amounts
+    @Override
+    public EntryIngredient fromSlimefunItemStack(SlimefunItemStack slimefunItemStack, int amount, EntryIngredient defaultValue) {
+        return EntryIngredient.of(EntryStack.of(ReiIntegration.SLIMEFUN, slimefunItemStack.setAmount(amount)));
+    }
     
-        if (ResourceLoader.getSlimefunItems().containsKey(type)) {
-            return EntryIngredient.empty();
-        }
+    @Override
+    public EntryIngredient fromFluid(Fluid fluid, int amount, EntryIngredient defaultValue) {
+        return EntryIngredients.of(fluid, amount);
+    }
     
-        if (type.equals("entity")) {
-            final Identifier identifier = new Identifier("minecraft:" + value);
-            if (! Registries.ENTITY_TYPE.containsId(identifier)) {
-                Utils.warn("Invalid ReiIngredient Entity Id: " + id);
-                return EntryIngredient.empty();
-            }
-            // TODO: Add entity support
-            return EntryIngredient.empty();
-        } else if (type.equals("fluid")) {
-            final Identifier identifier = new Identifier("minecraft:" + value);
-            if (!Registries.FLUID.containsId(identifier)) {
-                Utils.warn("Invalid ReiIngredient Fluid Id: " + id);
-                return EntryIngredient.empty();
-            }
-            return EntryIngredients.of(Registries.FLUID.get(identifier));
-        } else if (type.contains("#")) {
-            final Identifier identifier = new Identifier("minecraft:" + type.substring(1));
-            return EntryIngredients.ofItemTag(TagKey.of(Registries.ITEM.getKey(), identifier));
-        } else {
-            final Identifier identifier = new Identifier("minecraft:" + type.toLowerCase());
-            if (!Registries.ITEM.containsId(identifier)) {
-                Utils.warn("Invalid ReiIngredient Item Id: " + id);
-                return EntryIngredient.empty();
-            }
-            return EntryIngredients.of(Registries.ITEM.get(identifier));
-        }
+    @Override
+    public EntryIngredient fromEntityType(EntityType<?> entityType, int amount, EntryIngredient defaultValue) {
+        // TODO: add entity support
+        return defaultValue;
     }
 }

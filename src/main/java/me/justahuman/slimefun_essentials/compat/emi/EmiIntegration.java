@@ -6,6 +6,7 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import me.justahuman.slimefun_essentials.api.IdInterpreter;
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
@@ -18,7 +19,10 @@ import me.justahuman.slimefun_essentials.compat.emi.recipes.ProcessRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.ReactorRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.SmelteryRecipe;
 import me.justahuman.slimefun_essentials.utils.Utils;
-import net.minecraft.registry.Registries;
+import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
@@ -27,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EmiIntegration implements EmiPlugin {
+public class EmiIntegration implements EmiPlugin, IdInterpreter<EmiIngredient> {
     private static final Map<String, SlimefunEmiCategory> slimefunCategories = new HashMap<>();
     
     @Override
@@ -91,8 +95,8 @@ public class EmiIntegration implements EmiPlugin {
      * @param id The {@link String} id to retrieve the {@link EmiStack} from
      * @return {@link EmiStack} represented by the id or {@link EmiStack#EMPTY} if the id is invalid
      */
-    public static EmiStack emiStackFromId(String id) {
-        final EmiIngredient emiIngredient = emiIngredientFromId(id);
+    public EmiStack emiStackFromId(String id) {
+        final EmiIngredient emiIngredient = interpretId(id, EmiStack.EMPTY);
         if (emiIngredient instanceof EmiStack emiStack) {
             return emiStack;
         }
@@ -101,62 +105,7 @@ public class EmiIntegration implements EmiPlugin {
         return EmiStack.EMPTY;
     }
     
-    /**
-     * Returns an {@link EmiIngredient} based off of the provided id
-     * @param id The {@link String} id to retrieve the {@link EmiIngredient} from
-     * @return {@link EmiIngredient} represented by the id or {@link EmiStack#EMPTY} if the id is invalid
-     */
-    public static EmiIngredient emiIngredientFromId(String id) {
-        if (id.equals("")) {
-            return EmiStack.EMPTY;
-        }
-        
-        if (!id.contains(":")) {
-            Utils.warn("Invalid EmiIngredient Id: " + id);
-            return EmiStack.EMPTY;
-        }
-        
-        final String type = id.substring(0, id.indexOf(":"));
-        final String value = id.substring(id.indexOf(":") + 1);
-        int amount;
-        try {
-            amount = Integer.parseInt(value);
-        } catch (NumberFormatException ignored) {
-            amount = 1;
-        }
-        
-        if (ResourceLoader.getSlimefunItems().containsKey(type)) {
-            return EmiStack.of(ResourceLoader.getSlimefunItems().get(type).itemStack()).copy().setAmount(amount);
-        }
-        
-        if (type.equals("entity")) {
-            final Identifier identifier = new Identifier("minecraft:" + value);
-            if (!Registries.ENTITY_TYPE.containsId(identifier)) {
-               Utils.warn("Invalid EmiIngredient Entity Id: " + id);
-               return EmiStack.EMPTY;
-            }
-            return new EntityEmiStack(Registries.ENTITY_TYPE.get(identifier));
-        } else if (type.equals("fluid")) {
-            final Identifier identifier = new Identifier("minecraft:" + value);
-            if (!Registries.FLUID.containsId(identifier)) {
-                Utils.warn("Invalid EmiIngredient Fluid Id: " + id);
-                return EmiStack.EMPTY;
-            }
-            return EmiStack.of(Registries.FLUID.get(identifier));
-        } else if (type.contains("#")) {
-            final Identifier identifier = new Identifier("minecraft:" + type.substring(1));
-            return EmiIngredient.of(TagKey.of(Registries.ITEM.getKey(), identifier), amount);
-        } else {
-            final Identifier identifier = new Identifier("minecraft:" + type.toLowerCase());
-            if (!Registries.ITEM.containsId(identifier)) {
-                Utils.warn("Invalid EmiIngredient Item Id: " + id);
-                return EmiStack.EMPTY;
-            }
-            return EmiStack.of(Registries.ITEM.get(identifier)).copy().setAmount(amount);
-        }
-    }
-    
-    public static EmiStack emiStackFromComponent(SlimefunRecipeComponent component) {
+    public EmiStack emiStackFromComponent(SlimefunRecipeComponent component) {
         final EmiIngredient emiIngredient = emiIngredientFromComponent(component);
         if (emiIngredient instanceof EmiStack emiStack) {
             return emiStack;
@@ -166,17 +115,41 @@ public class EmiIntegration implements EmiPlugin {
         return EmiStack.EMPTY;
     }
     
-    public static EmiIngredient emiIngredientFromComponent(SlimefunRecipeComponent component) {
+    public EmiIngredient emiIngredientFromComponent(SlimefunRecipeComponent component) {
         final List<String> multiId = component.getMultiId();
         if (multiId != null) {
             final List<EmiIngredient> multiStack = new ArrayList<>();
             for (String id : multiId) {
-                multiStack.add(emiIngredientFromId(id));
+                multiStack.add(interpretId(id, EmiStack.EMPTY));
             }
             return EmiIngredient.of(multiStack, multiStack.isEmpty() ? 1 : multiStack.get(0).getAmount());
         }
         
-        final String id = component.getId();
-        return emiIngredientFromId(id);
+        return interpretId(component.getId(), EmiStack.EMPTY);
+    }
+    
+    @Override
+    public EmiIngredient fromTag(TagKey<Item> tagKey, int amount, EmiIngredient defaultValue) {
+        return EmiIngredient.of(tagKey, amount);
+    }
+    
+    @Override
+    public EmiIngredient fromItemStack(ItemStack itemStack, int amount, EmiIngredient defaultValue) {
+        return EmiStack.of(itemStack, amount);
+    }
+    
+    @Override
+    public EmiIngredient fromSlimefunItemStack(SlimefunItemStack slimefunItemStack, int amount, EmiIngredient defaultValue) {
+        return EmiStack.of(slimefunItemStack.itemStack(), amount);
+    }
+    
+    @Override
+    public EmiIngredient fromFluid(Fluid fluid, int amount, EmiIngredient defaultValue) {
+        return EmiStack.of(fluid);
+    }
+    
+    @Override
+    public EmiIngredient fromEntityType(EntityType<?> entityType, int amount, EmiIngredient defaultValue) {
+        return new EntityEmiStack(entityType, amount);
     }
 }
