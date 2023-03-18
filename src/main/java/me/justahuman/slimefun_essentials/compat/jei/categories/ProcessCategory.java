@@ -45,24 +45,32 @@ public class ProcessCategory implements IRecipeCategory<SlimefunRecipe>, IdInter
         this.slimefunCategory = slimefunCategory;
         this.catalyst = catalyst;
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, catalyst);
-        this.background = guiHelper.drawableBuilder(Utils.WIDGETS, 0, 0, 0, 0).addPadding(getContentsHeight() / 2, getContentsHeight() / 2, getContentsWidth() / 2, getContentsWidth() / 2).build();
+        this.background = guiHelper.drawableBuilder(Utils.WIDGETS, 0, 0, 0, 0).addPadding(yPadding(), yPadding(), xPadding(), xPadding()).build();
+    }
+    
+    public int xPadding() {
+        return getContentsWidth() / 2;
+    }
+    
+    public int yPadding() {
+        return getContentsHeight() / 2;
     }
     
     public int getContentsWidth() {
         int width = 0;
         for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
-            width = Math.max(width, TextureUtils.getProcessWidth(slimefunRecipe.labels(), slimefunRecipe.inputs(), slimefunRecipe.outputs(), slimefunRecipe.energy()));
+            width = Math.max(width, TextureUtils.getProcessWidth(slimefunRecipe));
         }
-        return width;
+        return width + TextureUtils.padding * 2;
     }
     
     public int getContentsHeight() {
         for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
             if (!slimefunRecipe.outputs().isEmpty()) {
-                return TextureUtils.bigSlot;
+                return TextureUtils.bigSlot + TextureUtils.padding * 2;
             }
         }
-        return TextureUtils.slot;
+        return TextureUtils.slot + TextureUtils.padding * 2;
     }
     
     @Override
@@ -91,16 +99,23 @@ public class ProcessCategory implements IRecipeCategory<SlimefunRecipe>, IdInter
     
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SlimefunRecipe recipe, IFocusGroup focuses) {
-        int x = 0;
-        for (SlimefunRecipeComponent input : recipe.inputs()) {
-            addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, x, 0), input);
-            x++;
+        int y = (getContentsHeight() - TextureUtils.slot) / 2;
+        int x = (getContentsWidth() - TextureUtils.getProcessWidth(recipe)) / 2;
+    
+        if (recipe.energy() != null) {
+            x += TextureUtils.chargeWidth + TextureUtils.padding;
         }
         
-        x = 0;
+        for (SlimefunRecipeComponent input : recipe.inputs()) {
+            addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, x, y), input);
+            x+= TextureUtils.slot + TextureUtils.padding;
+        }
+        
+        x += TextureUtils.arrowWidth + TextureUtils.padding;
+        
         for (SlimefunRecipeComponent output : recipe.outputs()) {
-            addIngredients(builder.addSlot(RecipeIngredientRole.OUTPUT, x, 0), output);
-            x++;
+            addIngredients(builder.addSlot(RecipeIngredientRole.OUTPUT, x, y), output);
+            x += TextureUtils.bigSlot + TextureUtils.padding;
         }
     }
     

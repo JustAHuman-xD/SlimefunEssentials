@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.List;
 
 public class Utils {
@@ -18,6 +19,10 @@ public class Utils {
     public static final Identifier BLOCK_CHANNEL = new Identifier("recipe_exporter", "block");
     private static final Logger logger = LoggerFactory.getLogger(ID);
     private static final String errorMessage = "[SFE] Failed to load data";
+    
+    public static File restartFile() {
+        return FabricLoader.getInstance().getConfigDir().resolve("slimefun_essentials_restart.txt").toFile();
+    }
     
     public static Identifier newIdentifier(String namespace) {
         return new Identifier(ID, namespace.toLowerCase());

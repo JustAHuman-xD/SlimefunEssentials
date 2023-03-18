@@ -90,7 +90,7 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
     
     @Override
     public SlimefunItemStack normalize(EntryStack<SlimefunItemStack> entry, SlimefunItemStack value) {
-        return value.copy().setAmount(0);
+        return value.copy().setAmount(1);
     }
     
     @Override

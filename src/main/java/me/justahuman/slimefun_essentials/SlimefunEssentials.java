@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -25,6 +26,7 @@ public class SlimefunEssentials implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModConfig.loadConfig();
+        shouldRestart();
         
         if (Utils.isClothConfigEnabled()) {
             final KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("slimefun_essentials.open_config", GLFW.GLFW_KEY_F1, "slimefun_essentials.title"));
@@ -86,6 +88,28 @@ public class SlimefunEssentials implements ClientModInitializer {
         
             }));
         }
+        
+        ClientTickEvents.END_CLIENT_TICK.register((client -> {
+            if (shouldRestart()) {
+                MinecraftClient.getInstance().scheduleStop();
+            }
+        }));
+    }
+    
+    public static boolean shouldRestart() {
+        if (Utils.restartFile().exists()) {
+            try {
+                boolean successful = Utils.restartFile().delete();
+                if (!successful) {
+                    throw new RuntimeException();
+                }
+                return true;
+            } catch (RuntimeException ignored) {
+                Utils.warn("Could not remove restart file!");
+                return false;
+            }
+        }
+        return false;
     }
     
     public static boolean filterResources(Identifier identifier) {
