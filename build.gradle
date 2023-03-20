@@ -100,11 +100,3 @@ publishing {
         // retrieving dependencies.
     }
 }
-
-tasks.register('copyJar', Copy) {
-    from 'C:/Users/keena/Documents/GitHub/SlimefunEssentials/build/libs/Slimefun Essentials-2.4.jar'
-    into 'C:/Users/keena/curseforge/minecraft/Instances/Testing (1.19.3)/mods'
-    new File('C:/Users/keena/curseforge/minecraft/Instances/Testing (1.19.3)/config', "slimefun_essentials_restart.txt").text = ""
-}
-
-assemble.finalizedBy(copyJar)
