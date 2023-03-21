@@ -23,7 +23,7 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: 'microsoft'
       - name: Exact folder
-        run: "mkdir C:/Users/keena/curseforge/minecraft/Instances/Testing (1.19.3)/config"
+        run: mkdir "C:/Users/keena/curseforge/minecraft/Instances/Testing (1.19.3)/config"
         # Delete it when testing codes in build.gradle are deleted
       - name: make gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
