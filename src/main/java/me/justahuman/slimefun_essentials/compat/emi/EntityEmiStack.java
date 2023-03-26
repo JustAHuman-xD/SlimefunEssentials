@@ -60,24 +60,24 @@ public class EntityEmiStack extends EmiStack {
     
     @Override
     public EmiStack copy() {
-        EntityEmiStack stack = new EntityEmiStack(entity, scale, amount);
+        EntityEmiStack stack = new EntityEmiStack(this.entity, this.scale, this.amount);
         stack.setRemainder(getRemainder().copy());
-        stack.comparison = comparison;
+        stack.comparison = this.comparison;
         return stack;
     }
     
     @Override
     public boolean isEmpty() {
-        return entity == null;
+        return this.entity == null;
     }
     
     @Override
     public void render(MatrixStack matrices, int x, int y, float delta, int flags) {
-        if (entity != null) {
-            if (entity instanceof LivingEntity living)
-                renderEntity(x + 8, (int) (y + 8 + scale), scale, living);
+        if (this.entity != null) {
+            if (this.entity instanceof LivingEntity living)
+                renderEntity(x + 8, (int) (y + 8 + this.scale), this.scale, living);
             else
-                renderEntity((int) (x + (2 * scale / 2)), (int) (y + (2 * scale)), scale, entity);
+                renderEntity((int) (x + (2 * this.scale / 2)), (int) (y + (2 * this.scale)), this.scale,this. entity);
         }
     }
     
@@ -88,18 +88,18 @@ public class EntityEmiStack extends EmiStack {
     
     @Override
     public Object getKey() {
-        return entity;
+        return this.entity;
     }
     
     @Override
     public Entry<?> getEntry() {
-        return entry;
+        return this.entry;
     }
     
     @Override
     public Identifier getId() {
-        if (entity == null) throw new RuntimeException("Entity is null");
-        return Registries.ENTITY_TYPE.getId(entity.getType());
+        if (this.entity == null) throw new RuntimeException("Entity is null");
+        return Registries.ENTITY_TYPE.getId(this.entity.getType());
     }
     
     @Override
@@ -110,13 +110,13 @@ public class EntityEmiStack extends EmiStack {
     @Override
     public List<TooltipComponent> getTooltip() {
         final List<TooltipComponent> list = new ArrayList<>();
-        if (entity != null) {
+        if (this.entity != null) {
             list.addAll(getTooltipText().stream().map(EmiPort::ordered).map(TooltipComponent::of).toList());
             final String mod;
-            if (entity instanceof VillagerEntity villager) {
+            if (this.entity instanceof VillagerEntity villager) {
                 mod = EmiUtil.getModName(Registries.VILLAGER_PROFESSION.getId(villager.getVillagerData().getProfession()).getNamespace());
             } else {
-                mod = EmiUtil.getModName(Registries.ENTITY_TYPE.getId(entity.getType()).getNamespace());
+                mod = EmiUtil.getModName(Registries.ENTITY_TYPE.getId(this.entity.getType()).getNamespace());
             }
             list.add(TooltipComponent.of(EmiPort.ordered(EmiPort.literal(mod, Formatting.BLUE, Formatting.ITALIC))));
             if (!getRemainder().isEmpty()) {
@@ -128,7 +128,7 @@ public class EntityEmiStack extends EmiStack {
     
     @Override
     public Text getName() {
-        return entity != null ? Text.literal(entity.getName().getString() + "x" + amount) : EmiPort.literal("yet another missingno");
+        return this.entity != null ? Text.literal(this.entity.getName().getString() + "x" + this.amount) : EmiPort.literal("yet another missingno");
     }
     
     public static void renderEntity(int x, int y, double size, Entity entity) {

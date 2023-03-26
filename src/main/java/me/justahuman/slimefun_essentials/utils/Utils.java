@@ -14,7 +14,6 @@ import java.util.List;
 
 public class Utils {
     public static final String ID = "slimefun_essentials";
-    public static final Identifier WIDGETS = new Identifier(ID, "textures/gui/widgets.png");
     public static final Identifier ADDON_CHANNEL = new Identifier("recipe_exporter", "addon");
     public static final Identifier BLOCK_CHANNEL = new Identifier("recipe_exporter", "block");
     private static final Logger logger = LoggerFactory.getLogger(ID);
