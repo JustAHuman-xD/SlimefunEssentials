@@ -30,6 +30,10 @@ public class Utils {
     public static boolean isClothConfigEnabled() {
         return FabricLoader.getInstance().isModLoaded("cloth-config2");
     }
+
+    public static boolean isMoreBlockPredicatesEnabled() {
+        return FabricLoader.getInstance().isModLoaded("mbp");
+    }
     
     public static boolean isJeiEnabled() {
         return FabricLoader.getInstance().isModLoaded("jei");

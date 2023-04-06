@@ -3,46 +3,39 @@ package me.justahuman.slimefun_essentials.client;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import lombok.NonNull;
-import me.justahuman.slimefun_essentials.mixins.ItemGroupAccessor;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemStackSet;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class ResourceLoader {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
-    private static final Map<Identifier, ItemGroup> itemGroups = new HashMap<>();
-    
+    private static final Map<String, Identifier> slimefunBlocks = new HashMap<>();
+    private static final Map<BlockPos, String> placedBlocks = new HashMap<>();
+
     /**
-     * Clears all loaded Slimefun Items, ItemGroups, and Categories
+     * Clears all loaded Slimefun Items, SlimefunBlocks, and Categories
      */
     public static void clear() {
         slimefunItems.clear();
-        
-        for (Map.Entry<Identifier, ItemGroup> itemGroupEntry : itemGroups.entrySet()) {
-            // TODO all of this stuff
-        }
+        slimefunBlocks.clear();
     }
     
     /**
@@ -82,46 +75,6 @@ public class ResourceLoader {
     }
     
     /**
-     * Load the {@link ItemGroup}s from a given {@link Resource}
-     *
-     * @param resource The {@link Resource} that contains the {@link ItemGroup}s
-     */
-    public static void loadItemGroups(Resource resource) {
-        final JsonObject itemGroups = jsonObjectFromResource(resource);
-        for (String id : itemGroups.keySet()) {
-            final JsonObject groupObject = itemGroups.getAsJsonObject(id);
-            final JsonElement iconElement = groupObject.get("icon");
-            if (!(iconElement instanceof JsonObject iconObject)|| !iconObject.has("item") || !iconObject.has("nbt")) {
-                continue;
-            }
-            
-            final ItemStack icon = JsonUtils.deserializeItem(iconObject);
-            final Collection<ItemStack> displayStacks = ItemStackSet.create();
-            final Set<ItemStack> searchTabStacks = ItemStackSet.create();
-            for (JsonElement entryElement : groupObject.getAsJsonArray("stacks")) {
-                if (!(entryElement instanceof JsonPrimitive entryPrimitive) || !entryPrimitive.isString() || ! slimefunItems.containsKey(entryPrimitive.getAsString())) {
-                    continue;
-                }
-                
-                displayStacks.add(slimefunItems.get(entryPrimitive.getAsString()).itemStack());
-            }
-            searchTabStacks.addAll(displayStacks);
-            
-            addItemGroup(id, icon, displayStacks, searchTabStacks);
-        }
-    }
-    
-    public static void addItemGroup(String id, ItemStack icon, Collection<ItemStack> displayStacks, Set<ItemStack> searchTabStacks) {
-        final Identifier identifier = Utils.newIdentifier(id);
-        if (itemGroups.get(identifier) instanceof ItemGroupAccessor itemGroupAccessor) {
-            // TODO all of this stuff
-            return;
-        }
-        
-        itemGroups.put(identifier, FabricItemGroup.builder(Utils.newIdentifier(id)).icon(() -> icon).entries(((enabledFeatures, groupEntries, operatorEnabled) -> groupEntries.addAll(displayStacks))).build());
-    }
-    
-    /**
      * Load the {@link SlimefunCategory} from a given {@link Resource}
      *
      * @param resource The {@link Resource} that contains an {@link SlimefunCategory} for a Slimefun Item
@@ -133,7 +86,12 @@ public class ResourceLoader {
             SlimefunCategory.deserialize(id, categoryObject);
         }
     }
-    
+
+    /**
+     * Load the {@link SlimefunLabel} from a given {@link Resource}
+     *
+     * @param resource The {@link Resource} that contains a {@link SlimefunLabel}
+     */
     public static void loadLabels(Resource resource) {
         final JsonObject slimefunLabels = jsonObjectFromResource(resource);
         for (String id : slimefunLabels.keySet()) {
@@ -141,7 +99,36 @@ public class ResourceLoader {
             SlimefunLabel.deserialize(id, labelObject);
         }
     }
-    
+
+    /**
+     * Adds a {@link Identifier} for a placed {@link Block} to change it's model when it's a slimefun block
+     *
+     * @param id The {@link String} id that represents a Slimefun Item
+     * @param model The {@link Identifier} of the model that should be applied for a Slimefun Item
+     */
+    public static void addSlimefunBlock(String id, Identifier model) {
+        slimefunBlocks.put(id, model);
+    }
+
+    /**
+     * Adds a {@link BlockPos} for a placed Slimefun Item, with the {@link String} id of what Slimefun Item it is
+     *
+     * @param blockPos The {@link BlockPos} representing the location of a placed Slimefun Item
+     * @param id The {@link String} id that represents a Slimefun Item
+     */
+    public static void addPlacedBlock(BlockPos blockPos, String id) {
+        placedBlocks.put(blockPos, id);
+    }
+
+    /**
+     * Removes a {@link BlockPos} for a placed Slimefun Item
+     *
+     * @param blockPos The {@link BlockPos} representing the location of the previously placed Slimefun Item
+     */
+    public static void removePlacedBlock(BlockPos blockPos) {
+        placedBlocks.remove(blockPos);
+    }
+
     /**
      * Returns an unmodifiable Map of all Slimefun ItemStacks, {@link String} -> Slimefun ID, {@link ItemStack} -> Slimefun ItemStack
      *
@@ -151,15 +138,15 @@ public class ResourceLoader {
     public static Map<String, SlimefunItemStack> getSlimefunItems() {
         return Collections.unmodifiableMap(slimefunItems);
     }
-    
-    /**
-     * Returns an unmodifiable Map of all Slimefun ItemGroups, {@link Identifier} -> The Identifier for the {@link ItemGroup}, {@link ItemGroup} -> The {@link ItemGroup} corresponding to the {@link Identifier}
-     *
-     * @return {@link Map}
-     */
+
     @NonNull
-    public static Map<Identifier, ItemGroup> getItemGroups() {
-        return Collections.unmodifiableMap(itemGroups);
+    public static Map<String, Identifier> getSlimefunBlocks() {
+        return Collections.unmodifiableMap(slimefunBlocks);
+    }
+
+    @NonNull
+    public static Map<BlockPos, String> getPlacedBlocks() {
+        return Collections.unmodifiableMap(placedBlocks);
     }
     
     private static void sortItems() {

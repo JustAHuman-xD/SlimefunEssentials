@@ -28,7 +28,7 @@ import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
@@ -39,6 +39,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 
 import java.util.List;
 import java.util.Optional;
@@ -172,16 +173,17 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
     public Stream<? extends TagKey<?>> getTagsFor(EntryStack<SlimefunItemStack> entry, SlimefunItemStack value) {
         return Stream.empty();
     }
-    
+
     public class SlimefunItemStackRenderer extends AbstractEntryRenderer<SlimefunItemStack> implements BatchedEntryRenderer<SlimefunItemStack, BakedModel> {
         private static final float SCALE = 20.0F;
         public static final int ITEM_LIGHT = 0xf000f0;
-    
+
         @Override
         public BakedModel getExtraData(EntryStack<SlimefunItemStack> entry) {
-            return MinecraftClient.getInstance().getItemRenderer().getModel(entry.getValue().itemStack(), null, null, 0);
+            MinecraftClient client = MinecraftClient.getInstance();
+            return client.getItemRenderer().getModel(entry.getValue().itemStack(), client.world, client.player, 0);
         }
-    
+
         @Override
         public void render(EntryStack<SlimefunItemStack> entry, MatrixStack matrices, Rectangle bounds, int mouseX, int mouseY, float delta) {
             BakedModel model = getExtraData(entry);
@@ -189,20 +191,14 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
             if (!entry.isEmpty()) {
                 ItemStack value = entry.getValue().itemStack();
                 matrices.push();
-                matrices.multiplyPositionMatrix(RenderSystem.getModelViewMatrix());
                 matrices.translate(bounds.getCenterX(), bounds.getCenterY(), entry.getZ());
-                matrices.scale(bounds.getWidth(), (bounds.getWidth() + bounds.getHeight()) / -2f, 1.0F);
-                MatrixStack modelViewStack = RenderSystem.getModelViewStack();
-                modelViewStack.push();
-                modelViewStack.peek().getPositionMatrix().set(matrices.peek().getPositionMatrix());
-                RenderSystem.applyModelViewMatrix();
+                matrices.multiplyPositionMatrix(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
+                matrices.scale(bounds.getWidth(), bounds.getHeight(), (bounds.getWidth() + bounds.getHeight()) / 2.0F);
                 VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-                MinecraftClient.getInstance().getItemRenderer().renderItem(value, ModelTransformation.Mode.GUI, false, new MatrixStack(), immediate,
+                MinecraftClient.getInstance().getItemRenderer().renderItem(value, ModelTransformationMode.GUI, false, new MatrixStack(), immediate,
                         ITEM_LIGHT, OverlayTexture.DEFAULT_UV, model);
                 immediate.draw();
                 matrices.pop();
-                modelViewStack.pop();
-                RenderSystem.applyModelViewMatrix();
             }
             MatrixStack modelViewStack = RenderSystem.getModelViewStack();
             modelViewStack.push();
@@ -210,17 +206,17 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
             modelViewStack.translate(bounds.x, bounds.y, 0);
             modelViewStack.scale(bounds.width / 16f, (bounds.getWidth() + bounds.getHeight()) / 2f / 16f, 1.0F);
             RenderSystem.applyModelViewMatrix();
-            renderOverlay(entry, bounds);
+            renderOverlay(new MatrixStack(), entry, bounds);
             modelViewStack.pop();
             endGL(entry, model);
             RenderSystem.applyModelViewMatrix();
         }
-    
+
         @Override
         public int getBatchIdentifier(EntryStack<SlimefunItemStack> entry, Rectangle bounds, BakedModel model) {
             return 1738923 + (model.isSideLit() ? 1 : 0);
         }
-    
+
         @Override
         public void startBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
             setupGL(entry, model);
@@ -229,7 +225,7 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
             modelViewStack.scale(SCALE, -SCALE, 1.0F);
             RenderSystem.applyModelViewMatrix();
         }
-    
+
         public void setupGL(EntryStack<SlimefunItemStack> entry, BakedModel model) {
             MinecraftClient.getInstance().getTextureManager().getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
             RenderSystem.setShaderTexture(0, SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
@@ -239,7 +235,7 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
             boolean sideLit = model.isSideLit();
             if (!sideLit) DiffuseLighting.disableGuiDepthLighting();
         }
-    
+
         @Override
         public void renderBase(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, VertexConsumerProvider.Immediate immediate, Rectangle bounds, int mouseX, int mouseY, float delta) {
             if (!entry.isEmpty()) {
@@ -247,19 +243,19 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
                 matrices.push();
                 matrices.translate(bounds.getCenterX() / SCALE, bounds.getCenterY() / -SCALE, entry.getZ());
                 matrices.scale(bounds.getWidth() / SCALE, (bounds.getWidth() + bounds.getHeight()) / 2f / SCALE, 1.0F);
-                MinecraftClient.getInstance().getItemRenderer().renderItem(value, ModelTransformation.Mode.GUI, false, matrices, immediate,
+                MinecraftClient.getInstance().getItemRenderer().renderItem(value, ModelTransformationMode.GUI, false, matrices, immediate,
                         ITEM_LIGHT, OverlayTexture.DEFAULT_UV, model);
                 matrices.pop();
             }
         }
-    
+
         @Override
         public void afterBase(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
             endGL(entry, model);
             RenderSystem.getModelViewStack().pop();
             RenderSystem.applyModelViewMatrix();
         }
-    
+
         @Override
         public void renderOverlay(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, VertexConsumerProvider.Immediate immediate, Rectangle bounds, int mouseX, int mouseY, float delta) {
             MatrixStack modelViewStack = RenderSystem.getModelViewStack();
@@ -268,29 +264,27 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
             modelViewStack.translate(bounds.x, bounds.y, 0);
             modelViewStack.scale(bounds.width / 16f, (bounds.getWidth() + bounds.getHeight()) / 2f / 16f, 1.0F);
             RenderSystem.applyModelViewMatrix();
-            renderOverlay(entry, bounds);
+            renderOverlay(new MatrixStack(), entry, bounds);
             modelViewStack.pop();
             RenderSystem.applyModelViewMatrix();
         }
-    
-        public void renderOverlay(EntryStack<SlimefunItemStack> entry, Rectangle bounds) {
+
+        public void renderOverlay(MatrixStack matrices, EntryStack<SlimefunItemStack> entry, Rectangle bounds) {
             if (!entry.isEmpty()) {
-                MinecraftClient.getInstance().getItemRenderer().zOffset = entry.getZ();
-                MinecraftClient.getInstance().getItemRenderer().renderGuiItemOverlay(MinecraftClient.getInstance().textRenderer, entry.getValue().itemStack(), 0, 0, null);
-                MinecraftClient.getInstance().getItemRenderer().zOffset = 0.0F;
+                MinecraftClient.getInstance().getItemRenderer().renderGuiItemOverlay(matrices, MinecraftClient.getInstance().textRenderer, entry.getValue().itemStack(), 0, 0, null);
             }
         }
-    
+
         @Override
         public void endBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
         }
-    
+
         public void endGL(EntryStack<SlimefunItemStack> entry, BakedModel model) {
             RenderSystem.enableDepthTest();
             boolean sideLit = model.isSideLit();
             if (!sideLit) DiffuseLighting.enableGuiDepthLighting();
         }
-    
+
         @Override
         @Nullable
         public Tooltip getTooltip(EntryStack<SlimefunItemStack> entry, TooltipContext context) {
@@ -309,5 +303,5 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
             return tooltip;
         }
     }
-    
+
 }

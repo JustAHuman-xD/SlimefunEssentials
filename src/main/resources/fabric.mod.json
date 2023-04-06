@@ -36,10 +36,9 @@
   "mixins": [
     "slimefun_essentials.mixins.json"
   ],
-  "accessWidener": "slimefun_essentials.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.10",
     "fabric": "*",
-    "minecraft": "1.19.3"
+    "minecraft": "1.19.4"
   }
 }

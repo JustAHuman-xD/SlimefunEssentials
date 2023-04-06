@@ -39,8 +39,8 @@ public class SlimefunStackRenderer implements IIngredientRenderer<SlimefunItemSt
         MinecraftClient minecraft = MinecraftClient.getInstance();
         TextRenderer font = getFontRenderer(minecraft, ingredient);
         ItemRenderer itemRenderer = minecraft.getItemRenderer();
-        itemRenderer.renderInGui(ingredient.itemStack(), 0, 0);
-        itemRenderer.renderGuiItemOverlay(font, ingredient.itemStack(), 0, 0);
+        itemRenderer.renderInGui(modelViewStack, ingredient.itemStack(), 0, 0);
+        itemRenderer.renderGuiItemOverlay(modelViewStack, font, ingredient.itemStack(), 0, 0);
         RenderSystem.disableBlend();
         modelViewStack.pop();
         RenderSystem.applyModelViewMatrix();

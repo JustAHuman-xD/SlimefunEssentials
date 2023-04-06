@@ -17,14 +17,7 @@ public class ConfigScreen {
                 .setTitle(Text.translatable("slimefun_essentials.title"));
         
         final ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-        
         final ConfigCategory category = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.category"));
-        
-        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.item_groups"), ModConfig.areItemGroupsEnabled())
-                .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.option.item_groups.tooltip"))
-                .setSaveConsumer(ModConfig::setItemGroupsEnabled)
-                .build());
         
         category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.custom_textures"), ModConfig.shouldUseCustomTextures())
                 .setDefaultValue(true)
