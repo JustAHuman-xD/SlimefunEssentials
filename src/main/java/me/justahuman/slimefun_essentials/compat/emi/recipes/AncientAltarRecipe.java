@@ -4,14 +4,14 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
+import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
-import me.justahuman.slimefun_essentials.utils.Utils;
 
 public class AncientAltarRecipe extends ProcessRecipe {
     public AncientAltarRecipe(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory emiRecipeCategory) {
         super(slimefunCategory, slimefunRecipe, emiRecipeCategory);
-        Utils.fillInputs(this.inputs, 9);
-        Utils.fillOutputs(this.outputs, 1);
+        EmiUtils.fillInputs(this.inputs, 9);
+        EmiUtils.fillOutputs(this.outputs, 1);
     }
     
     @Override

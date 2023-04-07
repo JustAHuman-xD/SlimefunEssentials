@@ -4,11 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.NonNull;
+import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -20,22 +21,37 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ResourceLoader {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
-    private static final Map<String, Identifier> slimefunBlocks = new HashMap<>();
     private static final Map<BlockPos, String> placedBlocks = new HashMap<>();
+    private static final Set<String> slimefunBlocks = new HashSet<>();
 
     /**
-     * Clears all loaded Slimefun Items, SlimefunBlocks, and Categories
+     * Clears: {@link ResourceLoader#slimefunItems}, {@link ResourceLoader#slimefunBlocks}, {@link ResourceLoader#placedBlocks}
      */
     public static void clear() {
         slimefunItems.clear();
         slimefunBlocks.clear();
+        placedBlocks.clear();
+    }
+
+    /**
+     * Locates and loads all the data {@link SlimefunEssentials} requires to function
+     *
+     * @param manager The {@link ResourceManager} to load from
+     */
+    public static void loadResources(ResourceManager manager) {
+        loadItems(manager);
+        loadLabels(manager);
+        loadCategories(manager);
+        loadBlocks(manager);
     }
     
     /**
@@ -52,6 +68,17 @@ public class ResourceLoader {
         } catch(IOException e) {
             Utils.error(e);
             return new JsonObject();
+        }
+    }
+
+    /**
+     * Locates and loads every Item from the "slimefun/items" directory
+     *
+     * @param manager The {@link ResourceManager} to load from
+     */
+    public static void loadItems(ResourceManager manager) {
+        for (Resource resource : manager.findResources("slimefun/items", Utils::filterAddons).values()) {
+            ResourceLoader.loadItems(resource);
         }
     }
     
@@ -73,17 +100,15 @@ public class ResourceLoader {
         
         sortItems();
     }
-    
+
     /**
-     * Load the {@link SlimefunCategory} from a given {@link Resource}
+     * Locates and loads every Label from the "slimefun/labels" directory
      *
-     * @param resource The {@link Resource} that contains an {@link SlimefunCategory} for a Slimefun Item
+     * @param manager The {@link ResourceManager} to load from
      */
-    public static void loadCategories(Resource resource) {
-        final JsonObject slimefunCategories = jsonObjectFromResource(resource);
-        for (String id : slimefunCategories.keySet()) {
-            final JsonObject categoryObject = slimefunCategories.getAsJsonObject(id);
-            SlimefunCategory.deserialize(id, categoryObject);
+    public static void loadLabels(ResourceManager manager) {
+        for (Resource resource : manager.findResources("slimefun/labels", Utils::filterAddons).values()) {
+            ResourceLoader.loadLabels(resource);
         }
     }
 
@@ -101,13 +126,48 @@ public class ResourceLoader {
     }
 
     /**
-     * Adds a {@link Identifier} for a placed {@link Block} to change it's model when it's a slimefun block
+     * Locates and loads every Category from the "slimefun/categories" directory
+     *
+     * @param manager The {@link ResourceManager} to load from
+     */
+    public static void loadCategories(ResourceManager manager) {
+        for (Resource resource : manager.findResources("slimefun/categories", Utils::filterAddons).values()) {
+            ResourceLoader.loadCategories(resource);
+        }
+    }
+
+    /**
+     * Load the {@link SlimefunCategory} from a given {@link Resource}
+     *
+     * @param resource The {@link Resource} that contains an {@link SlimefunCategory} for a Slimefun Item
+     */
+    public static void loadCategories(Resource resource) {
+        final JsonObject slimefunCategories = jsonObjectFromResource(resource);
+        for (String id : slimefunCategories.keySet()) {
+            final JsonObject categoryObject = slimefunCategories.getAsJsonObject(id);
+            SlimefunCategory.deserialize(id, categoryObject);
+        }
+    }
+
+    /**
+     * Locates and loads every Block Model from the "slimefun/blocks" directory
+     *
+     * @param manager The {@link ResourceManager} to load from
+     */
+    public static void loadBlocks(ResourceManager manager) {
+        for (Identifier identifier : manager.findResources("models/blocks", Utils::filterResources).keySet()) {
+            String id = Utils.getFileName(identifier.getPath());
+            ResourceLoader.addSlimefunBlock(id);
+        }
+    }
+
+    /**
+     * Adds a {@link String} id of a available {@link Block}'s Model
      *
      * @param id The {@link String} id that represents a Slimefun Item
-     * @param model The {@link Identifier} of the model that should be applied for a Slimefun Item
      */
-    public static void addSlimefunBlock(String id, Identifier model) {
-        slimefunBlocks.put(id, model);
+    public static void addSlimefunBlock(String id) {
+        slimefunBlocks.add(id);
     }
 
     /**
@@ -130,7 +190,7 @@ public class ResourceLoader {
     }
 
     /**
-     * Returns an unmodifiable Map of all Slimefun ItemStacks, {@link String} -> Slimefun ID, {@link ItemStack} -> Slimefun ItemStack
+     * Returns an unmodifiable Map of {@link ResourceLoader#slimefunItems}
      *
      * @return {@link Map}
      */
@@ -139,16 +199,29 @@ public class ResourceLoader {
         return Collections.unmodifiableMap(slimefunItems);
     }
 
+    /**
+     * Returns an unmodifiable Set of {@link ResourceLoader#slimefunBlocks}
+     *
+     * @return {@link Map}
+     */
     @NonNull
-    public static Map<String, Identifier> getSlimefunBlocks() {
-        return Collections.unmodifiableMap(slimefunBlocks);
+    public static Set<String> getSlimefunBlocks() {
+        return Collections.unmodifiableSet(slimefunBlocks);
     }
 
+    /**
+     * Returns an unmodifiable Map of {@link ResourceLoader#placedBlocks}
+     *
+     * @return {@link Map}
+     */
     @NonNull
     public static Map<BlockPos, String> getPlacedBlocks() {
         return Collections.unmodifiableMap(placedBlocks);
     }
-    
+
+    /**
+     * Sorts {@link ResourceLoader#slimefunItems} based on id's
+     */
     private static void sortItems() {
         final Map<String, SlimefunItemStack> sortedSlimefunItems = new LinkedHashMap<>();
         final List<String> ids = new ArrayList<>(slimefunItems.keySet());

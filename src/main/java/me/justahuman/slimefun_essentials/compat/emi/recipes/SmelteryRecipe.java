@@ -7,8 +7,8 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
+import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
-import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 
 import java.util.List;
@@ -16,8 +16,8 @@ import java.util.List;
 public class SmelteryRecipe extends ProcessRecipe {
     public SmelteryRecipe(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory emiRecipeCategory) {
         super(slimefunCategory, slimefunRecipe, emiRecipeCategory);
-        Utils.fillInputs(this.inputs, 6);
-        Utils.fillOutputs(this.outputs, 1);
+        EmiUtils.fillInputs(this.inputs, 6);
+        EmiUtils.fillOutputs(this.outputs, 1);
     }
     
     @Override

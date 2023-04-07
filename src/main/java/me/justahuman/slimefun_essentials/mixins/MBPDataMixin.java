@@ -1,7 +1,9 @@
 package me.justahuman.slimefun_essentials.mixins;
 
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
+import me.justahuman.slimefun_essentials.utils.Utils;
 import mod.omoflop.mbp.MBPData;
+import mod.omoflop.mbp.common.ContextIdentifiers;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -14,12 +16,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(MBPData.class)
-public class MBPMixin {
+public class MBPDataMixin {
     @Inject(at = @At("HEAD"), method = "meetsPredicate", cancellable = true)
     private static void isSlimefunBlock(BlockView world, BlockPos pos, BlockState state, Identifier renderContext, CallbackInfoReturnable<Optional<Identifier>> cir) {
-        if (ResourceLoader.getPlacedBlocks().containsKey(pos) && ResourceLoader.getSlimefunBlocks().containsKey(ResourceLoader.getPlacedBlocks().get(pos))) {
-            final Identifier identifier = new Identifier("minecraft:" + ResourceLoader.getPlacedBlocks().get(pos));
-            cir.setReturnValue(Optional.of(identifier));
+        if (!renderContext.equals(ContextIdentifiers.ITEM_HELD) && !renderContext.equals(ContextIdentifiers.ITEM) && ResourceLoader.getPlacedBlocks().containsKey(pos) && ResourceLoader.getSlimefunBlocks().contains(ResourceLoader.getPlacedBlocks().get(pos))) {
+            cir.setReturnValue(Optional.of(Utils.newIdentifier("block/" + ResourceLoader.getPlacedBlocks().get(pos))));
         }
     }
 }

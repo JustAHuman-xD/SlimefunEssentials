@@ -18,7 +18,6 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -33,7 +32,7 @@ public class SlimefunEssentials implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModConfig.loadConfig();
-        shouldRestart();
+        Utils.shouldRestart();
         
         if (Utils.isClothConfigEnabled()) {
             final KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("slimefun_essentials.open_config", GLFW.GLFW_KEY_F6, "slimefun_essentials.title"));
@@ -53,27 +52,7 @@ public class SlimefunEssentials implements ClientModInitializer {
             @Override
             public void reload(ResourceManager manager) {
                 ResourceLoader.clear();
-                
-                // Load all the Items
-                for (Resource resource : manager.findResources("slimefun/items", SlimefunEssentials::filterAddons).values()) {
-                    ResourceLoader.loadItems(resource);
-                }
-                
-                // Load all the Labels
-                for (Resource resource : manager.findResources("slimefun/labels", SlimefunEssentials::filterAddons).values()) {
-                    ResourceLoader.loadLabels(resource);
-                }
-                
-                // Load all the Recipes
-                for (Resource resource : manager.findResources("slimefun/categories", SlimefunEssentials::filterAddons).values()) {
-                    ResourceLoader.loadCategories(resource);
-                }
-
-                // Load all the Blocks
-                for (Identifier identifier : manager.findResources("models", SlimefunEssentials::filterItems).keySet()) {
-                    String id = getFileName(identifier.getPath());
-                    ResourceLoader.addSlimefunBlock(id, identifier);
-                }
+                ResourceLoader.loadResources(manager);
             }
         });
         
@@ -124,60 +103,9 @@ public class SlimefunEssentials implements ClientModInitializer {
         }
         
         ClientTickEvents.END_CLIENT_TICK.register((client -> {
-            if (shouldRestart()) {
+            if (Utils.shouldRestart()) {
                 MinecraftClient.getInstance().scheduleStop();
             }
         }));
-    }
-    
-    public static boolean shouldRestart() {
-        if (Utils.restartFile().exists()) {
-            try {
-                boolean successful = Utils.restartFile().delete();
-                if (!successful) {
-                    throw new RuntimeException();
-                }
-                return true;
-            } catch (RuntimeException ignored) {
-                Utils.warn("Could not remove restart file!");
-                return false;
-            }
-        }
-        return false;
-    }
-
-    public static boolean filterResources(Identifier identifier) {
-        final String path = identifier.getPath();
-        return path.endsWith(".json");
-    }
-    
-    public static boolean filterAddons(Identifier identifier) {
-        if (!filterResources(identifier)) {
-            return false;
-        }
-
-        final String path = identifier.getPath();
-        final String addon = getFileName(path);
-        for (String enabledAddon : ModConfig.getAddons()) {
-            if (enabledAddon.equalsIgnoreCase(addon)) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    public static boolean filterItems(Identifier identifier) {
-        if (!filterResources(identifier)) {
-            return false;
-        }
-
-        final String path = identifier.getPath();
-        final String id = getFileName(path);
-        return ResourceLoader.getSlimefunItems().containsKey(id.toUpperCase()) || id.equals("supreme_ventus_generator");
-    }
-
-    public static String getFileName(String path) {
-        return path.substring(path.lastIndexOf("/") + 1, path.indexOf(".json"));
     }
 }

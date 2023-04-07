@@ -7,8 +7,8 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
+import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
-import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class GridRecipe extends ProcessRecipe {
             length = 3;
         }
         this.side = length;
-        Utils.fillInputs(this.inputs, this.side * this.side);
+        EmiUtils.fillInputs(this.inputs, this.side * this.side);
     }
     
     @Override

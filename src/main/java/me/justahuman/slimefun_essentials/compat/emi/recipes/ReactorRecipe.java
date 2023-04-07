@@ -10,7 +10,6 @@ import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
 import me.justahuman.slimefun_essentials.compat.emi.ReverseFillingArrowWidget;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
-import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 public class ReactorRecipe extends ProcessRecipe {
     public ReactorRecipe(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory emiRecipeCategory) {
         super(slimefunCategory, slimefunRecipe, emiRecipeCategory);
-        Utils.fillInputs(this.inputs, 4);
+        EmiUtils.fillInputs(this.inputs, 4);
     }
     
     @Override
