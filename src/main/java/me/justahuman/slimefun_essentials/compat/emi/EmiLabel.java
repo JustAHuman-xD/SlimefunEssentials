@@ -17,6 +17,6 @@ public class EmiLabel extends TextureWidget {
     }
     
     public EmiLabel(SlimefunLabel slimefunLabel, int x, int y) {
-        this(slimefunLabel.id(), new EmiTexture(slimefunLabel.identifier(), slimefunLabel.u(), slimefunLabel.v(), TextureUtils.label, TextureUtils.label), x, y);
+        this(slimefunLabel.id(), new EmiTexture(slimefunLabel.light(), slimefunLabel.u(), slimefunLabel.v(), TextureUtils.labelSize, TextureUtils.labelSize), x, y);
     }
 }

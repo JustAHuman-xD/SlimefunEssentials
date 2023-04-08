@@ -18,6 +18,6 @@ public class SlimefunEmiCategory extends EmiRecipeCategory {
     
     @Override
     public Text getName() {
-        return Text.translatable("emi.category.slimefun", displayName);
+        return Text.translatable("emi.category.slimefun", this.displayName);
     }
 }

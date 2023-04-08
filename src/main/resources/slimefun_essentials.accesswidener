@@ -1,5 +1,0 @@
-accessWidener v1 named
-
-accessible field net/minecraft/item/ItemGroup icon Lnet/minecraft/item/ItemStack;
-accessible field net/minecraft/item/ItemGroup displayStacks Ljava/util/Collection;
-accessible field net/minecraft/item/ItemGroup searchTabStacks Ljava/util/Set;

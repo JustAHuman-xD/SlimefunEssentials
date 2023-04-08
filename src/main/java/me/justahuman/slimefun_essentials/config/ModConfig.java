@@ -42,7 +42,6 @@ public class ModConfig {
         }
         
         try {
-            itemGroupsEnabled = JsonUtils.getBooleanOrDefault(root, "item_groups_enabled", true, true);
             useCustomTextures = JsonUtils.getBooleanOrDefault(root, "use_custom_textures", true, true);
             autoToggleAddons = JsonUtils.getBooleanOrDefault(root, "auto_toggle_addons", true, true);
             for (JsonElement addon : JsonUtils.getArrayOrDefault(root, "addons", defaultAddons, true)) {
@@ -63,8 +62,7 @@ public class ModConfig {
         for (String addon : addons) {
             addonArray.add(addon);
         }
-        
-        root.addProperty("item_groups_enabled", itemGroupsEnabled);
+
         root.addProperty("use_custom_textures", useCustomTextures);
         root.addProperty("auto_toggle_addons", autoToggleAddons);
         root.add("addons", addonArray);
@@ -76,13 +74,6 @@ public class ModConfig {
             Utils.warn("Error occurred while saving Config!");
             Utils.warn(e.getMessage());
         }
-    }
-    
-    public static boolean areItemGroupsEnabled() {
-        return itemGroupsEnabled;
-    }
-    public static void setItemGroupsEnabled(boolean newValue) {
-        itemGroupsEnabled = newValue;
     }
     
     public static boolean shouldUseCustomTextures() {

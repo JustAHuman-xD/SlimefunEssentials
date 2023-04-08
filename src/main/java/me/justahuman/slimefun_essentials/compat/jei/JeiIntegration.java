@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 @JeiPlugin
 public class JeiIntegration implements IModPlugin {
     public static final SlimefunStackType SLIMEFUN = new SlimefunStackType();
+    public static final JeiRecipeInterpreter RECIPE_INTERPRETER = new JeiRecipeInterpreter();
     
     @Override
     @NotNull

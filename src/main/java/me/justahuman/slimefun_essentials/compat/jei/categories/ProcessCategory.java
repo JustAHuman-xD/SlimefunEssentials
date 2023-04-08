@@ -1,8 +1,8 @@
 package me.justahuman.slimefun_essentials.compat.jei.categories;
 
-import me.justahuman.slimefun_essentials.api.IdInterpreter;
+import me.justahuman.slimefun_essentials.api.RecipeRenderer;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
-import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
+import me.justahuman.slimefun_essentials.client.SlimefunLabel;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipeComponent;
 import me.justahuman.slimefun_essentials.compat.jei.JeiIntegration;
@@ -10,7 +10,6 @@ import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -18,22 +17,12 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.fabric.ingredients.fluid.JeiFluidIngredient;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Optional;
-
-public class ProcessCategory implements IRecipeCategory<SlimefunRecipe>, IdInterpreter<Object> {
+public class ProcessCategory implements IRecipeCategory<SlimefunRecipe>, RecipeRenderer {
     protected final IGuiHelper guiHelper;
     protected final SlimefunCategory slimefunCategory;
     protected final ItemStack catalyst;
@@ -45,134 +34,132 @@ public class ProcessCategory implements IRecipeCategory<SlimefunRecipe>, IdInter
         this.slimefunCategory = slimefunCategory;
         this.catalyst = catalyst;
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, catalyst);
-        this.background = guiHelper.drawableBuilder(Utils.WIDGETS, 0, 0, 0, 0).addPadding(yPadding(), yPadding(), xPadding(), xPadding()).build();
+        this.background = guiHelper.drawableBuilder(TextureUtils.WIDGETS, 0, 0, 0, 0).addPadding(yPadding(), yPadding(), xPadding(), xPadding()).build();
     }
     
     public int xPadding() {
-        return getContentsWidth() / 2;
+        return getDisplayWidth() / 2;
     }
     
     public int yPadding() {
-        return getContentsHeight() / 2;
+        return getDisplayHeight() / 2;
     }
-    
+
+    @Override
     public int getContentsWidth() {
-        int width = 0;
-        for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
-            width = Math.max(width, TextureUtils.getProcessWidth(slimefunRecipe));
-        }
-        return width + TextureUtils.padding * 2;
+        return TextureUtils.getContentsWidth(this.slimefunCategory);
     }
-    
+
+    @Override
     public int getContentsHeight() {
-        for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
-            if (!slimefunRecipe.outputs().isEmpty()) {
-                return TextureUtils.bigSlot + TextureUtils.padding * 2;
-            }
-        }
-        return TextureUtils.slot + TextureUtils.padding * 2;
+        return TextureUtils.getContentsHeight(this.slimefunCategory);
     }
     
     @Override
     @NotNull
     public RecipeType<SlimefunRecipe> getRecipeType() {
-        return RecipeType.create(Utils.ID, slimefunCategory.id().toLowerCase(), SlimefunRecipe.class);
+        return RecipeType.create(Utils.ID, this.slimefunCategory.id().toLowerCase(), SlimefunRecipe.class);
     }
     
     @Override
     @NotNull
     public Text getTitle() {
-        return Text.translatable("emi.category.slimefun", catalyst.getName());
+        return Text.translatable("emi.category.slimefun", this.catalyst.getName());
     }
     
     @Override
     @NotNull
     public IDrawable getBackground() {
-        return background;
+        return this.background;
     }
     
     @Override
     @NotNull
     public IDrawable getIcon() {
-        return icon;
+        return this.icon;
     }
     
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SlimefunRecipe recipe, IFocusGroup focuses) {
-        int y = (getContentsHeight() - TextureUtils.slot) / 2;
-        int x = (getContentsWidth() - TextureUtils.getProcessWidth(recipe)) / 2;
+        final int slotOffset = calculateYOffset(TextureUtils.slotSize);
+        final int outputOffset = calculateYOffset(TextureUtils.outputSize);
+        int xOffset = (getDisplayWidth() - TextureUtils.getContentsWidth(recipe)) / 2;
     
-        if (recipe.energy() != null) {
-            x += TextureUtils.chargeWidth + TextureUtils.padding;
+        if (hasLabels(recipe)) {
+            xOffset += (TextureUtils.labelSize + TextureUtils.padding) * recipe.labels().size();
         }
-        
-        for (SlimefunRecipeComponent input : recipe.inputs()) {
-            addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, x, y), input);
-            x+= TextureUtils.slot + TextureUtils.padding;
+
+        if (hasEnergy(recipe) && hasOutputs(recipe)) {
+            xOffset += TextureUtils.energyWidth + TextureUtils.padding;
         }
-        
-        x += TextureUtils.arrowWidth + TextureUtils.padding;
-        
-        for (SlimefunRecipeComponent output : recipe.outputs()) {
-            addIngredients(builder.addSlot(RecipeIngredientRole.OUTPUT, x, y), output);
-            x += TextureUtils.bigSlot + TextureUtils.padding;
+
+        if (hasInputs(recipe)) {
+            for (SlimefunRecipeComponent input : recipe.inputs()) {
+                JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, xOffset + 1, slotOffset + 1), input);
+                xOffset += TextureUtils.slotSize + TextureUtils.padding;
+            }
+        } else {
+            JeiIntegration.RECIPE_INTERPRETER.addIngredient(builder.addSlot(RecipeIngredientRole.INPUT, xOffset + 1, slotOffset + 1), this.catalyst);
+            xOffset += TextureUtils.slotSize + TextureUtils.padding;
+        }
+
+        xOffset += TextureUtils.arrowWidth + TextureUtils.padding;
+
+        if (hasOutputs(recipe)) {
+            for (SlimefunRecipeComponent output : recipe.outputs()) {
+                JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.OUTPUT, xOffset + 5, outputOffset + 5), output);
+                xOffset += TextureUtils.outputSize + TextureUtils.padding;
+            }
         }
     }
     
     @Override
     public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
-    
-    }
-    
-    public void addIngredients(IRecipeSlotBuilder slotBuilder, SlimefunRecipeComponent component) {
-        for (String id : component.getMultiId() != null ? component.getMultiId() : List.of(component.getId())) {
-            addIngredientObject(slotBuilder, interpretId(id, ItemStack.EMPTY));
-        }
-    }
-    
-    public void addIngredientObject(IRecipeSlotBuilder slotBuilder, Object ingredient) {
-        if (ingredient instanceof List<?> list) {
-            for (Object object : list) {
-                addIngredientObject(slotBuilder, object);
+        final int labelOffset = calculateYOffset(TextureUtils.labelSize);
+        final int energyOffset = calculateYOffset(TextureUtils.energyHeight);
+        final int slotOffset = calculateYOffset(TextureUtils.slotSize);
+        final int arrowOffset = calculateYOffset(TextureUtils.arrowHeight);
+        final int outputOffset = calculateYOffset(TextureUtils.outputSize);
+        int xOffset = calculateXOffset();
+
+        // Display Labels
+        if (hasLabels(recipe)) {
+            for (SlimefunLabel slimefunLabel : recipe.labels()) {
+                slimefunLabel.draw(stack, xOffset, labelOffset);
+                xOffset += TextureUtils.labelSize + TextureUtils.padding;
             }
-        } else if (ingredient instanceof ItemStack itemStack) {
-            slotBuilder.addItemStack(itemStack);
-        } else if (ingredient instanceof SlimefunItemStack slimefunItemStack) {
-            slotBuilder.addIngredient(JeiIntegration.SLIMEFUN, slimefunItemStack);
-        } else if (ingredient instanceof JeiFluidIngredient fluidStack) {
-            slotBuilder.addFluidStack(fluidStack.getFluid(), fluidStack.getAmount());
         }
-    }
-    
-    @Override
-    public Object fromTag(TagKey<Item> tagKey, int amount, Object defaultValue) {
-        Optional<RegistryEntryList.Named<Item>> optional = Registries.ITEM.getEntryList(tagKey);
-        if (optional.isEmpty()) {
-            return defaultValue;
+
+        // Display Energy
+        if (hasEnergy(recipe) && hasOutputs(recipe)) {
+            TextureUtils.ENERGY.draw(stack, xOffset, energyOffset);
+            xOffset += TextureUtils.energyWidth + TextureUtils.padding;
         }
-        
-        return optional.get().stream().map(ItemStack::new).toList();
-    }
-    
-    @Override
-    public Object fromItemStack(ItemStack itemStack, int amount, Object defaultValue) {
-        itemStack.setCount(amount);
-        return itemStack;
-    }
-    
-    @Override
-    public Object fromSlimefunItemStack(SlimefunItemStack slimefunItemStack, int amount, Object defaultValue) {
-        return slimefunItemStack.setAmount(amount);
-    }
-    
-    @Override
-    public Object fromFluid(Fluid fluid, int amount, Object defaultValue) {
-        return new JeiFluidIngredient(fluid, amount);
-    }
-    
-    @Override
-    public Object fromEntityType(EntityType<?> entityType, int amount, Object defaultValue) {
-        // TODO: add support for entities
-        return defaultValue;
+
+        // Display Inputs, only the slot icon
+        if (hasInputs(recipe)) {
+            for (SlimefunRecipeComponent ignored : recipe.inputs()) {
+                TextureUtils.SLOT.draw(stack, xOffset, slotOffset);
+                xOffset += TextureUtils.slotSize + TextureUtils.padding;
+            }
+        } else {
+            TextureUtils.SLOT.draw(stack, xOffset, slotOffset);
+            xOffset += TextureUtils.slotSize + TextureUtils.padding;
+        }
+
+        // Display Time
+        // TODO: Support Animated Textures
+        TextureUtils.ARROW.draw(stack, xOffset, arrowOffset);
+        xOffset += TextureUtils.arrowWidth + TextureUtils.padding;
+
+        // Display Outputs
+        if (hasOutputs(recipe)) {
+            for (SlimefunRecipeComponent ignored : recipe.outputs()) {
+                TextureUtils.OUTPUT.draw(stack, xOffset, outputOffset);
+                xOffset += TextureUtils.outputSize + TextureUtils.padding;
+            }
+        } else if (hasEnergy(recipe)) {
+            TextureUtils.ENERGY.draw(stack, xOffset, energyOffset);
+        }
     }
 }

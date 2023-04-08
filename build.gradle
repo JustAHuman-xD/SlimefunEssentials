@@ -23,6 +23,10 @@ repositories {
         name = "Cloth Config, Rei"
         url = "https://maven.shedaniel.me/"
     }
+    maven {
+        name = "MoreBlockPredicates"
+        url = "https://jitpack.io"
+    }
     mavenCentral()
 }
 
@@ -38,6 +42,10 @@ dependencies {
 
     modImplementation("mezz.jei:${project.jei_version}") {
         exclude(group: "mezz.jei")
+    }
+
+    modImplementation("com.github.JustAHuman-xD:MoreBlockPredicates:${project.mbp_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
     }
 
     modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:$rei_version")
