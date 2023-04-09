@@ -5,7 +5,6 @@ import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunLabel;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.compat.rei.ReiIntegration;
-import me.justahuman.slimefun_essentials.compat.rei.SlimefunDisplay;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.math.Point;
@@ -69,7 +68,7 @@ public class ProcessDisplay extends SlimefunDisplay {
         addArrow(widgets, offsets);
 
         // Display Outputs
-        addOutputsWithEnergy(widgets, offsets);
+        addOutputsOrEnergy(widgets, offsets);
 
         return widgets;
     }
@@ -136,7 +135,7 @@ public class ProcessDisplay extends SlimefunDisplay {
         }
     }
 
-    protected void addOutputsWithEnergy(List<Widget> widgets, OffsetBuilder offsets) {
+    protected void addOutputsOrEnergy(List<Widget> widgets, OffsetBuilder offsets) {
         if (this.slimefunRecipe.hasOutputs()) {
             addOutputs(widgets, offsets);
         } else if (this.slimefunRecipe.hasEnergy()) {

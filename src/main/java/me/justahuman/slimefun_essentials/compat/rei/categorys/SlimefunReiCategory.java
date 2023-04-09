@@ -1,8 +1,9 @@
-package me.justahuman.slimefun_essentials.compat.rei;
+package me.justahuman.slimefun_essentials.compat.rei.categorys;
 
 import me.justahuman.slimefun_essentials.api.OffsetBuilder;
 import me.justahuman.slimefun_essentials.api.RecipeRenderer;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
+import me.justahuman.slimefun_essentials.compat.rei.displays.SlimefunDisplay;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -52,11 +53,11 @@ public class SlimefunReiCategory<T extends SlimefunDisplay> extends RecipeRender
 
     @Override
     public int getDisplayWidth(T display) {
-        return getDisplayWidth(display.slimefunRecipe);
+        return getDisplayWidth(display.slimefunRecipe());
     }
 
     @Override
     public List<Widget> setupDisplay(T display, Rectangle bounds) {
-        return display.setupDisplay(new OffsetBuilder(display, display.slimefunRecipe), new ArrayList<>(List.of(Widgets.createCategoryBase(bounds))), bounds, this.icon);
+        return display.setupDisplay(new OffsetBuilder(display, display.slimefunRecipe(), bounds.getMinX() + calculateXOffset(display.slimefunRecipe()), calculateYOffset(this.slimefunCategory, display.slimefunRecipe()), bounds.getMinY()), new ArrayList<>(List.of(Widgets.createCategoryBase(bounds))), bounds, this.icon);
     }
 }

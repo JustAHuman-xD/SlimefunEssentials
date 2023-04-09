@@ -17,30 +17,28 @@ public class AncientAltarDisplay extends ProcessDisplay {
     }
 
     @Override
-    public List<Widget> setupDisplay(OffsetBuilder ignored, List<Widget> widgets, Rectangle bounds, ItemStack icon) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe, calculateXOffset(this.slimefunRecipe), 0, bounds.getMinY());
-
-        addSlot(widgets, this.inputs.get(3), offsets.getX(), offsets.slot(), false);
-        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot()));
+    public List<Widget> setupDisplay(OffsetBuilder offsets, List<Widget> widgets, Rectangle bounds, ItemStack icon) {
+        addSlot(widgets, this.inputs.get(3), offsets.getX() + 1, offsets.slot() + 1, false);
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX() + 1, offsets.slot() + 1));
         offsets.x().addSlot(false);
-        addSlot(widgets, this.inputs.get(0), offsets.getX(), offsets.slot() + TextureUtils.slotSize);
+        addSlot(widgets, this.inputs.get(0), offsets.getX() + 1, offsets.slot() + TextureUtils.slotSize, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize));
-        addSlot(widgets, this.inputs.get(6), offsets.getX(), offsets.slot() - TextureUtils.slotSize);
+        addSlot(widgets, this.inputs.get(6), offsets.getX() + 1, offsets.slot() - TextureUtils.slotSize, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() - TextureUtils.slotSize));
         offsets.x().addSlot(false);
-        addSlot(widgets, this.inputs.get(1), offsets.getX(), offsets.slot() + TextureUtils.slotSize);
-        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize));
-        addSlot(widgets, this.inputs.get(4), offsets.getX(), offsets.slot());
+        addSlot(widgets, this.inputs.get(1), offsets.getX() + 1, offsets.slot() + TextureUtils.slotSize * 2, false);
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize * 2));
+        addSlot(widgets, this.inputs.get(4), offsets.getX() + 1, offsets.slot());
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.ALTAR, offsets.getX(), offsets.slot()));
-        addSlot(widgets, this.inputs.get(7), offsets.getX(), offsets.slot() - TextureUtils.slotSize);
-        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() - TextureUtils.slotSize));
+        addSlot(widgets, this.inputs.get(7), offsets.getX() + 1, offsets.slot() - TextureUtils.slotSize * 2, false);
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() - TextureUtils.slotSize * 2));
         offsets.x().addSlot(false);
-        addSlot(widgets, this.inputs.get(2), offsets.getX(), offsets.slot() + TextureUtils.slotSize);
+        addSlot(widgets, this.inputs.get(2), offsets.getX() + 1, offsets.slot() + TextureUtils.slotSize, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize));
-        addSlot(widgets, this.inputs.get(8), offsets.getX(), offsets.slot() - TextureUtils.slotSize);
+        addSlot(widgets, this.inputs.get(8), offsets.getX() + 1, offsets.slot() - TextureUtils.slotSize, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() - TextureUtils.slotSize));
         offsets.x().addSlot(false);
-        addSlot(widgets, this.inputs.get(5), offsets.getX(), offsets.slot(), false);
+        addSlot(widgets, this.inputs.get(5), offsets.getX() + 1, offsets.slot(), false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot()));
         offsets.x().addSlot();
         addArrow(widgets, offsets);

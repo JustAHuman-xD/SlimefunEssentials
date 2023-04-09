@@ -1,9 +1,10 @@
-package me.justahuman.slimefun_essentials.compat.rei;
+package me.justahuman.slimefun_essentials.compat.rei.displays;
 
 import me.justahuman.slimefun_essentials.api.OffsetBuilder;
 import me.justahuman.slimefun_essentials.api.RecipeRenderer;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
+import me.justahuman.slimefun_essentials.compat.rei.ReiIntegration;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.common.display.Display;
@@ -30,6 +31,10 @@ public abstract class SlimefunDisplay extends RecipeRenderer implements Display 
         this.slimefunRecipe = slimefunRecipe;
         this.inputs.addAll(ReiIntegration.RECIPE_INTERPRETER.getInputEntries(this.slimefunRecipe));
         this.outputs.addAll(ReiIntegration.RECIPE_INTERPRETER.getOutputEntries(this.slimefunRecipe));
+    }
+
+    public SlimefunRecipe slimefunRecipe() {
+        return this.slimefunRecipe;
     }
 
     public abstract List<Widget> setupDisplay(OffsetBuilder offsets, List<Widget> widgets, Rectangle bounds, ItemStack icon);

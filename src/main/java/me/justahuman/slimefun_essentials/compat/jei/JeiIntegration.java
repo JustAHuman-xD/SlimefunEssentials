@@ -20,6 +20,7 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IModIngredientRegistration;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.item.ItemStack;
@@ -55,6 +56,13 @@ public class JeiIntegration implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
             registration.addRecipes(RecipeType.create(Utils.ID, slimefunCategory.id().toLowerCase(), SlimefunRecipe.class), slimefunCategory.recipes());
+        }
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
+            registration.addRecipeCatalyst(ResourceLoader.getSlimefunItems().get(slimefunCategory.id()).itemStack(), RecipeType.create(Utils.ID, slimefunCategory.id().toLowerCase(), SlimefunRecipe.class));
         }
     }
 
