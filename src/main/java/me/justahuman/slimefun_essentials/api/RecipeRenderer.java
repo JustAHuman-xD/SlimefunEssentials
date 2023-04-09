@@ -43,8 +43,16 @@ public abstract class RecipeRenderer {
         return getContentsHeight(slimefunRecipe) + TextureUtils.padding * 2;
     }
 
+    protected int calculateXOffset(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
+        return (getDisplayWidth(slimefunCategory) - getContentsWidth(slimefunRecipe)) / 2;
+    }
+
     protected int calculateXOffset(SlimefunRecipe slimefunRecipe) {
         return (getDisplayWidth(slimefunRecipe) - getContentsWidth(slimefunRecipe)) / 2;
+    }
+
+    protected int calculateYOffset(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
+        return (getDisplayHeight(slimefunCategory) - getContentsHeight(slimefunRecipe)) / 2;
     }
 
     protected int calculateYOffset(SlimefunRecipe slimefunRecipe, int height) {

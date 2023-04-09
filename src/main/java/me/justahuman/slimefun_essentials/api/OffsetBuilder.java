@@ -13,7 +13,11 @@ public class OffsetBuilder {
     protected Offset yOffset;
 
     public OffsetBuilder(RecipeRenderer recipeRenderer, SlimefunRecipe slimefunRecipe) {
-        this(recipeRenderer, slimefunRecipe, recipeRenderer.calculateXOffset(slimefunRecipe), recipeRenderer.calculateYOffset(slimefunRecipe, 0), 0);
+        this(recipeRenderer, slimefunRecipe, recipeRenderer.calculateXOffset(slimefunRecipe), recipeRenderer.calculateYOffset(slimefunRecipe, 0));
+    }
+
+    public OffsetBuilder(RecipeRenderer recipeRenderer, SlimefunRecipe slimefunRecipe, int x) {
+        this(recipeRenderer, slimefunRecipe, x, recipeRenderer.calculateYOffset(slimefunRecipe, 0));
     }
 
     public OffsetBuilder(RecipeRenderer recipeRenderer, SlimefunRecipe slimefunRecipe, int x, int y) {

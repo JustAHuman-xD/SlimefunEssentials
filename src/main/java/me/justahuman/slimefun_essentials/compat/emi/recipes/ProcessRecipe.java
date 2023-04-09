@@ -74,7 +74,7 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return getDisplayWidth(this.slimefunRecipe);
+        return getDisplayHeight(this.slimefunRecipe);
     }
     
     @Override

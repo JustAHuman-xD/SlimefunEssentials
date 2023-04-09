@@ -20,7 +20,7 @@ public class ReactorCategory extends ProcessCategory {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SlimefunRecipe recipe, IFocusGroup focuses) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, TextureUtils.padding, TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe), calculateYOffset(this.slimefunCategory, recipe));
         recipe.fillInputs(4);
 
         JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.getY() + 1), recipe.inputs().get(0));
@@ -52,7 +52,7 @@ public class ReactorCategory extends ProcessCategory {
 
     @Override
     public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, TextureUtils.padding, TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe), calculateYOffset(this.slimefunCategory, recipe));
         recipe.fillInputs(4);
 
         TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
@@ -62,7 +62,7 @@ public class ReactorCategory extends ProcessCategory {
         TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
         offsets.x().addSlot();
 
-        addArrow(stack, offsets.getX(), offsets.getY(), false);
+        addFillingArrow(stack, offsets.getX(), offsets.getY(), false, getTime(recipe));
         offsets.x().addArrow();
 
         if (recipe.hasOutputs()) {
@@ -70,11 +70,11 @@ public class ReactorCategory extends ProcessCategory {
         }
 
         if (recipe.hasEnergy()) {
-            addEnergy(stack, offsets.getX() + (recipe.hasOutputs() ? (TextureUtils.outputSize - TextureUtils.energyWidth) / 2 : 0), offsets.getY() + (recipe.hasOutputs() ? - TextureUtils.energyHeight - TextureUtils.padding : TextureUtils.padding));
+            addEnergy(stack, offsets.getX() + (recipe.hasOutputs() ? (TextureUtils.outputSize - TextureUtils.energyWidth) / 2 : 0), offsets.getY() + (recipe.hasOutputs() ? - TextureUtils.energyHeight - TextureUtils.padding : TextureUtils.padding), recipe.energy() < 0);
             offsets.x().add(recipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth).addPadding();
         }
 
-        addArrow(stack, offsets.getX(), offsets.getY(), true);
+        addFillingArrow(stack, offsets.getX(), offsets.getY(), true, getTime(recipe));
         offsets.x().addArrow();
         offsets.y().set(TextureUtils.padding);
         TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());

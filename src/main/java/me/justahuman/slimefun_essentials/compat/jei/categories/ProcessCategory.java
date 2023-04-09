@@ -1,5 +1,8 @@
 package me.justahuman.slimefun_essentials.compat.jei.categories;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import me.justahuman.slimefun_essentials.api.OffsetBuilder;
 import me.justahuman.slimefun_essentials.api.RecipeRenderer;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
@@ -12,6 +15,7 @@ import me.justahuman.slimefun_essentials.utils.Utils;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -29,6 +33,10 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
     protected final ItemStack catalyst;
     protected final IDrawable icon;
     protected final IDrawable background;
+    protected final IDrawableAnimated positiveEnergy;
+    protected final IDrawableAnimated negativeEnergy;
+    protected final LoadingCache<Integer, IDrawableAnimated> cachedArrows;
+    protected final LoadingCache<Integer, IDrawableAnimated> cachedBackwardsArrows;
 
     public ProcessCategory(IGuiHelper guiHelper, SlimefunCategory slimefunCategory, ItemStack catalyst) {
         this(Type.PROCESS, guiHelper, slimefunCategory, catalyst);
@@ -42,6 +50,26 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
         this.catalyst = catalyst;
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, catalyst);
         this.background = guiHelper.drawableBuilder(TextureUtils.WIDGETS, 0, 0, 0, 0).addPadding(yPadding(), yPadding(), xPadding(), xPadding()).build();
+        this.positiveEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY.u() + TextureUtils.energyWidth, TextureUtils.ENERGY.v(), TextureUtils.energyWidth, TextureUtils.energyHeight).buildAnimated(20, IDrawableAnimated.StartDirection.TOP, false);
+        this.negativeEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY.u() + TextureUtils.energyWidth * 2, TextureUtils.ENERGY.v(), TextureUtils.energyWidth, TextureUtils.energyHeight).buildAnimated(20, IDrawableAnimated.StartDirection.BOTTOM, true);
+        this.cachedArrows = CacheBuilder.newBuilder()
+                .maximumSize(25)
+                .build(new CacheLoader<>() {
+                    @Override
+                    @NotNull
+                    public IDrawableAnimated load(@NotNull Integer sfTicks) {
+                        return guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ARROW.u(), TextureUtils.ARROW.v() + TextureUtils.arrowHeight, TextureUtils.arrowWidth, TextureUtils.arrowHeight).buildAnimated(sfTicks * 10, IDrawableAnimated.StartDirection.LEFT, false);
+                    }
+                });
+        this.cachedBackwardsArrows = CacheBuilder.newBuilder()
+                .maximumSize(25)
+                .build(new CacheLoader<>() {
+                    @Override
+                    @NotNull
+                    public IDrawableAnimated load(@NotNull Integer sfTicks) {
+                        return guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.BACKWARDS_ARROW.u(), TextureUtils.BACKWARDS_ARROW.v() + TextureUtils.arrowHeight, TextureUtils.arrowWidth, TextureUtils.arrowHeight).buildAnimated(sfTicks * 10, IDrawableAnimated.StartDirection.RIGHT, false);
+                    }
+                });
     }
     
     public int xPadding() {
@@ -78,8 +106,8 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
     
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SlimefunRecipe recipe, IFocusGroup focuses) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, recipe);
-    
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe));
+
         if (recipe.hasLabels()) {
             offsets.x().add((TextureUtils.labelSize + TextureUtils.padding) * recipe.labels().size());
         }
@@ -110,7 +138,7 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
     
     @Override
     public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, recipe);
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe));
 
         // Display Labels
         if (recipe.hasLabels()) {
@@ -143,17 +171,18 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
 
     protected void addEnergyWithCheck(MatrixStack stack, OffsetBuilder offsets, SlimefunRecipe recipe) {
         if (recipe.hasEnergy() && recipe.hasOutputs()) {
-            addEnergy(stack, offsets);
+            addEnergy(stack, offsets, recipe.energy() < 0);
         }
     }
 
-    protected void addEnergy(MatrixStack stack, OffsetBuilder offsets) {
-        addEnergy(stack, offsets.getX(), offsets.energy());
+    protected void addEnergy(MatrixStack stack, OffsetBuilder offsets, boolean negative) {
+        addEnergy(stack, offsets.getX(), offsets.energy(), negative);
         offsets.x().addEnergy();
     }
 
-    protected void addEnergy(MatrixStack stack, int x, int y) {
+    protected void addEnergy(MatrixStack stack, int x, int y, boolean negative) {
         TextureUtils.ENERGY.draw(stack, x, y);
+        (negative ? this.negativeEnergy : this.positiveEnergy).draw(stack, x, y);
     }
 
     protected void addArrow(MatrixStack stack, OffsetBuilder offsets, SlimefunRecipe recipe) {
@@ -162,10 +191,8 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
     }
 
     protected void addArrow(MatrixStack stack, SlimefunRecipe recipe, int x, int y, boolean backwards) {
-        if (recipe.hasTime() && false) {
-            final int sfTicks = Math.max(1, recipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
-            final int millis =  sfTicks * 500;
-            addFillingArrow(stack, x, y, backwards, 0, 0);
+        if (recipe.hasTime()) {
+            addFillingArrow(stack, x, y, backwards, getTime(recipe));
         } else {
             addArrow(stack, x, y, backwards);
         }
@@ -175,15 +202,16 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
         (backwards ? TextureUtils.BACKWARDS_ARROW : TextureUtils.ARROW).draw(stack, x, y);
     }
 
-    protected void addFillingArrow(MatrixStack stack, int x, int y, boolean backwards, int sfTicks, int millis) {
-        // TODO ANIMATED TEXTURES
+    protected void addFillingArrow(MatrixStack stack, int x, int y, boolean backwards, int sfTicks) {
+        addArrow(stack, x, y, backwards);
+        (backwards ? this.cachedBackwardsArrows.getUnchecked(sfTicks) : this.cachedArrows.getUnchecked(sfTicks)).draw(stack, x, y);
     }
 
     protected void addOutputsOrEnergy(MatrixStack stack, OffsetBuilder offsets, SlimefunRecipe recipe) {
         if (recipe.hasOutputs()) {
             addOutputs(stack, offsets, recipe);
         } else {
-            addEnergy(stack, offsets);
+            addEnergy(stack, offsets, recipe.energy() < 0);
         }
     }
 
@@ -191,6 +219,14 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
         for (SlimefunRecipeComponent ignored : recipe.outputs()) {
             TextureUtils.OUTPUT.draw(stack, offsets.getX(), offsets.output());
             offsets.x().addOutput();
+        }
+    }
+
+    protected int getTime(SlimefunRecipe slimefunRecipe) {
+        if (slimefunRecipe.hasTime()) {
+            return slimefunRecipe.sfTicks(this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1);
+        } else {
+            return 2;
         }
     }
 }

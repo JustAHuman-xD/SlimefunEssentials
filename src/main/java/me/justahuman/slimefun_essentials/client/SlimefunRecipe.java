@@ -109,6 +109,10 @@ public class SlimefunRecipe {
         return this.outputs != null && !this.outputs.isEmpty();
     }
 
+    public Integer sfTicks(int speed) {
+        return hasTime() ? Math.max(1, time() / 10 / speed) : null;
+    }
+
     public Integer time() {
         return this.time;
     }
