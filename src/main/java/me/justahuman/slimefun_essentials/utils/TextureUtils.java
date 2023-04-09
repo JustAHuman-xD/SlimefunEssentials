@@ -7,7 +7,6 @@ import net.minecraft.util.Identifier;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TextureUtils {
@@ -26,6 +25,8 @@ public class TextureUtils {
     public static final SlimefunLabel OUTPUT = new SlimefunLabel("output", WIDGETS, WIDGETS_DARK, 18, 230, outputSize, outputSize);
     public static final SlimefunLabel ARROW = new SlimefunLabel("arrow", WIDGETS, WIDGETS_DARK, 44, 222, arrowWidth, arrowHeight);
     public static final SlimefunLabel BACKWARDS_ARROW = new SlimefunLabel("backwards_arrow", WIDGETS, WIDGETS_DARK, 67, 222, arrowWidth, arrowHeight);
+    public static final SlimefunLabel PEDESTAL = new SlimefunLabel("pedestal", WIDGETS, WIDGETS_DARK, 0, 0, slotSize, slotSize);
+    public static final SlimefunLabel ALTAR = new SlimefunLabel("altar", WIDGETS, WIDGETS_DARK, 18, 0, slotSize, slotSize);
     public static final Map<SlimefunCategory, Integer> CACHED_WIDTH = new HashMap<>();
     public static final Map<SlimefunCategory, Integer> CACHED_HEIGHT = new HashMap<>();
     public static final NumberFormat numberFormat = NumberFormat.getInstance();
@@ -34,28 +35,50 @@ public class TextureUtils {
         numberFormat.setGroupingUsed(true);
     }
 
-    public static int getContentsWidth(SlimefunCategory slimefunCategory) {
+    public static int getSideSafe(String type) {
+        try {
+            return Integer.parseInt(type.substring(type.length() - 1));
+        } catch (NumberFormatException ignored) {
+            return 3;
+        }
+    }
+
+    public static int getGridWidth(SlimefunCategory slimefunCategory, int side) {
         return CACHED_WIDTH.computeIfAbsent(slimefunCategory, value -> {
             int width = 0;
             for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
-                width = Math.max(width, getContentsWidth(slimefunRecipe));
+                width = Math.max(width, getGridWidth(slimefunRecipe, side));
             }
             return width;
         });
     }
 
-    public static int getContentsWidth(SlimefunRecipe slimefunRecipe) {
-        return getContentsWidth(slimefunRecipe.labels(), slimefunRecipe.inputs(), slimefunRecipe.outputs(), slimefunRecipe.energy());
-    }
-    
-    public static int getContentsWidth(List<?> labels, List<?> inputs, List<?> outputs, Integer energy) {
-        return (labels != null ? (labelSize + padding) * labels.size() : 0) + (energy != null ? energyWidth + padding : 0) + ((slotSize + padding) * (inputs != null ? inputs.size(): 1)) + (arrowWidth + padding) + (outputs != null ? outputSize * outputs.size() + padding * (outputs.size() - 1) : 0);
+    public static int getGridWidth(SlimefunRecipe slimefunRecipe, int side) {
+        return (side * TextureUtils.slotSize + TextureUtils.padding) + (slimefunRecipe.hasEnergy() ? TextureUtils.energyWidth + TextureUtils.padding : 0) + (TextureUtils.arrowWidth + TextureUtils.padding) + (slimefunRecipe.hasOutputs()? TextureUtils.outputSize * slimefunRecipe.outputs().size() : 0);
     }
 
-    public static int getContentsHeight(SlimefunCategory slimefunCategory) {
+    public static int getGridHeight(int side) {
+        return side * slotSize;
+    }
+
+    public static int getProcessWidth(SlimefunCategory slimefunCategory) {
+        return CACHED_WIDTH.computeIfAbsent(slimefunCategory, value -> {
+            int width = 0;
+            for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
+                width = Math.max(width, getProcessWidth(slimefunRecipe));
+            }
+            return width;
+        });
+    }
+    
+    public static int getProcessWidth(SlimefunRecipe slimefunRecipe) {
+        return (slimefunRecipe.hasLabels() ? (labelSize + padding) * slimefunRecipe.labels().size() : 0) + (slimefunRecipe.hasEnergy() ? energyWidth + padding : 0) + ((slotSize + padding) * (slimefunRecipe.hasInputs() ? slimefunRecipe.inputs().size(): 1)) + (arrowWidth + padding) + (slimefunRecipe.hasOutputs() ? outputSize * slimefunRecipe.outputs().size() + padding * (slimefunRecipe.outputs().size() - 1) : 0);
+    }
+
+    public static int getProcessHeight(SlimefunCategory slimefunCategory) {
         return CACHED_HEIGHT.computeIfAbsent(slimefunCategory, value -> {
             for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
-                if (slimefunRecipe.outputs() != null && !slimefunRecipe.outputs().isEmpty()) {
+                if (slimefunRecipe.hasOutputs()) {
                     return outputSize;
                 }
             }
@@ -64,7 +87,52 @@ public class TextureUtils {
         });
     }
 
-    public static int getContentsHeight(SlimefunRecipe slimefunRecipe) {
-        return slimefunRecipe.outputs() != null && !slimefunRecipe.outputs().isEmpty() ? outputSize : slotSize;
+    public static int getProcessHeight(SlimefunRecipe slimefunRecipe) {
+        return slimefunRecipe.hasOutputs() ? outputSize : slotSize;
+    }
+
+    public static int getReactorWidth(SlimefunCategory slimefunCategory) {
+        return CACHED_WIDTH.computeIfAbsent(slimefunCategory, value -> {
+            int width = 0;
+            for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
+                width = Math.max(width, getReactorWidth(slimefunRecipe));
+            }
+            return width;
+        });
+    }
+
+    public static int getReactorWidth(SlimefunRecipe slimefunRecipe) {
+        return (TextureUtils.slotSize + TextureUtils.arrowWidth) * 2 + TextureUtils.padding * 4 + (slimefunRecipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth);
+    }
+
+    public static int getReactorHeight(SlimefunCategory slimefunCategory) {
+        return CACHED_HEIGHT.computeIfAbsent(slimefunCategory, value -> {
+            final int baseAmount = TextureUtils.slotSize * 2;
+            for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
+                if (slimefunRecipe.hasOutputs()) {
+                    return baseAmount + outputSize;
+                }
+            }
+
+            return baseAmount + slotSize;
+        });
+    }
+
+    public static int getReactorHeight(SlimefunRecipe slimefunRecipe) {
+        return TextureUtils.slotSize * 2 + (slimefunRecipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.slotSize);
+    }
+
+    public static int getSmelteryWidth(SlimefunCategory slimefunCategory) {
+        return CACHED_WIDTH.computeIfAbsent(slimefunCategory, value -> {
+            int width = 0;
+            for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
+                width = Math.max(width, getSmelteryWidth(slimefunRecipe));
+            }
+            return width;
+        });
+    }
+
+    public static int getSmelteryWidth(SlimefunRecipe slimefunRecipe) {
+        return (slimefunRecipe.hasEnergy() ? TextureUtils.energyWidth + TextureUtils.padding : 0) + (slimefunRecipe.hasInputs() ? TextureUtils.slotSize * 2 + TextureUtils.padding : TextureUtils.slotSize + TextureUtils.padding) + (TextureUtils.arrowWidth + TextureUtils.padding) + (slimefunRecipe.hasOutputs() ? TextureUtils.outputSize * slimefunRecipe.outputs().size() + TextureUtils.padding * (slimefunRecipe.outputs().size() - 1): 0);
     }
 }

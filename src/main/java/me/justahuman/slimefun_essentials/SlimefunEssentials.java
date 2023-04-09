@@ -93,6 +93,10 @@ public class SlimefunEssentials implements ClientModInitializer {
                 ResourceLoader.addPlacedBlock(blockPos, id.toLowerCase());
             }));
 
+            ClientPlayConnectionEvents.DISCONNECT.register((handler, minecraftClient) -> {
+                ResourceLoader.clearPlacedBlocks();
+            });
+
             ClientChunkEvents.CHUNK_LOAD.register(((world, chunk) -> {
                 final PacketByteBuf packetByteBuf = PacketByteBufs.create();
                 final ChunkPos chunkPos = chunk.getPos();

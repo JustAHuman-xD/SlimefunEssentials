@@ -1,7 +1,6 @@
 package me.justahuman.slimefun_essentials.mixins;
 
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
-import me.justahuman.slimefun_essentials.utils.Utils;
 import mod.omoflop.mbp.MBPData;
 import mod.omoflop.mbp.common.ContextIdentifiers;
 import net.minecraft.block.BlockState;
@@ -19,8 +18,18 @@ import java.util.Optional;
 public class MBPDataMixin {
     @Inject(at = @At("HEAD"), method = "meetsPredicate", cancellable = true)
     private static void isSlimefunBlock(BlockView world, BlockPos pos, BlockState state, Identifier renderContext, CallbackInfoReturnable<Optional<Identifier>> cir) {
-        if (!renderContext.equals(ContextIdentifiers.ITEM_HELD) && !renderContext.equals(ContextIdentifiers.ITEM) && ResourceLoader.getPlacedBlocks().containsKey(pos) && ResourceLoader.getSlimefunBlocks().contains(ResourceLoader.getPlacedBlocks().get(pos))) {
-            cir.setReturnValue(Optional.of(Utils.newIdentifier("block/" + ResourceLoader.getPlacedBlocks().get(pos))));
+        if (!renderContext.equals(ContextIdentifiers.ITEM_HELD) && !renderContext.equals(ContextIdentifiers.ITEM)) {
+            final String id = ResourceLoader.getPlacedBlocks().get(pos);
+            if (id == null) {
+                return;
+            }
+
+            final Identifier model = ResourceLoader.getSlimefunBlocks().get(id);
+            if (model == null) {
+                return;
+            }
+
+            cir.setReturnValue(Optional.of(model));
         }
     }
 }

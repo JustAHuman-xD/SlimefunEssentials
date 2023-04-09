@@ -6,7 +6,9 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.FillingArrowWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import me.justahuman.slimefun_essentials.api.OffsetBuilder;
 import me.justahuman.slimefun_essentials.api.RecipeRenderer;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunLabel;
@@ -14,6 +16,7 @@ import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.EmiIntegration;
 import me.justahuman.slimefun_essentials.compat.emi.EmiLabel;
 import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
+import me.justahuman.slimefun_essentials.compat.emi.ReverseFillingArrowWidget;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.util.Identifier;
@@ -22,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcessRecipe implements EmiRecipe, RecipeRenderer {
+public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
     protected final SlimefunCategory slimefunCategory;
     protected final SlimefunRecipe slimefunRecipe;
     protected final EmiRecipeCategory emiRecipeCategory;
@@ -30,6 +33,12 @@ public class ProcessRecipe implements EmiRecipe, RecipeRenderer {
     protected final List<EmiStack> outputs = new ArrayList<>();
 
     public ProcessRecipe(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory emiRecipeCategory) {
+        this(Type.PROCESS, slimefunCategory, slimefunRecipe, emiRecipeCategory);
+    }
+
+    public ProcessRecipe(Type type, SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory emiRecipeCategory) {
+        super(type);
+
         this.slimefunCategory = slimefunCategory;
         this.slimefunRecipe = slimefunRecipe;
         this.emiRecipeCategory = emiRecipeCategory;
@@ -59,23 +68,13 @@ public class ProcessRecipe implements EmiRecipe, RecipeRenderer {
     }
 
     @Override
-    public int getContentsWidth() {
-        return TextureUtils.getContentsWidth(this.slimefunRecipe);
-    }
-
-    @Override
-    public int getContentsHeight() {
-        return TextureUtils.getContentsHeight(this.slimefunRecipe);
-    }
-
-    @Override
     public int getDisplayWidth() {
-        return getContentsWidth() + TextureUtils.padding * 2;
+        return getDisplayWidth(this.slimefunRecipe);
     }
-    
+
     @Override
     public int getDisplayHeight() {
-        return getContentsHeight() + TextureUtils.padding * 2;
+        return getDisplayWidth(this.slimefunRecipe);
     }
     
     @Override
@@ -85,86 +84,89 @@ public class ProcessRecipe implements EmiRecipe, RecipeRenderer {
     
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final int labelOffset = calculateYOffset(TextureUtils.labelSize);
-        final int energyOffset =calculateYOffset(TextureUtils.energyHeight);
-        final int slotOffset = calculateYOffset(TextureUtils.slotSize);
-        final int arrowOffset = calculateYOffset(TextureUtils.arrowHeight);
-        final int outputSlot = calculateYOffset(TextureUtils.outputSize);
-        int offsetX = calculateXOffset();
+        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe);
 
         // Display Labels
-        if (hasLabels()) {
+        if (this.slimefunRecipe.hasLabels()) {
             for (SlimefunLabel slimefunLabel : this.slimefunRecipe.labels()) {
-                widgets.add(new EmiLabel(slimefunLabel, offsetX, labelOffset));
-                offsetX += TextureUtils.labelSize + TextureUtils.padding;
+                widgets.add(new EmiLabel(slimefunLabel, offsets.getX(), offsets.label()));
+                offsets.x().addLabel();
             }
         }
     
         // Display Energy
-        if (hasEnergy() && hasOutputs()) {
-            addEnergyDisplay(widgets, offsetX, energyOffset);
-            offsetX += TextureUtils.energyWidth + TextureUtils.padding;
-        }
+        addEnergyWithCheck(widgets, offsets);
     
         //Display Inputs
-        if (hasInputs()) {
+        if (this.slimefunRecipe.hasInputs()) {
             for (EmiIngredient input : this.inputs) {
-                widgets.addSlot(input, offsetX, slotOffset);
-                offsetX += TextureUtils.slotSize + TextureUtils.padding;
+                widgets.addSlot(input, offsets.getX(), offsets.slot());
+                offsets.x().addSlot();
             }
         } else {
-            widgets.addSlot((EmiIngredient) this.emiRecipeCategory.icon, offsetX, slotOffset);
-            offsetX += TextureUtils.slotSize + TextureUtils.padding;
+            widgets.addSlot((EmiIngredient) this.emiRecipeCategory.icon, offsets.getX(), offsets.slot());
+            offsets.x().addSlot();
         }
     
-        // Display Time
-        if (hasTime()) {
-            final int sfTicks = Math.max(1, this.slimefunRecipe.time() / 10 / (hasSpeed() ? this.slimefunCategory.speed() : 1));
-            final int millis =  sfTicks * 500;
-            widgets.addFillingArrow(offsetX, arrowOffset, millis).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", TextureUtils.numberFormat.format(sfTicks / 2f), TextureUtils.numberFormat.format(sfTicks * 10))))));
-        } else {
-            widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, arrowOffset);
-        }
-        offsetX += TextureUtils.arrowWidth + TextureUtils.padding;
+        // Display Arrow
+        addArrowWithCheck(widgets, offsets);
     
         // Display Outputs
-        if (hasOutputs()) {
-            for (EmiStack output : this.outputs) {
-                widgets.addSlot(output, offsetX, outputSlot).output(true);
-                offsetX += TextureUtils.outputSize + TextureUtils.padding;
-            }
-        } else if (hasEnergy()) {
-            addEnergyDisplay(widgets, offsetX, energyOffset);
+        addOutputsOrEnergy(widgets, offsets);
+    }
+
+    protected void addEnergyWithCheck(WidgetHolder widgets, OffsetBuilder offsets) {
+        if (this.slimefunRecipe.hasEnergy() && this.slimefunRecipe.hasOutputs()) {
+            addEnergy(widgets, offsets);
         }
     }
-    
-    protected void addEnergyDisplay(WidgetHolder widgets, int offsetX, int offsetYCharge) {
-        final int totalEnergy = this.slimefunRecipe.energy() * Math.max(1, this.slimefunRecipe.time() / 10 / (hasSpeed(this.slimefunCategory) ? this.slimefunCategory.speed() : 1));
-        widgets.addTexture(EmiUtils.EMPTY_CHARGE, offsetX, offsetYCharge);
-        widgets.addAnimatedTexture(totalEnergy >= 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, offsetX, offsetYCharge, 1000, false, totalEnergy < 0, totalEnergy < 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (totalEnergy >= 0 ? "generate" : "use"), TextureUtils.numberFormat.format(Math.abs(totalEnergy)))))));
+
+    protected void addEnergy(WidgetHolder widgets, OffsetBuilder offsets) {
+        addEnergy(widgets, offsets.getX(), offsets.energy());
+        offsets.x().addEnergy();
     }
 
-    protected boolean hasLabels() {
-        return hasLabels(this.slimefunRecipe);
+    protected void addEnergy(WidgetHolder widgets, int x, int y) {
+        final int totalEnergy = this.slimefunRecipe.energy() * Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
+        widgets.addTexture(EmiUtils.EMPTY_CHARGE, x, y);
+        widgets.addAnimatedTexture(totalEnergy >= 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, x, y, 1000, false, totalEnergy < 0, totalEnergy < 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (totalEnergy >= 0 ? "generate" : "use"), TextureUtils.numberFormat.format(Math.abs(totalEnergy)))))));
     }
 
-    protected boolean hasEnergy() {
-        return hasEnergy(this.slimefunRecipe);
+    protected void addArrowWithCheck(WidgetHolder widgets, OffsetBuilder offsets) {
+        addArrowWithCheck(widgets, offsets.getX(), offsets.arrow(), false);
+        offsets.x().addArrow();
     }
 
-    protected boolean hasInputs() {
-        return hasInputs(this.slimefunRecipe);
+    protected void addArrowWithCheck(WidgetHolder widgets, int x, int y, boolean backwards) {
+        if (this.slimefunRecipe.hasTime()) {
+            final int sfTicks = Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
+            final int millis =  sfTicks * 500;
+            addFillingArrow(widgets, x, y, backwards, sfTicks, millis);
+        } else {
+            addArrow(widgets, x, y, backwards);
+        }
     }
 
-    protected boolean hasTime() {
-        return hasTime(this.slimefunRecipe);
+    protected void addArrow(WidgetHolder widgets, int x, int y, boolean backwards) {
+        widgets.addTexture(backwards ? EmiUtils.BACKWARDS_EMPTY_ARROW : EmiTexture.EMPTY_ARROW, x, y);
     }
 
-    protected boolean hasSpeed() {
-        return hasSpeed(this.slimefunCategory);
+    protected void addFillingArrow(WidgetHolder widgets, int x, int y, boolean backwards, int sfTicks, int millis) {
+        widgets.add(backwards ? new ReverseFillingArrowWidget(x, y, millis) : new FillingArrowWidget(x, y, millis)).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", TextureUtils.numberFormat.format(sfTicks / 2f), TextureUtils.numberFormat.format(sfTicks * 10L))))));
     }
 
-    protected boolean hasOutputs() {
-        return hasOutputs(this.slimefunRecipe);
+    protected void addOutputsOrEnergy(WidgetHolder widgets, OffsetBuilder offsets) {
+        if (this.slimefunRecipe.hasOutputs()) {
+            addOutputs(widgets, offsets);
+        } else if (this.slimefunRecipe.hasEnergy()) {
+            addEnergy(widgets, offsets);
+        }
+    }
+
+    protected void addOutputs(WidgetHolder widgets, OffsetBuilder offsets) {
+        for (EmiStack output : this.outputs) {
+            widgets.addSlot(output, offsets.getX(), offsets.output()).output(true);
+            offsets.x().addOutput();
+        }
     }
 }

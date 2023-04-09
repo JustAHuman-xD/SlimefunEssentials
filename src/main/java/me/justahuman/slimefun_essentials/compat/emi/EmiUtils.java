@@ -15,7 +15,7 @@ public class EmiUtils {
     public static final EmiTexture BACKWARDS_EMPTY_ARROW = new EmiTexture(EmiRenderHelper.WIDGETS, 68, 0, 24, 17);
 
     public static void fillInputs(List<EmiIngredient> list, int size) {
-        if (list.size() == size) {
+        if (list.size() >= size) {
             return;
         }
 
@@ -25,7 +25,7 @@ public class EmiUtils {
     }
 
     public static void fillOutputs(List<EmiStack> list, int size) {
-        if (list.size() == size) {
+        if (list.size() >= size) {
             return;
         }
 

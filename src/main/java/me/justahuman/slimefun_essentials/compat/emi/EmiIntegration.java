@@ -14,6 +14,7 @@ import me.justahuman.slimefun_essentials.compat.emi.recipes.GridRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.ProcessRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.ReactorRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.SmelteryRecipe;
+import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.util.Identifier;
 
@@ -32,7 +33,6 @@ public class EmiIntegration implements EmiPlugin {
         
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
             final String workstationId = slimefunCategory.id();
-            final String type = slimefunCategory.type();
             final Identifier categoryIdentifier = Utils.newIdentifier(workstationId);
             final EmiStack workStation = RECIPE_INTERPRETER.emiStackFromId(workstationId + ":1");
             final SlimefunEmiCategory slimefunEmiCategory;
@@ -45,12 +45,13 @@ public class EmiIntegration implements EmiPlugin {
             }
             
             for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
-                emiRegistry.addRecipe(getEmiRecipe(slimefunCategory, slimefunRecipe, slimefunEmiCategory, type));
+                emiRegistry.addRecipe(getEmiRecipe(slimefunCategory, slimefunRecipe, slimefunEmiCategory));
             }
         }
     }
 
-    public static EmiRecipe getEmiRecipe(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory category, String type) {
+    public static EmiRecipe getEmiRecipe(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory category) {
+        final String type = slimefunCategory.type();
         if (type.equals("ancient_altar")) {
             return new AncientAltarRecipe(slimefunCategory, slimefunRecipe, category);
         } else if (type.equals("smeltery")) {
@@ -58,7 +59,7 @@ public class EmiIntegration implements EmiPlugin {
         } else if (type.equals("reactor")) {
             return new ReactorRecipe(slimefunCategory, slimefunRecipe, category);
         } else if (type.contains("grid")) {
-            return new GridRecipe(slimefunCategory, slimefunRecipe, category, type);
+            return new GridRecipe(slimefunCategory, slimefunRecipe, category, TextureUtils.getSideSafe(type));
         } else {
             return new ProcessRecipe(slimefunCategory, slimefunRecipe, category);
         }

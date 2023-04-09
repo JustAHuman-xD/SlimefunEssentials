@@ -24,8 +24,7 @@ public class ModConfig {
     static {
         defaultAddons.add("Slimefun");
     }
-    
-    private static boolean itemGroupsEnabled = true;
+
     private static boolean useCustomTextures = true;
     private static boolean autoToggleAddons = true;
     private static List<String> addons = new ArrayList<>();

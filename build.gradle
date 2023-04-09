@@ -49,6 +49,9 @@ dependencies {
     }
 
     modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:$rei_version")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-runtime-fabric:$rei_version") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:$rei_version")
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:$rei_version")
 

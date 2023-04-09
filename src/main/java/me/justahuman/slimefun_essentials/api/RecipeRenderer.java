@@ -4,47 +4,169 @@ import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 
-public interface RecipeRenderer {
-    int getContentsWidth();
-    int getContentsHeight();
+public abstract class RecipeRenderer {
+    private final Type type;
 
-    default int getDisplayWidth() {
-        return getContentsWidth() + TextureUtils.padding * 2;
+    protected RecipeRenderer(Type type) {
+        this.type = type;
     }
 
-    default int getDisplayHeight() {
-        return getContentsHeight() + TextureUtils.padding * 2;
+    public int getContentsWidth(SlimefunCategory slimefunCategory) {
+        return this.type.getContentsWidth(slimefunCategory);
     }
 
-    default int calculateXOffset() {
-        return (getDisplayWidth() - getContentsWidth()) / 2;
+    public int getContentsWidth(SlimefunRecipe slimefunRecipe) {
+        return this.type.getContentsWidth(slimefunRecipe);
     }
 
-    default int calculateYOffset(int height) {
-        return (getDisplayHeight() - height) / 2;
+    public int getContentsHeight(SlimefunCategory slimefunCategory) {
+        return this.type.getContentsHeight(slimefunCategory);
     }
 
-    default boolean hasLabels(SlimefunRecipe slimefunRecipe) {
-        return slimefunRecipe.labels() != null && !slimefunRecipe.labels().isEmpty();
+    public int getContentsHeight(SlimefunRecipe slimefunRecipe) {
+        return this.type.getContentsHeight(slimefunRecipe);
     }
 
-    default boolean hasEnergy(SlimefunRecipe slimefunRecipe) {
-        return slimefunRecipe.energy() != null && slimefunRecipe.energy() != 0;
+    public int getDisplayWidth(SlimefunCategory slimefunCategory) {
+        return getContentsWidth(slimefunCategory) + TextureUtils.padding * 2;
     }
 
-    default boolean hasInputs(SlimefunRecipe slimefunRecipe) {
-        return slimefunRecipe.inputs() != null && !slimefunRecipe.inputs().isEmpty();
+    public int getDisplayWidth(SlimefunRecipe slimefunRecipe) {
+        return getContentsWidth(slimefunRecipe) + TextureUtils.padding * 2;
     }
 
-    default boolean hasTime(SlimefunRecipe slimefunRecipe) {
-        return slimefunRecipe.time() != null;
+    public int getDisplayHeight(SlimefunCategory slimefunCategory) {
+        return getContentsHeight(slimefunCategory) + TextureUtils.padding * 2;
     }
 
-    default boolean hasSpeed(SlimefunCategory slimefunCategory) {
-        return slimefunCategory.speed() != null;
+    public int getDisplayHeight(SlimefunRecipe slimefunRecipe) {
+        return getContentsHeight(slimefunRecipe) + TextureUtils.padding * 2;
     }
 
-    default boolean hasOutputs(SlimefunRecipe slimefunRecipe) {
-        return slimefunRecipe.outputs() != null && !slimefunRecipe.outputs().isEmpty();
+    protected int calculateXOffset(SlimefunRecipe slimefunRecipe) {
+        return (getDisplayWidth(slimefunRecipe) - getContentsWidth(slimefunRecipe)) / 2;
+    }
+
+    protected int calculateYOffset(SlimefunRecipe slimefunRecipe, int height) {
+        return (getDisplayHeight(slimefunRecipe) - height) / 2;
+    }
+
+    public abstract static class Type {
+        public static final Type ANCIENT_ALTAR = new Type() {
+            @Override
+            public int getContentsWidth(SlimefunCategory slimefunCategory) {
+                return 138;
+            }
+
+            @Override
+            public int getContentsWidth(SlimefunRecipe slimefunRecipe) {
+                return 138;
+            }
+
+            @Override
+            public int getContentsHeight(SlimefunCategory slimefunCategory) {
+                return 80;
+            }
+
+            @Override
+            public int getContentsHeight(SlimefunRecipe slimefunRecipe) {
+                return 80;
+            }
+        };
+
+        public static final Type PROCESS = new Type() {
+            @Override
+            public int getContentsWidth(SlimefunCategory slimefunCategory) {
+                return TextureUtils.getProcessWidth(slimefunCategory);
+            }
+
+            @Override
+            public int getContentsWidth(SlimefunRecipe slimefunRecipe) {
+                return TextureUtils.getProcessWidth(slimefunRecipe);
+            }
+
+            @Override
+            public int getContentsHeight(SlimefunCategory slimefunCategory) {
+                return TextureUtils.getProcessHeight(slimefunCategory);
+            }
+
+            @Override
+            public int getContentsHeight(SlimefunRecipe slimefunRecipe) {
+                return TextureUtils.getProcessHeight(slimefunRecipe);
+            }
+        };
+
+        public static final Type REACTOR = new Type() {
+            @Override
+            public int getContentsWidth(SlimefunCategory slimefunCategory) {
+                return TextureUtils.getReactorWidth(slimefunCategory);
+            }
+
+            @Override
+            public int getContentsWidth(SlimefunRecipe slimefunRecipe) {
+                return TextureUtils.getReactorWidth(slimefunRecipe);
+            }
+
+            @Override
+            public int getContentsHeight(SlimefunCategory slimefunCategory) {
+                return TextureUtils.getReactorHeight(slimefunCategory);
+            }
+
+            @Override
+            public int getContentsHeight(SlimefunRecipe slimefunRecipe) {
+                return TextureUtils.getReactorHeight(slimefunRecipe);
+            }
+        };
+
+        public static final Type SMELTERY = new Type() {
+            @Override
+            public int getContentsWidth(SlimefunCategory slimefunCategory) {
+                return TextureUtils.getSmelteryWidth(slimefunCategory);
+            }
+
+            @Override
+            public int getContentsWidth(SlimefunRecipe slimefunRecipe) {
+                return TextureUtils.getSmelteryWidth(slimefunRecipe);
+            }
+
+            @Override
+            public int getContentsHeight(SlimefunCategory slimefunCategory) {
+                return TextureUtils.slotSize * 3;
+            }
+
+            @Override
+            public int getContentsHeight(SlimefunRecipe slimefunRecipe) {
+                return TextureUtils.slotSize * 3;
+            }
+        };
+
+        public static Type GRID(int side) {
+            return new Type() {
+                @Override
+                public int getContentsWidth(SlimefunCategory slimefunCategory) {
+                    return TextureUtils.getGridWidth(slimefunCategory, side);
+                }
+
+                @Override
+                public int getContentsWidth(SlimefunRecipe slimefunRecipe) {
+                    return TextureUtils.getGridWidth(slimefunRecipe, side);
+                }
+
+                @Override
+                public int getContentsHeight(SlimefunCategory slimefunCategory) {
+                    return TextureUtils.getGridHeight(side);
+                }
+
+                @Override
+                public int getContentsHeight(SlimefunRecipe slimefunRecipe) {
+                    return TextureUtils.getGridHeight(side);
+                }
+            };
+        }
+
+        public abstract int getContentsWidth(SlimefunCategory slimefunCategory);
+        public abstract int getContentsWidth(SlimefunRecipe slimefunRecipe);
+        public abstract int getContentsHeight(SlimefunCategory slimefunCategory);
+        public abstract int getContentsHeight(SlimefunRecipe slimefunRecipe);
     }
 }
