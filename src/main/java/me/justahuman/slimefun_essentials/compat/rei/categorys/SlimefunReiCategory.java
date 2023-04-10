@@ -4,6 +4,7 @@ import me.justahuman.slimefun_essentials.api.OffsetBuilder;
 import me.justahuman.slimefun_essentials.api.RecipeRenderer;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.compat.rei.displays.SlimefunDisplay;
+import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -48,12 +49,12 @@ public class SlimefunReiCategory<T extends SlimefunDisplay> extends RecipeRender
 
     @Override
     public int getDisplayHeight() {
-        return getDisplayHeight(this.slimefunCategory);
+        return getDisplayHeight(this.slimefunCategory) + TextureUtils.padding;
     }
 
     @Override
     public int getDisplayWidth(T display) {
-        return getDisplayWidth(display.slimefunRecipe());
+        return getDisplayWidth(display.slimefunRecipe()) + TextureUtils.padding;
     }
 
     @Override
