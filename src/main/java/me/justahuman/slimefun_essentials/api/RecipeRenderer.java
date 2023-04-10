@@ -63,22 +63,22 @@ public abstract class RecipeRenderer {
         public static final Type ANCIENT_ALTAR = new Type() {
             @Override
             public int getContentsWidth(SlimefunCategory slimefunCategory) {
-                return 138;
+                return 140;
             }
 
             @Override
             public int getContentsWidth(SlimefunRecipe slimefunRecipe) {
-                return 138;
+                return 140;
             }
 
             @Override
             public int getContentsHeight(SlimefunCategory slimefunCategory) {
-                return 80;
+                return 90;
             }
 
             @Override
             public int getContentsHeight(SlimefunRecipe slimefunRecipe) {
-                return 80;
+                return 90;
             }
         };
 
