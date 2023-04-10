@@ -13,8 +13,8 @@ import java.io.File;
 
 public class Utils {
     public static final String ID = "slimefun_essentials";
-    public static final Identifier ADDON_CHANNEL = new Identifier("recipe_exporter", "addon");
-    public static final Identifier BLOCK_CHANNEL = new Identifier("recipe_exporter", "block");
+    public static final Identifier ADDON_CHANNEL = new Identifier("slimefun_server_essentials", "addon");
+    public static final Identifier BLOCK_CHANNEL = new Identifier("slimefun_server_essentials", "block");
     private static final Logger logger = LoggerFactory.getLogger(ID);
     private static final String errorMessage = "[SFE] Failed to load data";
     
