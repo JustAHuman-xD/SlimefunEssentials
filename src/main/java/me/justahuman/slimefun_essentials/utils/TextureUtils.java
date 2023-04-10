@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class TextureUtils {
     public static final int padding = 4;
+    public static final int reiPadding = 6;
     public static final int slotSize = 18;
     public static final int outputSize = 26;
     public static final int arrowHeight = 17;

@@ -40,7 +40,7 @@ public class ReactorRecipe extends ProcessRecipe {
         
         addArrowWithCheck(widgets, offsets.getX(), offsets.getY(), true);
         offsets.x().addArrow();
-        offsets.y().set(TextureUtils.padding);
+        offsets.y().subtract(TextureUtils.slotSize * 2);
         widgets.addSlot(inputs.get(1), offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
         widgets.addSlot(inputs.get(2), offsets.getX(), offsets.getY());

@@ -49,16 +49,18 @@ public class SlimefunReiCategory<T extends SlimefunDisplay> extends RecipeRender
 
     @Override
     public int getDisplayHeight() {
-        return getDisplayHeight(this.slimefunCategory) + TextureUtils.padding;
+        return getDisplayHeight(this.slimefunCategory) + TextureUtils.reiPadding;
     }
 
     @Override
     public int getDisplayWidth(T display) {
-        return getDisplayWidth(display.slimefunRecipe()) + TextureUtils.padding;
+        return getDisplayWidth(display.slimefunRecipe()) + TextureUtils.reiPadding;
     }
 
     @Override
     public List<Widget> setupDisplay(T display, Rectangle bounds) {
-        return display.setupDisplay(new OffsetBuilder(display, display.slimefunRecipe(), bounds.getMinX() + calculateXOffset(display.slimefunRecipe()), calculateYOffset(this.slimefunCategory, display.slimefunRecipe()), bounds.getMinY()), new ArrayList<>(List.of(Widgets.createCategoryBase(bounds))), bounds, this.icon);
+        final int x = bounds.getMinX() + ((getDisplayWidth(display) - getContentsWidth(display.slimefunRecipe())) / 2);
+        final int y = bounds.getMinY() + ((getDisplayHeight() - getDisplayHeight(display.slimefunRecipe())) / 2);
+        return display.setupDisplay(new OffsetBuilder(display, display.slimefunRecipe(), x, y, y), new ArrayList<>(List.of(Widgets.createCategoryBase(bounds))), bounds, this.icon);
     }
 }

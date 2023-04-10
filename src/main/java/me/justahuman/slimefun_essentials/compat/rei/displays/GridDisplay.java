@@ -3,6 +3,7 @@ package me.justahuman.slimefun_essentials.compat.rei.displays;
 import me.justahuman.slimefun_essentials.api.OffsetBuilder;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
+import me.justahuman.slimefun_essentials.compat.rei.ReiUtils;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -13,9 +14,10 @@ import java.util.List;
 public class GridDisplay extends ProcessDisplay {
     protected final int side;
     public GridDisplay(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, int side) {
-        super(Type.GRID(3), slimefunCategory, slimefunRecipe);
+        super(Type.GRID(side), slimefunCategory, slimefunRecipe);
 
         this.side = side;
+        ReiUtils.fillEntrys(this.inputs, side * side);
     }
 
     @Override

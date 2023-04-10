@@ -41,7 +41,7 @@ public class ReactorCategory extends ProcessCategory {
         }
 
         offsets.x().addArrow();
-        offsets.y().set(TextureUtils.padding);
+        offsets.y().subtract(TextureUtils.slotSize * 2);
 
         JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.getY() + 1), recipe.inputs().get(1));
         offsets.y().addSlot(false);
@@ -76,7 +76,7 @@ public class ReactorCategory extends ProcessCategory {
 
         addFillingArrow(stack, offsets.getX(), offsets.getY(), true, getTime(recipe));
         offsets.x().addArrow();
-        offsets.y().set(TextureUtils.padding);
+        offsets.y().subtract(TextureUtils.slotSize * 2);
         TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
         TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());

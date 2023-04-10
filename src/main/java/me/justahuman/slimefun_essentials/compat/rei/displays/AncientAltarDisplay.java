@@ -4,6 +4,7 @@ import me.justahuman.slimefun_essentials.api.OffsetBuilder;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.compat.rei.ReiIntegration;
+import me.justahuman.slimefun_essentials.compat.rei.ReiUtils;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -14,12 +15,15 @@ import java.util.List;
 public class AncientAltarDisplay extends ProcessDisplay {
     public AncientAltarDisplay(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
         super(Type.ANCIENT_ALTAR, slimefunCategory, slimefunRecipe);
+
+        ReiUtils.fillEntrys(this.inputs, 9);
+        ReiUtils.fillEntrys(this.outputs, 1);
     }
 
     @Override
     public List<Widget> setupDisplay(OffsetBuilder offsets, List<Widget> widgets, Rectangle bounds, ItemStack icon) {
         addSlot(widgets, this.inputs.get(3), offsets.getX() + 1, offsets.slot() + 1, false);
-        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX() + 1, offsets.slot() + 1));
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot()));
         offsets.x().addSlot(false);
         addSlot(widgets, this.inputs.get(0), offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize));
