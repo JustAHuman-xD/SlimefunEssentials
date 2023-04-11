@@ -34,8 +34,8 @@ public class ReactorDisplay extends ProcessDisplay {
         offsets.x().addArrow();
 
         if (this.slimefunRecipe.hasOutputs()) {
-            widgets.add(Widgets.createSlot(new Point(offsets.getX() + 5, offsets.getY() + 5)).entries(this.outputs.get(0)).disableBackground().markOutput());
             widgets.add(Widgets.createResultSlotBackground(new Point(offsets.getX() + 5, offsets.getY() + 5)));
+            widgets.add(Widgets.createSlot(new Point(offsets.getX() + 5, offsets.getY() + 5)).entries(this.outputs.get(0)).disableBackground().markOutput());
         }
 
         if (this.slimefunRecipe.hasEnergy()) {

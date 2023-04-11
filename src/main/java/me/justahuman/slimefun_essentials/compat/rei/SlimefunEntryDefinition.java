@@ -116,7 +116,7 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
         }
         
         final boolean initial = ItemComparatorRegistry.getInstance().hashOf(context, o1.itemStack()) == ItemComparatorRegistry.getInstance().hashOf(context, o2.itemStack());
-        return context.isExact() ? initial : initial && Utils.equalSlimefunIds(o1.itemStack(), o2.itemStack());
+        return context.isExact() ? initial && Utils.equalSlimefunIds(o1.itemStack(), o2.itemStack()) : Utils.equalSlimefunIds(o1.itemStack(), o2.itemStack());
     }
     
     @Override
@@ -161,48 +161,48 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
 
         @Override
         public BakedModel getExtraData(EntryStack<SlimefunItemStack> entry) {
-            return itemStackEntryRenderer.getExtraData(EntryStacks.of(entry.getValue().itemStack()));
+            return itemStackEntryRenderer.getExtraData(ReiIntegration.unwrap(entry));
         }
 
         @Override
         public void render(EntryStack<SlimefunItemStack> entry, MatrixStack matrices, Rectangle bounds, int mouseX, int mouseY, float delta) {
-            itemStackEntryRenderer.render(EntryStacks.of(entry.getValue().itemStack()), matrices, bounds, mouseX, mouseY, delta);
+            itemStackEntryRenderer.render(ReiIntegration.unwrap(entry), matrices, bounds, mouseX, mouseY, delta);
         }
 
         @Override
         public int getBatchIdentifier(EntryStack<SlimefunItemStack> entry, Rectangle bounds, BakedModel model) {
-            return itemStackEntryRenderer.getBatchIdentifier(EntryStacks.of(entry.getValue().itemStack()), bounds, model);
+            return itemStackEntryRenderer.getBatchIdentifier(ReiIntegration.unwrap(entry), bounds, model);
         }
 
         @Override
         public void startBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
-            itemStackEntryRenderer.startBatch(EntryStacks.of(entry.getValue().itemStack()), model, matrices, delta);
+            itemStackEntryRenderer.startBatch(ReiIntegration.unwrap(entry), model, matrices, delta);
         }
 
         @Override
         public void renderBase(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, VertexConsumerProvider.Immediate immediate, Rectangle bounds, int mouseX, int mouseY, float delta) {
-            itemStackEntryRenderer.renderBase(EntryStacks.of(entry.getValue().itemStack()), model, matrices, immediate, bounds, mouseX, mouseY, delta);
+            itemStackEntryRenderer.renderBase(ReiIntegration.unwrap(entry), model, matrices, immediate, bounds, mouseX, mouseY, delta);
         }
 
         @Override
         public void afterBase(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
-            itemStackEntryRenderer.afterBase(EntryStacks.of(entry.getValue().itemStack()), model, matrices, delta);
+            itemStackEntryRenderer.afterBase(ReiIntegration.unwrap(entry), model, matrices, delta);
         }
 
         @Override
         public void renderOverlay(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, VertexConsumerProvider.Immediate immediate, Rectangle bounds, int mouseX, int mouseY, float delta) {
-            itemStackEntryRenderer.renderOverlay(EntryStacks.of(entry.getValue().itemStack()), model, matrices, immediate, bounds, mouseX, mouseY, delta);
+            itemStackEntryRenderer.renderOverlay(ReiIntegration.unwrap(entry), model, matrices, immediate, bounds, mouseX, mouseY, delta);
         }
 
         @Override
         public void endBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
-            itemStackEntryRenderer.endBatch(EntryStacks.of(entry.getValue().itemStack()), model, matrices, delta);
+            itemStackEntryRenderer.endBatch(ReiIntegration.unwrap(entry), model, matrices, delta);
         }
 
         @Override
         @Nullable
         public Tooltip getTooltip(EntryStack<SlimefunItemStack> entry, TooltipContext context) {
-            return itemStackEntryRenderer.getTooltip(EntryStacks.of(entry.getValue().itemStack()), context);
+            return itemStackEntryRenderer.getTooltip(ReiIntegration.unwrap(entry), context);
         }
     }
 }

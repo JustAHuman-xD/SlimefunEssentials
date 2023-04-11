@@ -105,4 +105,10 @@ public class ReiIntegration implements REIClientPlugin {
     public static Widget widgetFromSlimefunLabel(SlimefunLabel slimefunLabel, int x, int y) {
         return Widgets.createDrawableWidget((helper, stack, mouseX, mouseY, delta) -> slimefunLabel.draw(stack, x, y, REIRuntime.getInstance().isDarkThemeEnabled()));
     }
+
+    public static EntryStack<ItemStack> unwrap(EntryStack<SlimefunItemStack> entryStack) {
+        EntryStack<ItemStack> from = EntryStacks.of(entryStack.getValue().itemStack());
+        from.setZ(entryStack.getZ());
+        return from;
+    }
 }

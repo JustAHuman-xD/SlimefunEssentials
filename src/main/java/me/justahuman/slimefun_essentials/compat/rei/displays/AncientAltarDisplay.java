@@ -22,28 +22,28 @@ public class AncientAltarDisplay extends ProcessDisplay {
 
     @Override
     public List<Widget> setupDisplay(OffsetBuilder offsets, List<Widget> widgets, Rectangle bounds, ItemStack icon) {
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot()));
         addSlot(widgets, this.inputs.get(3), offsets.getX() + 1, offsets.slot() + 1, false);
-        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot()));
         offsets.x().addSlot(false);
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize));
         addSlot(widgets, this.inputs.get(0), offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize, false);
-        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize));
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() - TextureUtils.slotSize));
         addSlot(widgets, this.inputs.get(6), offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.slotSize, false);
-        widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() - TextureUtils.slotSize));
         offsets.x().addSlot(false);
-        addSlot(widgets, this.inputs.get(1), offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize * 2, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize * 2));
-        addSlot(widgets, this.inputs.get(4), offsets.getX() + 1, offsets.slot() + 1);
+        addSlot(widgets, this.inputs.get(1), offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize * 2, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.ALTAR, offsets.getX(), offsets.slot()));
-        addSlot(widgets, this.inputs.get(7), offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.slotSize * 2, false);
+        addSlot(widgets, this.inputs.get(4), offsets.getX() + 1, offsets.slot() + 1, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() - TextureUtils.slotSize * 2));
+        addSlot(widgets, this.inputs.get(7), offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.slotSize * 2, false);
         offsets.x().addSlot(false);
-        addSlot(widgets, this.inputs.get(2), offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() + TextureUtils.slotSize));
-        addSlot(widgets, this.inputs.get(8), offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.slotSize, false);
+        addSlot(widgets, this.inputs.get(2), offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot() - TextureUtils.slotSize));
+        addSlot(widgets, this.inputs.get(8), offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.slotSize, false);
         offsets.x().addSlot(false);
-        addSlot(widgets, this.inputs.get(5), offsets.getX() + 1, offsets.slot() + 1, false);
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.PEDESTAL, offsets.getX(), offsets.slot()));
+        addSlot(widgets, this.inputs.get(5), offsets.getX() + 1, offsets.slot() + 1, false);
         offsets.x().addSlot();
         addArrow(widgets, offsets);
         addSlot(widgets, offsets, this.outputs.get(0));

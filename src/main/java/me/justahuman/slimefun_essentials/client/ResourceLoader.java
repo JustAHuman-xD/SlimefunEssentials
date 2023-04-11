@@ -12,6 +12,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,14 +22,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ResourceLoader {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
     private static final Map<String, Identifier> slimefunBlocks = new HashMap<>();
+    private static final Map<ChunkPos, Set<BlockPos>> placedChunks = new HashMap<>();
     private static final Map<BlockPos, String> placedBlocks = new HashMap<>();
 
     /**
@@ -40,10 +44,11 @@ public class ResourceLoader {
     }
 
     /**
-     * Clears {@link ResourceLoader#placedBlocks}
+     * Clears {@link ResourceLoader#placedBlocks} & {@link ResourceLoader#placedChunks}
      */
     public static void clearPlacedBlocks() {
         placedBlocks.clear();
+        placedChunks.clear();
     }
 
     /**
@@ -181,7 +186,22 @@ public class ResourceLoader {
      * @param id The {@link String} id that represents a Slimefun Item
      */
     public static void addPlacedBlock(BlockPos blockPos, String id) {
+        final ChunkPos chunkPos = new ChunkPos(blockPos);
+        final Set<BlockPos> blocks = placedChunks.getOrDefault(chunkPos, new HashSet<>());
+
+        blocks.add(blockPos);
+        placedChunks.put(chunkPos, blocks);
         placedBlocks.put(blockPos, id);
+    }
+
+    /**
+     * Removes all the cached {@link BlockPos} for a given {@link ChunkPos}
+     *
+     * @param chunkPos The {@link ChunkPos} to remove
+     */
+    public static void removePlacedChunk(ChunkPos chunkPos) {
+        placedChunks.getOrDefault(chunkPos, new HashSet<>()).forEach(placedBlocks::remove);
+        placedChunks.remove(chunkPos);
     }
 
     /**
