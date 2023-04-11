@@ -102,7 +102,7 @@ public class Utils {
 
         final NbtCompound b1 = n1.getCompound("PublicBukkitValues");
         final NbtCompound b2 = n2.getCompound("PublicBukkitValues");
-        if (!b1.contains("slimefun:slimefun_item") || b2.contains("slimefun:slimefun_item")) {
+        if (!b1.contains("slimefun:slimefun_item") || !b2.contains("slimefun:slimefun_item")) {
             return false;
         }
 

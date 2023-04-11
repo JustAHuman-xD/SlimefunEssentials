@@ -116,7 +116,7 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
         }
         
         final boolean initial = ItemComparatorRegistry.getInstance().hashOf(context, o1.itemStack()) == ItemComparatorRegistry.getInstance().hashOf(context, o2.itemStack());
-        return context.isExact() ? initial && Utils.equalSlimefunIds(o1.itemStack(), o2.itemStack()) : Utils.equalSlimefunIds(o1.itemStack(), o2.itemStack());
+        return context.isExact() ? initial : initial && Utils.equalSlimefunIds(o1.itemStack(), o2.itemStack());
     }
     
     @Override
