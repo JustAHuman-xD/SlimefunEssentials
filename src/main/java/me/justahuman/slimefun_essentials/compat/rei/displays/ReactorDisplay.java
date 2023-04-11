@@ -23,6 +23,8 @@ public class ReactorDisplay extends ProcessDisplay {
 
     @Override
     public List<Widget> setupDisplay(OffsetBuilder offsets, List<Widget> widgets, Rectangle bounds, ItemStack icon) {
+        offsets.setY(calculateYOffset(slimefunRecipe, TextureUtils.slotSize * 3) + offsets.minY());
+
         addSlot(widgets, this.inputs.get(0), offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
         addSlot(widgets, EntryIngredient.empty(), offsets.getX(), offsets.getY());

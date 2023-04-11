@@ -21,6 +21,8 @@ public class SmelteryDisplay extends ProcessDisplay {
 
     @Override
     public List<Widget> setupDisplay(OffsetBuilder offsets, List<Widget> widgets, Rectangle bounds, ItemStack icon) {
+        offsets.setY(calculateYOffset(slimefunRecipe, TextureUtils.slotSize * 3) + offsets.minY());
+
         // Display Energy
         addEnergyWithCheck(widgets, offsets);
 

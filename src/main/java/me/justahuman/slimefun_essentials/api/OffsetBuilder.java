@@ -9,6 +9,7 @@ public class OffsetBuilder {
     protected final int slotOffset;
     protected final int arrowOffset;
     protected final int outputOffset;
+    protected final int minY;
     protected Offset xOffset;
     protected Offset yOffset;
 
@@ -30,6 +31,7 @@ public class OffsetBuilder {
         this.slotOffset = recipeRenderer.calculateYOffset(slimefunRecipe, TextureUtils.slotSize) + minY;
         this.arrowOffset = recipeRenderer.calculateYOffset(slimefunRecipe, TextureUtils.arrowHeight) + minY;
         this.outputOffset = recipeRenderer.calculateYOffset(slimefunRecipe, TextureUtils.outputSize) + minY;
+        this.minY = minY;
         this.xOffset = new Offset(x);
         this.yOffset = new Offset(y);
     }
@@ -58,6 +60,10 @@ public class OffsetBuilder {
 
     public int getY() {
         return this.yOffset.get();
+    }
+
+    public int minY() {
+        return this.minY;
     }
 
     public int label() {
