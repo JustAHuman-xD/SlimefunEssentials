@@ -106,6 +106,47 @@ public class ReiIntegration implements REIClientPlugin {
         return Widgets.createDrawableWidget((helper, stack, mouseX, mouseY, delta) -> slimefunLabel.draw(stack, x, y, REIRuntime.getInstance().isDarkThemeEnabled()));
     }
 
+    /**
+     * I would like to note that a lot of the logic for this method came from EMI: AnimatedTextureWidget.java
+     */
+    public static Widget widgetFromSlimefunLabel(SlimefunLabel slimefunLabel, int x, int y, int time, boolean horizontal, boolean endToStart, boolean fullToEmpty) {
+        return Widgets.createDrawableWidget((helper, stack, mouseX, mouseY, delta) -> {
+            int subTime = (int) (System.currentTimeMillis() % time);
+            if (endToStart ^ fullToEmpty) {
+                subTime = time - subTime;
+            }
+
+            int mx = x, my = y;
+            int w = slimefunLabel.width(), mw = slimefunLabel.width(), h = slimefunLabel.height(), mh = slimefunLabel.height();
+            int u = slimefunLabel.u(), mu = slimefunLabel.u(), v = slimefunLabel.v(), mv = slimefunLabel.v();
+            int rw = slimefunLabel.width(), mrw = slimefunLabel.width(), rh = slimefunLabel.height(), mrh = slimefunLabel.height();
+
+            if (horizontal) {
+                if (endToStart) {
+                    mx = x + w * subTime / time;
+                    mu = u + rw * subTime / time;
+                    mw = w - (mx - x);
+                    mrw = rw - (mu - u);
+                } else {
+                    mw = w * subTime / time;
+                    mrw = rw * subTime / time;
+                }
+            } else {
+                if (endToStart) {
+                    my = y + h * subTime / time;
+                    mv = v + rh * subTime / time;
+                    mh = h - (my - y);
+                    mrh = rh - (mv - v);
+                } else {
+                    mh = h * subTime / time;
+                    mrh = rh * subTime / time;
+                }
+            }
+
+            slimefunLabel.draw(stack, mx, my, mw, mh, mu, mv, mrw, mrh, REIRuntime.getInstance().isDarkThemeEnabled());
+        });
+    }
+
     public static EntryStack<ItemStack> unwrap(EntryStack<SlimefunItemStack> entryStack) {
         EntryStack<ItemStack> from = EntryStacks.of(entryStack.getValue().itemStack());
         from.setZ(entryStack.getZ());

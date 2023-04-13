@@ -50,8 +50,8 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
         this.catalyst = catalyst;
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, catalyst);
         this.background = guiHelper.drawableBuilder(TextureUtils.WIDGETS, 0, 0, 0, 0).addPadding(yPadding(), yPadding(), xPadding(), xPadding()).build();
-        this.positiveEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY.u() + TextureUtils.energyWidth, TextureUtils.ENERGY.v(), TextureUtils.energyWidth, TextureUtils.energyHeight).buildAnimated(20, IDrawableAnimated.StartDirection.TOP, false);
-        this.negativeEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY.u() + TextureUtils.energyWidth * 2, TextureUtils.ENERGY.v(), TextureUtils.energyWidth, TextureUtils.energyHeight).buildAnimated(20, IDrawableAnimated.StartDirection.BOTTOM, true);
+        this.positiveEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY_POSITIVE.u(), TextureUtils.ENERGY.v(), TextureUtils.energyWidth, TextureUtils.energyHeight).buildAnimated(20, IDrawableAnimated.StartDirection.TOP, false);
+        this.negativeEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY_NEGATIVE.u(), TextureUtils.ENERGY.v(), TextureUtils.energyWidth, TextureUtils.energyHeight).buildAnimated(20, IDrawableAnimated.StartDirection.BOTTOM, true);
         this.cachedArrows = CacheBuilder.newBuilder()
                 .maximumSize(25)
                 .build(new CacheLoader<>() {

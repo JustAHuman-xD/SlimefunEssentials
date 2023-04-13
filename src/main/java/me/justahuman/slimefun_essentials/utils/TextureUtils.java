@@ -22,10 +22,14 @@ public class TextureUtils {
     public static final Identifier WIDGETS = new Identifier(Utils.ID, "textures/gui/widgets.png");
     public static final Identifier WIDGETS_DARK = new Identifier(Utils.ID, "textures/gui/widgets_dark.png");
     public static final SlimefunLabel ENERGY = new SlimefunLabel("energy", WIDGETS, WIDGETS_DARK, 36, 0, energyWidth, energyHeight);
+    public static final SlimefunLabel ENERGY_POSITIVE = new SlimefunLabel("energy_positive", WIDGETS, WIDGETS_DARK, 43, 0, energyWidth, energyHeight);
+    public static final SlimefunLabel ENERGY_NEGATIVE = new SlimefunLabel("energy_negative", WIDGETS, WIDGETS_DARK, 50, 0, energyWidth, energyHeight);
     public static final SlimefunLabel SLOT = new SlimefunLabel("slot", WIDGETS, WIDGETS_DARK, 0, 238, slotSize, slotSize);
     public static final SlimefunLabel OUTPUT = new SlimefunLabel("output", WIDGETS, WIDGETS_DARK, 18, 230, outputSize, outputSize);
     public static final SlimefunLabel ARROW = new SlimefunLabel("arrow", WIDGETS, WIDGETS_DARK, 44, 222, arrowWidth, arrowHeight);
+    public static final SlimefunLabel FILLED_ARROW = new SlimefunLabel("filled_arrow", WIDGETS, WIDGETS_DARK, 44, 239, arrowWidth, arrowHeight);
     public static final SlimefunLabel BACKWARDS_ARROW = new SlimefunLabel("backwards_arrow", WIDGETS, WIDGETS_DARK, 67, 222, arrowWidth, arrowHeight);
+    public static final SlimefunLabel FILLED_BACKWARDS_ARROW = new SlimefunLabel("filled_backwards_arrow", WIDGETS, WIDGETS_DARK, 67, 239, arrowWidth, arrowHeight);
     public static final SlimefunLabel PEDESTAL = new SlimefunLabel("pedestal", WIDGETS, WIDGETS_DARK, 0, 0, slotSize, slotSize);
     public static final SlimefunLabel ALTAR = new SlimefunLabel("altar", WIDGETS, WIDGETS_DARK, 18, 0, slotSize, slotSize);
     public static final Map<SlimefunCategory, Integer> CACHED_WIDTH = new HashMap<>();

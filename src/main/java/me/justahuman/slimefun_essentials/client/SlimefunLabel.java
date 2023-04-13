@@ -41,11 +41,15 @@ public record SlimefunLabel(String id, Identifier light, Identifier dark, int u,
         return Collections.unmodifiableMap(slimefunLabels);
     }
 
-    public void draw(MatrixStack stack, int x, int y, boolean dark) {
+    public void draw(MatrixStack stack, int x, int y, int width, int height, int u, int v, int regionWidth, int regionHeight, boolean dark) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, dark ? this.dark : this.light);
-        DrawableHelper.drawTexture(stack, x, y, width, height, this.u, this.v, width, height, 256, 256);
+        DrawableHelper.drawTexture(stack, x, y, width, height, u, v, regionWidth, regionHeight, 256, 256);
+    }
+
+    public void draw(MatrixStack stack, int x, int y, boolean dark) {
+        draw(stack, x, y, this.width, this.height, this.u, this.v, this.width, this.height, dark);
     }
 
     public void draw(MatrixStack stack, int x, int y) {

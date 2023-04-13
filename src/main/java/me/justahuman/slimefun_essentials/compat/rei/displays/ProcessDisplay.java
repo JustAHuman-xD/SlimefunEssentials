@@ -85,9 +85,9 @@ public class ProcessDisplay extends SlimefunDisplay {
     }
 
     protected void addEnergy(List<Widget> widgets, int x, int y) {
-        // TODO Animated Textures
         final int totalEnergy = this.slimefunRecipe.energy() * Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.ENERGY, x, y));
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel((totalEnergy >= 0 ? TextureUtils.ENERGY_POSITIVE : TextureUtils.ENERGY_NEGATIVE), x, y, 1000, false, totalEnergy < 0, totalEnergy < 0));
     }
 
     protected void addSlot(List<Widget> widgets, OffsetBuilder offsets, EntryIngredient entryIngredient) {
@@ -126,12 +126,12 @@ public class ProcessDisplay extends SlimefunDisplay {
     }
 
     protected void addArrow(List<Widget> widgets, int x, int y, boolean backwards) {
-        if (this.slimefunRecipe.hasTime() && false) {
+        widgets.add(ReiIntegration.widgetFromSlimefunLabel((backwards ? TextureUtils.BACKWARDS_ARROW : TextureUtils.ARROW), x, y));
+
+        if (this.slimefunRecipe.hasTime()) {
             final int sfTicks = Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
             final int millis =  sfTicks * 500;
-            // TODO Animated Textures
-        } else {
-            widgets.add(ReiIntegration.widgetFromSlimefunLabel((backwards ? TextureUtils.BACKWARDS_ARROW : TextureUtils.ARROW), x, y));
+            widgets.add(ReiIntegration.widgetFromSlimefunLabel((backwards ? TextureUtils.FILLED_BACKWARDS_ARROW : TextureUtils.FILLED_ARROW), x, y, millis, true, backwards, false));
         }
     }
 
