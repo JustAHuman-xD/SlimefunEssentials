@@ -1,77 +1,50 @@
 package me.justahuman.slimefun_essentials.compat.emi.recipes;
 
-import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.render.EmiTexture;
-import dev.emi.emi.api.widget.FillingArrowWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import me.justahuman.slimefun_essentials.api.OffsetBuilder;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
-import me.justahuman.slimefun_essentials.compat.emi.ReverseFillingArrowWidget;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
-
-import java.util.List;
 
 public class ReactorRecipe extends ProcessRecipe {
     public ReactorRecipe(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory emiRecipeCategory) {
-        super(slimefunCategory, slimefunRecipe, emiRecipeCategory);
+        super(Type.REACTOR, slimefunCategory, slimefunRecipe, emiRecipeCategory);
+
         EmiUtils.fillInputs(this.inputs, 4);
     }
     
     @Override
-    public int getContentsWidth() {
-        return (TextureUtils.slotSize + TextureUtils.arrowWidth) * 2 + TextureUtils.padding * 4 + (hasOutputs(this.slimefunRecipe) ? TextureUtils.outputSize : TextureUtils.energyWidth);
-    }
-    
-    @Override
-    public int getContentsHeight() {
-        return TextureUtils.slotSize * 2 + (hasOutputs(this.slimefunRecipe) ? TextureUtils.outputSize : TextureUtils.slotSize);
-    }
-    
-    @Override
     public void addWidgets(WidgetHolder widgets) {
-        int offsetX = TextureUtils.padding;
-        int offsetY = TextureUtils.padding;
+        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe, TextureUtils.padding, TextureUtils.padding);
+
+        widgets.addSlot(this.inputs.get(0), offsets.getX(), offsets.getY());
+        offsets.y().addSlot(false);
+        widgets.addSlot(offsets.getX(), offsets.getY());
+        offsets.y().addSlot(false);
+        widgets.addSlot(offsets.getX(), offsets.getY());
+        offsets.x().addSlot();
+
+        addArrowWithCheck(widgets, offsets.getX(), offsets.getY(), false);
+        offsets.x().addArrow();
         
-        widgets.addSlot(this.inputs.get(0), offsetX, offsetY);
-        offsetY += TextureUtils.slotSize;
-        widgets.addSlot(offsetX, offsetY);
-        offsetY += TextureUtils.slotSize;
-        widgets.addSlot(offsetX, offsetY);
-        offsetX += TextureUtils.slotSize + TextureUtils.padding;
-        if (hasTime()) {
-            final int sfTicks = Math.max(1, this.slimefunRecipe.time() / 10 / (hasSpeed() ? this.slimefunCategory.speed() : 1));
-            final int millis =  sfTicks * 500;
-            widgets.add(new FillingArrowWidget(offsetX, offsetY, millis)).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", TextureUtils.numberFormat.format(sfTicks / 2f), TextureUtils.numberFormat.format(sfTicks * 10))))));
-        } else {
-            widgets.addTexture(EmiTexture.EMPTY_ARROW, offsetX, offsetY);
-        }
-        offsetX += TextureUtils.arrowWidth + TextureUtils.padding;
-        
-        if (hasOutputs()) {
-            widgets.addSlot(this.outputs.get(0), offsetX, offsetY).output(true);
+        if (this.slimefunRecipe.hasOutputs()) {
+            widgets.addSlot(this.outputs.get(0), offsets.getX(), offsets.getY()).output(true);
         }
         
-        if (hasEnergy()) {
-            addEnergyDisplay(widgets, offsetX + (hasOutputs() ? (TextureUtils.outputSize - TextureUtils.energyWidth) / 2 : 0), offsetY + (hasOutputs() ? - TextureUtils.energyHeight - TextureUtils.padding : TextureUtils.padding));
-            offsetX += (hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth) + + TextureUtils.padding;
+        if (this.slimefunRecipe.hasEnergy()) {
+            addEnergy(widgets, offsets.getX() + (this.slimefunRecipe.hasOutputs() ? (TextureUtils.outputSize - TextureUtils.energyWidth) / 2 : 0), offsets.getY() + (this.slimefunRecipe.hasOutputs() ? - TextureUtils.energyHeight - TextureUtils.padding : TextureUtils.padding));
+            offsets.x().add(this.slimefunRecipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth).addPadding();
         }
         
-        if (hasTime()) {
-            final int sfTicks = Math.max(1, this.slimefunRecipe.time() / 10 / (hasSpeed() ? this.slimefunCategory.speed() : 1));
-            final int millis =  sfTicks * 500;
-            widgets.add(new ReverseFillingArrowWidget(offsetX, offsetY, millis)).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", TextureUtils.numberFormat.format(sfTicks / 2f), TextureUtils.numberFormat.format(sfTicks * 10))))));
-        } else {
-            widgets.addTexture(EmiUtils.BACKWARDS_EMPTY_ARROW, offsetX, offsetY);
-        }
-        offsetX += TextureUtils.arrowWidth + TextureUtils.padding;
-        offsetY = TextureUtils.padding;
-        widgets.addSlot(inputs.get(1), offsetX, offsetY);
-        offsetY += TextureUtils.slotSize;
-        widgets.addSlot(inputs.get(2), offsetX, offsetY);
-        offsetY += TextureUtils.slotSize;
-        widgets.addSlot(inputs.get(3), offsetX, offsetY);
+        addArrowWithCheck(widgets, offsets.getX(), offsets.getY(), true);
+        offsets.x().addArrow();
+        offsets.y().subtract(TextureUtils.slotSize * 2);
+        widgets.addSlot(inputs.get(1), offsets.getX(), offsets.getY());
+        offsets.y().addSlot(false);
+        widgets.addSlot(inputs.get(2), offsets.getX(), offsets.getY());
+        offsets.y().addSlot(false);
+        widgets.addSlot(inputs.get(3), offsets.getX(), offsets.getY());
     }
 }

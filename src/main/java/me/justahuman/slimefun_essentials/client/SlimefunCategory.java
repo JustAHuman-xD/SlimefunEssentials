@@ -44,4 +44,8 @@ public record SlimefunCategory(String id, String type, Integer speed, Integer en
     public static Map<String, SlimefunCategory> getSlimefunCategories() {
         return Collections.unmodifiableMap(slimefunCategories);
     }
+
+    public boolean hasSpeed() {
+        return this.speed != null && this.speed != 1;
+    }
 }

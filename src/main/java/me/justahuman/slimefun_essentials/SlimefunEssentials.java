@@ -79,6 +79,16 @@ public class SlimefunEssentials implements ClientModInitializer {
         }
         
         if (ModConfig.shouldUseCustomTextures() && Utils.isMoreBlockPredicatesEnabled()) {
+            ClientChunkEvents.CHUNK_LOAD.register(((world, chunk) -> {
+                final PacketByteBuf packetByteBuf = PacketByteBufs.create();
+                final ChunkPos chunkPos = chunk.getPos();
+                packetByteBuf.writeInt(chunkPos.x);
+                packetByteBuf.writeInt(chunkPos.z);
+                ClientPlayNetworking.send(Utils.BLOCK_CHANNEL, packetByteBuf);
+            }));
+
+            ClientChunkEvents.CHUNK_UNLOAD.register((world, chunk) -> ResourceLoader.removePlacedChunk(chunk.getPos()));
+
             ClientPlayNetworking.registerGlobalReceiver(Utils.BLOCK_CHANNEL, ((client, handler, buf, sender) -> {
                 final ByteArrayDataInput packet = ByteStreams.newDataInput(buf.getWrittenBytes());
                 final int x = packet.readInt();
@@ -93,13 +103,7 @@ public class SlimefunEssentials implements ClientModInitializer {
                 ResourceLoader.addPlacedBlock(blockPos, id.toLowerCase());
             }));
 
-            ClientChunkEvents.CHUNK_LOAD.register(((world, chunk) -> {
-                final PacketByteBuf packetByteBuf = PacketByteBufs.create();
-                final ChunkPos chunkPos = chunk.getPos();
-                packetByteBuf.writeInt(chunkPos.x);
-                packetByteBuf.writeInt(chunkPos.z);
-                ClientPlayNetworking.send(Utils.BLOCK_CHANNEL, packetByteBuf);
-            }));
+            ClientPlayConnectionEvents.DISCONNECT.register((handler, minecraftClient) -> ResourceLoader.clearPlacedBlocks());
         }
         
         ClientTickEvents.END_CLIENT_TICK.register((client -> {

@@ -383,22 +383,6 @@
         "item": "minecraft:string",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"CHAIN\"},display:{Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"aqua\",\"text\":\"Chain\"}],\"text\":\"\"}\u0027 }}"
     },
-    "CHAIN_BOOTS": {
-        "item": "minecraft:chainmail_boots",
-        "nbt": "{Damage:0}"
-    },
-    "CHAIN_CHESTPLATE": {
-        "item": "minecraft:chainmail_chestplate",
-        "nbt": "{Damage:0}"
-    },
-    "CHAIN_HELMET": {
-        "item": "minecraft:chainmail_helmet",
-        "nbt": "{Damage:0}"
-    },
-    "CHAIN_LEGGINGS": {
-        "item": "minecraft:chainmail_leggings",
-        "nbt": "{Damage:0}"
-    },
     "CHARGING_BENCH": {
         "item": "minecraft:crafting_table",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"CHARGING_BENCH\"},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Charges Items such as Jetpacks\"}],\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"yellow\",\"text\":\"Basic Machine\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"dark_gray\",\"text\":\"⇨ \"},{\"italic\":false,\"color\":\"yellow\",\"text\":\"⚡ \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"128 J Buffer\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"dark_gray\",\"text\":\"⇨ \"},{\"italic\":false,\"color\":\"yellow\",\"text\":\"⚡ \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"Energy Loss: \"},{\"italic\":false,\"color\":\"red\",\"text\":\"50%\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gold\",\"text\":\"Charging Bench\"}],\"text\":\"\"}\u0027 }}"
@@ -718,10 +702,6 @@
     "ELEVATOR_PLATE": {
         "item": "minecraft:stone_pressure_plate",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"ELEVATOR_PLATE\"},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Place an Elevator Plate on every floor\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"and you will be able to teleport between them.\"}],\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"yellow\",\"text\":\"Right Click this Block \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"to name it\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"aqua\",\"text\":\"Elevator Plate\"}],\"text\":\"\"}\u0027 }}"
-    },
-    "ELYTRA": {
-        "item": "minecraft:elytra",
-        "nbt": "{Damage:0}"
     },
     "ELYTRA_CAP": {
         "item": "minecraft:leather_helmet",
@@ -2111,10 +2091,6 @@
         "item": "minecraft:enchanted_book",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"TOME_OF_KNOWLEDGE_SHARING\"},display:{Lore:[\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gray\",\"text\":\"Owner: \"},{\"italic\":false,\"color\":\"aqua\",\"text\":\"None\"}],\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"yellow\",\"text\":\"Right Click\"},{\"italic\":false,\"color\":\"gray\",\"text\":\" to bind this Tome to yourself\"}],\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"yellow\",\"text\":\"Right Click\"},{\"italic\":false,\"color\":\"gray\",\"text\":\" to obtain all Researches by\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gray\",\"text\":\"the previously assigned Owner\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"gold\",\"text\":\"Tome of Knowledge Sharing\"}],\"text\":\"\"}\u0027 }}"
     },
-    "TOTEM_OF_UNDYING": {
-        "item": "minecraft:totem_of_undying",
-        "nbt": "{}"
-    },
     "TRASH_CAN_BLOCK": {
         "item": "minecraft:player_head",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"TRASH_CAN_BLOCK\"},SkullOwner:{Id:[I;1147247507,747124443,-1528363618,-1287761749],Name:\"CS-CoreLib\",Properties:{textures:[{Value:\"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzJkNDEwNDJjZTk5MTQ3Y2MzOGNhYzllNDY3NDE1NzZlN2VlNzkxMjgzZTZmYWM4ZDMyOTJjYWUyOTM1ZjFmIn19fQ\u003d\u003d\"}] }},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Will destroy all Items put into it\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"dark_aqua\",\"text\":\"Trash Can\"}],\"text\":\"\"}\u0027 }}"
@@ -2126,10 +2102,6 @@
     "TREE_GROWTH_ACCELERATOR": {
         "item": "minecraft:brown_terracotta",
         "nbt": "{PublicBukkitValues:{\"slimefun:slimefun_item\":\"TREE_GROWTH_ACCELERATOR\"},display:{Lore:[\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"white\",\"text\":\"Runs on \"},{\"italic\":false,\"color\":\"green\",\"text\":\"Organic Fertilizer\"}],\"text\":\"\"}\u0027,\u0027{\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"dark_red\",\"text\":\"End-Game Machine\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"dark_gray\",\"text\":\"⇨ \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"Radius: 9x9\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"dark_gray\",\"text\":\"⇨ \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"Speed: \"},{\"italic\":false,\"color\":\"green\",\"text\":\"4/time\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"dark_gray\",\"text\":\"⇨ \"},{\"italic\":false,\"color\":\"yellow\",\"text\":\"⚡ \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"1024 J Buffer\"}],\"text\":\"\"}\u0027,\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"dark_gray\",\"text\":\"⇨ \"},{\"italic\":false,\"color\":\"yellow\",\"text\":\"⚡ \"},{\"italic\":false,\"color\":\"gray\",\"text\":\"48 J/s\"}],\"text\":\"\"}\u0027],Name:\u0027{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"color\":\"green\",\"text\":\"Tree Growth Accelerator\"}],\"text\":\"\"}\u0027 }}"
-    },
-    "TRIDENT": {
-        "item": "minecraft:trident",
-        "nbt": "{Damage:0}"
     },
     "URANIUM": {
         "item": "minecraft:player_head",
