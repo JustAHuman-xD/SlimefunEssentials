@@ -39,14 +39,19 @@ public class EmiIntegration implements EmiPlugin {
             if (slimefunCategories.containsKey(workstationId)) {
                 slimefunEmiCategory = slimefunCategories.get(workstationId);
             } else {
-                slimefunEmiCategory = new SlimefunEmiCategory(emiRegistry, categoryIdentifier, workStation);
+                slimefunEmiCategory = new SlimefunEmiCategory(categoryIdentifier, workStation);
                 slimefunCategories.put(workstationId, slimefunEmiCategory);
                 emiRegistry.addCategory(slimefunEmiCategory);
+                emiRegistry.addWorkstation(slimefunEmiCategory, workStation);
             }
             
             for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
                 emiRegistry.addRecipe(getEmiRecipe(slimefunCategory, slimefunRecipe, slimefunEmiCategory));
             }
+        }
+
+        for (SlimefunItemStack slimefunItemStack : ResourceLoader.getSlimefunItems().values()) {
+            emiRegistry.addEmiStack(EmiStack.of(slimefunItemStack.itemStack()));
         }
     }
 
