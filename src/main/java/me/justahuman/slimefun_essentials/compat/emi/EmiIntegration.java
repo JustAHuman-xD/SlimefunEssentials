@@ -30,7 +30,8 @@ public class EmiIntegration implements EmiPlugin {
         for (Map.Entry<String, SlimefunItemStack> entry : ResourceLoader.getSlimefunItems().entrySet()) {
             emiRegistry.setDefaultComparison(EmiStack.of(entry.getValue().itemStack()), original -> original.copy().nbt(true).build());
         }
-        
+        slimefunCategories.clear();
+
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
             final String workstationId = slimefunCategory.id();
             final Identifier categoryIdentifier = Utils.newIdentifier(workstationId);
