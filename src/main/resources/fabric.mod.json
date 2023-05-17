@@ -37,7 +37,7 @@
     "slimefun_essentials.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.10",
+    "fabricloader": ">=0.14.14",
     "fabric-api": "*",
     "minecraft": "1.19.4"
   }
