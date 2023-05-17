@@ -30,7 +30,8 @@ public class EmiIntegration implements EmiPlugin {
         for (Map.Entry<String, SlimefunItemStack> entry : ResourceLoader.getSlimefunItems().entrySet()) {
             emiRegistry.setDefaultComparison(EmiStack.of(entry.getValue().itemStack()), original -> original.copy().nbt(true).build());
         }
-        
+        slimefunCategories.clear();
+
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
             final String workstationId = slimefunCategory.id();
             final Identifier categoryIdentifier = Utils.newIdentifier(workstationId);
@@ -39,14 +40,19 @@ public class EmiIntegration implements EmiPlugin {
             if (slimefunCategories.containsKey(workstationId)) {
                 slimefunEmiCategory = slimefunCategories.get(workstationId);
             } else {
-                slimefunEmiCategory = new SlimefunEmiCategory(emiRegistry, categoryIdentifier, workStation);
+                slimefunEmiCategory = new SlimefunEmiCategory(categoryIdentifier, workStation);
                 slimefunCategories.put(workstationId, slimefunEmiCategory);
                 emiRegistry.addCategory(slimefunEmiCategory);
+                emiRegistry.addWorkstation(slimefunEmiCategory, workStation);
             }
             
             for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
                 emiRegistry.addRecipe(getEmiRecipe(slimefunCategory, slimefunRecipe, slimefunEmiCategory));
             }
+        }
+
+        for (SlimefunItemStack slimefunItemStack : ResourceLoader.getSlimefunItems().values()) {
+            emiRegistry.addEmiStack(EmiStack.of(slimefunItemStack.itemStack()));
         }
     }
 
