@@ -21,7 +21,7 @@ public class SmelteryDisplay extends ProcessDisplay {
 
     @Override
     public List<Widget> setupDisplay(OffsetBuilder offsets, List<Widget> widgets, Rectangle bounds, ItemStack icon) {
-        offsets.setY(calculateYOffset(slimefunRecipe, TextureUtils.slotSize * 3) + offsets.minY());
+        offsets.setY(calculateYOffset(slimefunRecipe, TextureUtils.SLOT_SIZE * 3) + offsets.minY());
 
         // Display Energy
         addEnergyWithCheck(widgets, offsets);
@@ -33,10 +33,10 @@ public class SmelteryDisplay extends ProcessDisplay {
                 offsets.x().addSlot(false);
                 i++;
             }
-            offsets.x().subtract(TextureUtils.slotSize * 2);
+            offsets.x().subtract(TextureUtils.SLOT_SIZE * 2);
             offsets.y().addSlot(false);
         }
-        offsets.x().add(TextureUtils.slotSize * 2).addPadding();
+        offsets.x().add(TextureUtils.SLOT_SIZE * 2).addPadding();
 
         // Display Arrow
         addArrow(widgets, offsets);

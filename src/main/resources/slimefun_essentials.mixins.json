@@ -5,8 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [
-    "MBPDataMixin",
-    "MBPProviderMixin"
+    "mbp.MBPDataMixin",
+    "mbp.MBPProviderMixin"
   ],
   "server": [],
   "injectors": {

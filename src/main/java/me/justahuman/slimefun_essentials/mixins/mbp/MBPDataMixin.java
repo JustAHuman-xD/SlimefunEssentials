@@ -1,4 +1,4 @@
-package me.justahuman.slimefun_essentials.mixins;
+package me.justahuman.slimefun_essentials.mixins.mbp;
 
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import mod.omoflop.mbp.MBPData;
@@ -24,7 +24,7 @@ public class MBPDataMixin {
                 return;
             }
 
-            final Identifier model = ResourceLoader.getSlimefunBlocks().get(id);
+            final Identifier model = ResourceLoader.getBlockModels().get(id);
             if (model == null) {
                 return;
             }

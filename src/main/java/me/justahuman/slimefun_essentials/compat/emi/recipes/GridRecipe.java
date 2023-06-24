@@ -19,7 +19,7 @@ public class GridRecipe extends ProcessRecipe {
     
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe, calculateXOffset(this.slimefunRecipe), TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe, calculateXOffset(this.slimefunRecipe), TextureUtils.PADDING);
     
         // Display Energy
         addEnergyWithCheck(widgets, offsets);
@@ -31,10 +31,10 @@ public class GridRecipe extends ProcessRecipe {
                 offsets.x().addSlot(false);
                 i++;
             }
-            offsets.x().subtract(TextureUtils.slotSize * this.side);
+            offsets.x().subtract(TextureUtils.SLOT_SIZE * this.side);
             offsets.y().addSlot(false);
         }
-        offsets.x().add(TextureUtils.slotSize * this.side).addPadding();
+        offsets.x().add(TextureUtils.SLOT_SIZE * this.side).addPadding();
     
         // Display Arrow
         addArrowWithCheck(widgets, offsets);

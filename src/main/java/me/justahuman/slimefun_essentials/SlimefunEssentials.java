@@ -5,6 +5,7 @@ import com.google.common.io.ByteStreams;
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.compat.cloth_config.ConfigScreen;
 import me.justahuman.slimefun_essentials.config.ModConfig;
+import me.justahuman.slimefun_essentials.utils.Channels;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
@@ -15,7 +16,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.resource.ResourceManager;
@@ -32,7 +32,6 @@ public class SlimefunEssentials implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModConfig.loadConfig();
-        Utils.shouldRestart();
         
         if (Utils.isClothConfigEnabled()) {
             final KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("slimefun_essentials.open_config", GLFW.GLFW_KEY_F6, "slimefun_essentials.title"));
@@ -56,9 +55,9 @@ public class SlimefunEssentials implements ClientModInitializer {
             }
         });
         
-        if (ModConfig.shouldAutoToggleAddons()) {
+        if (ModConfig.autoToggleAddons()) {
             final List<String> normalAddons = new ArrayList<>();
-            ClientPlayNetworking.registerGlobalReceiver(Utils.ADDON_CHANNEL, ((client, handler, buf, sender) -> {
+            ClientPlayNetworking.registerGlobalReceiver(Channels.ADDON_CHANNEL, ((client, handler, buf, sender) -> {
                 final String utf = ByteStreams.newDataInput(buf.getWrittenBytes()).readUTF();
                 if (utf.equals("clear")) {
                     normalAddons.addAll(ModConfig.getAddons());
@@ -78,18 +77,18 @@ public class SlimefunEssentials implements ClientModInitializer {
             }));
         }
         
-        if (ModConfig.shouldUseCustomTextures() && Utils.isMoreBlockPredicatesEnabled()) {
+        if (ModConfig.customBlockFeatures()) {
             ClientChunkEvents.CHUNK_LOAD.register(((world, chunk) -> {
                 final PacketByteBuf packetByteBuf = PacketByteBufs.create();
                 final ChunkPos chunkPos = chunk.getPos();
                 packetByteBuf.writeInt(chunkPos.x);
                 packetByteBuf.writeInt(chunkPos.z);
-                ClientPlayNetworking.send(Utils.BLOCK_CHANNEL, packetByteBuf);
+                ClientPlayNetworking.send(Channels.BLOCK_CHANNEL, packetByteBuf);
             }));
 
             ClientChunkEvents.CHUNK_UNLOAD.register((world, chunk) -> ResourceLoader.removePlacedChunk(chunk.getPos()));
 
-            ClientPlayNetworking.registerGlobalReceiver(Utils.BLOCK_CHANNEL, ((client, handler, buf, sender) -> {
+            ClientPlayNetworking.registerGlobalReceiver(Channels.BLOCK_CHANNEL, ((client, handler, buf, sender) -> {
                 final ByteArrayDataInput packet = ByteStreams.newDataInput(buf.getWrittenBytes());
                 final int x = packet.readInt();
                 final int y = packet.readInt();
@@ -105,11 +104,5 @@ public class SlimefunEssentials implements ClientModInitializer {
 
             ClientPlayConnectionEvents.DISCONNECT.register((handler, minecraftClient) -> ResourceLoader.clearPlacedBlocks());
         }
-        
-        ClientTickEvents.END_CLIENT_TICK.register((client -> {
-            if (Utils.shouldRestart()) {
-                MinecraftClient.getInstance().scheduleStop();
-            }
-        }));
     }
 }

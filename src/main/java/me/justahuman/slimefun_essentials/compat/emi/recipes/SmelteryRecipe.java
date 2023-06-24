@@ -18,7 +18,7 @@ public class SmelteryRecipe extends ProcessRecipe {
     
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe, TextureUtils.padding, TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe, TextureUtils.PADDING, TextureUtils.PADDING);
         
         // Display Energy
         addEnergyWithCheck(widgets, offsets);
@@ -31,10 +31,10 @@ public class SmelteryRecipe extends ProcessRecipe {
                 offsets.x().addSlot(false);
                 i++;
             }
-            offsets.x().subtract(TextureUtils.slotSize * 2);
+            offsets.x().subtract(TextureUtils.SLOT_SIZE * 2);
             offsets.y().addSlot(false);
         }
-        offsets.x().add(TextureUtils.slotSize * 2).addPadding();
+        offsets.x().add(TextureUtils.SLOT_SIZE * 2).addPadding();
     
         // Display Arrow
         addArrowWithCheck(widgets, offsets);

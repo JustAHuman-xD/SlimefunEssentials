@@ -24,7 +24,7 @@ public class GridCategory extends ProcessCategory {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SlimefunRecipe recipe, IFocusGroup focuses) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(recipe), TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(recipe), TextureUtils.PADDING);
         recipe.fillInputs(this.side * this.side);
 
         if (recipe.hasEnergy() && recipe.hasOutputs()) {
@@ -38,10 +38,10 @@ public class GridCategory extends ProcessCategory {
                 offsets.x().addSlot(false);
                 i++;
             }
-            offsets.x().subtract(TextureUtils.slotSize * this.side);
+            offsets.x().subtract(TextureUtils.SLOT_SIZE * this.side);
             offsets.y().addSlot(false);
         }
-        offsets.x().add(TextureUtils.slotSize * this.side).addPadding();
+        offsets.x().add(TextureUtils.SLOT_SIZE * this.side).addPadding();
 
         offsets.x().addArrow();
 
@@ -54,7 +54,7 @@ public class GridCategory extends ProcessCategory {
 
     @Override
     public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(recipe), TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(recipe), TextureUtils.PADDING);
         recipe.fillInputs(this.side * this.side);
 
         // Display Energy
@@ -65,10 +65,10 @@ public class GridCategory extends ProcessCategory {
                 TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
                 offsets.x().addSlot(false);
             }
-            offsets.x().subtract(TextureUtils.slotSize * this.side);
+            offsets.x().subtract(TextureUtils.SLOT_SIZE * this.side);
             offsets.y().addSlot(false);
         }
-        offsets.x().add(TextureUtils.slotSize * this.side).addPadding();
+        offsets.x().add(TextureUtils.SLOT_SIZE * this.side).addPadding();
 
         // Display Arrow
         addArrow(stack, offsets, recipe);

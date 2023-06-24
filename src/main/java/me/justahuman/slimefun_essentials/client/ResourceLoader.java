@@ -8,6 +8,7 @@ import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -31,16 +32,18 @@ import java.util.Set;
 public class ResourceLoader {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
-    private static final Map<String, Identifier> slimefunBlocks = new HashMap<>();
+    private static final Map<String, Identifier> itemModels = new HashMap<>();
+    private static final Map<String, Identifier> blockModels = new HashMap<>();
     private static final Map<ChunkPos, Set<BlockPos>> placedChunks = new HashMap<>();
     private static final Map<BlockPos, String> placedBlocks = new HashMap<>();
 
     /**
-     * Clears {@link ResourceLoader#slimefunItems} & {@link ResourceLoader#slimefunBlocks}
+     * Clears {@link ResourceLoader#slimefunItems}, {@link ResourceLoader#itemModels}, and {@link ResourceLoader#blockModels}
      */
     public static void clear() {
         slimefunItems.clear();
-        slimefunBlocks.clear();
+        itemModels.clear();
+        blockModels.clear();
     }
 
     /**
@@ -60,7 +63,8 @@ public class ResourceLoader {
         loadItems(manager);
         loadLabels(manager);
         loadCategories(manager);
-        loadBlocks(manager);
+        loadItemModels(manager);
+        loadBlockModels(manager);
     }
     
     /**
@@ -108,6 +112,10 @@ public class ResourceLoader {
         }
         
         sortItems();
+    }
+
+    public static SlimefunItemStack getSlimefunItem(String id) {
+        return slimefunItems.get(id);
     }
 
     /**
@@ -159,24 +167,45 @@ public class ResourceLoader {
     }
 
     /**
-     * Locates and loads every Block Model from the "models/block" directory
+     * Locates and loads every Slimefun Item Model from the "models/item" directory
      *
      * @param manager The {@link ResourceManager} to load from
      */
-    public static void loadBlocks(ResourceManager manager) {
-        for (Identifier identifier : manager.findResources("models/block", Utils::filterResources).keySet()) {
-            String id = Utils.getFileName(identifier.getPath());
-            ResourceLoader.addSlimefunBlock(id);
+    public static void loadItemModels(ResourceManager manager) {
+        for (Identifier identifier : manager.findResources("models/item", Utils::filterResources).keySet()) {
+            final String id = Utils.getFileName(identifier.getPath());
+            ResourceLoader.addItemModel(id);
         }
     }
 
     /**
-     * Adds a {@link String} id of a available {@link Block}'s Model
+     * Adds a {@link String} id of an available {@link ItemStack}'s Model
      *
      * @param id The {@link String} id that represents a Slimefun Item
      */
-    public static void addSlimefunBlock(String id) {
-        slimefunBlocks.put(id, new Identifier("minecraft", "block/" + id));
+    public static void addItemModel(String id) {
+        itemModels.put(id, new Identifier("minecraft", "item/" + id));
+    }
+
+    /**
+     * Locates and loads every Slimefun Block Model from the "models/block" directory
+     *
+     * @param manager The {@link ResourceManager} to load from
+     */
+    public static void loadBlockModels(ResourceManager manager) {
+        for (Identifier identifier : manager.findResources("models/block", Utils::filterResources).keySet()) {
+            final String id = Utils.getFileName(identifier.getPath());
+            ResourceLoader.addBlockModel(id);
+        }
+    }
+
+    /**
+     * Adds a {@link String} id of an available {@link Block}'s Model
+     *
+     * @param id The {@link String} id that represents a Slimefun Item
+     */
+    public static void addBlockModel(String id) {
+        blockModels.put(id, new Identifier("minecraft", "block/" + id));
     }
 
     /**
@@ -214,6 +243,21 @@ public class ResourceLoader {
     }
 
     /**
+     * Checks if a {@link BlockPos} is a placed Slimefun Item
+     *
+     * @param blockPos The {@link BlockPos} to check
+     *
+     * @return If the {@link BlockPos} is a Slimefun Item
+     */
+    public static boolean isSlimefunItem(BlockPos blockPos) {
+        return placedBlocks.containsKey(blockPos);
+    }
+
+    public static String getPlacedId(BlockPos blockPos) {
+        return placedBlocks.get(blockPos);
+    }
+
+    /**
      * Returns an unmodifiable version of {@link ResourceLoader#slimefunItems}
      *
      * @return {@link Map}
@@ -224,13 +268,13 @@ public class ResourceLoader {
     }
 
     /**
-     * Returns an unmodifiable version of {@link ResourceLoader#slimefunBlocks}
+     * Returns an unmodifiable version of {@link ResourceLoader#blockModels}
      *
      * @return {@link Map}
      */
     @NonNull
-    public static Map<String, Identifier> getSlimefunBlocks() {
-        return Collections.unmodifiableMap(slimefunBlocks);
+    public static Map<String, Identifier> getBlockModels() {
+        return Collections.unmodifiableMap(blockModels);
     }
 
     /**

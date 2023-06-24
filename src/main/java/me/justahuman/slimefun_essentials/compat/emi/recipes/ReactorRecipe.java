@@ -17,7 +17,7 @@ public class ReactorRecipe extends ProcessRecipe {
     
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe, TextureUtils.padding, TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe, TextureUtils.PADDING, TextureUtils.PADDING);
 
         widgets.addSlot(this.inputs.get(0), offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
@@ -34,13 +34,13 @@ public class ReactorRecipe extends ProcessRecipe {
         }
         
         if (this.slimefunRecipe.hasEnergy()) {
-            addEnergy(widgets, offsets.getX() + (this.slimefunRecipe.hasOutputs() ? (TextureUtils.outputSize - TextureUtils.energyWidth) / 2 : 0), offsets.getY() + (this.slimefunRecipe.hasOutputs() ? - TextureUtils.energyHeight - TextureUtils.padding : TextureUtils.padding));
-            offsets.x().add(this.slimefunRecipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth).addPadding();
+            addEnergy(widgets, offsets.getX() + (this.slimefunRecipe.hasOutputs() ? (TextureUtils.OUTPUT_SIZE - TextureUtils.ENERGY_WIDTH) / 2 : 0), offsets.getY() + (this.slimefunRecipe.hasOutputs() ? - TextureUtils.ENERGY_HEIGHT - TextureUtils.PADDING : TextureUtils.PADDING));
+            offsets.x().add(this.slimefunRecipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.ENERGY_WIDTH).addPadding();
         }
         
         addArrowWithCheck(widgets, offsets.getX(), offsets.getY(), true);
         offsets.x().addArrow();
-        offsets.y().subtract(TextureUtils.slotSize * 2);
+        offsets.y().subtract(TextureUtils.SLOT_SIZE * 2);
         widgets.addSlot(inputs.get(1), offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
         widgets.addSlot(inputs.get(2), offsets.getX(), offsets.getY());

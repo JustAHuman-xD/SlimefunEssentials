@@ -1,4 +1,4 @@
-package me.justahuman.slimefun_essentials.mixins;
+package me.justahuman.slimefun_essentials.mixins.mbp;
 
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import mod.omoflop.mbp.client.MBPResourceProvider;
@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public class MBPProviderMixin {
     @Inject(at = @At("HEAD"), method = "provideExtraModels")
     public void addSlimefunModels(ResourceManager manager, Consumer<Identifier> out, CallbackInfo ci) {
-        ResourceLoader.loadBlocks(manager);
-        ResourceLoader.getSlimefunBlocks().values().forEach(out);
+        ResourceLoader.loadBlockModels(manager);
+        ResourceLoader.getBlockModels().values().forEach(out);
     }
 }

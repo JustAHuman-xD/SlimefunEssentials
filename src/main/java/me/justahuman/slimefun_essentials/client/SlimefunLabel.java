@@ -18,7 +18,7 @@ public record SlimefunLabel(String id, Identifier light, Identifier dark, int u,
     private static final Map<String, SlimefunLabel> slimefunLabels = new LinkedHashMap<>();
 
     public SlimefunLabel(String id, Identifier light, Identifier dark, int u, int v) {
-        this(id, light, dark, u, v, TextureUtils.labelSize, TextureUtils.labelSize);
+        this(id, light, dark, u, v, TextureUtils.LABEL_SIZE, TextureUtils.LABEL_SIZE);
     }
 
     public static void deserialize(String id, JsonObject labelObject) {

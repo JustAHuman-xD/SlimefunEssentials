@@ -9,53 +9,17 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-
 public class Utils {
     public static final String ID = "slimefun_essentials";
-    public static final Identifier ADDON_CHANNEL = new Identifier("slimefun_server_essentials", "addon");
-    public static final Identifier BLOCK_CHANNEL = new Identifier("slimefun_server_essentials", "block");
-    private static final Logger logger = LoggerFactory.getLogger(ID);
-    private static final String errorMessage = "[SFE] Failed to load data";
-    
-    public static File restartFile() {
-        return FabricLoader.getInstance().getConfigDir().resolve("slimefun_essentials_restart.txt").toFile();
-    }
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(ID);
+    private static final String ERROR_MESSAGE = "[SFE] Failed to load data";
+
     public static Identifier newIdentifier(String namespace) {
         return new Identifier(ID, namespace.toLowerCase());
     }
     
     public static boolean isClothConfigEnabled() {
         return FabricLoader.getInstance().isModLoaded("cloth-config2");
-    }
-
-    public static boolean isMoreBlockPredicatesEnabled() {
-        return FabricLoader.getInstance().isModLoaded("mbp");
-    }
-    
-    public static boolean isJeiEnabled() {
-        return FabricLoader.getInstance().isModLoaded("jei");
-    }
-    
-    public static boolean isReiEnabled() {
-        return FabricLoader.getInstance().isModLoaded("rei");
-    }
-
-    public static boolean shouldRestart() {
-        if (restartFile().exists()) {
-            try {
-                boolean successful = restartFile().delete();
-                if (!successful) {
-                    throw new RuntimeException();
-                }
-                return true;
-            } catch (RuntimeException ignored) {
-                warn("Could not remove restart file!");
-                return false;
-            }
-        }
-        return false;
     }
 
     public static boolean filterResources(Identifier identifier) {
@@ -112,15 +76,15 @@ public class Utils {
     }
 
     public static void log(String message) {
-        logger.info(message);
+        LOGGER.info(message);
     }
 
     public static void warn(String warning) {
-        logger.warn(warning);
+        LOGGER.warn(warning);
     }
 
     public static void error(Exception exception) {
-        logger.error(errorMessage);
+        LOGGER.error(ERROR_MESSAGE);
         exception.printStackTrace();
     }
 }
