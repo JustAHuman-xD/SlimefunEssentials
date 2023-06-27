@@ -26,15 +26,15 @@ public class AncientAltarCategory extends ProcessCategory {
 
         JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1), recipe.inputs().get(3));
         offsets.x().addSlot(false);
-        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize), recipe.inputs().get(0));
-        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.slotSize), recipe.inputs().get(6));
+        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.SLOT_SIZE), recipe.inputs().get(0));
+        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.SLOT_SIZE), recipe.inputs().get(6));
         offsets.x().addSlot(false);
-        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize * 2), recipe.inputs().get(1));
+        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.SLOT_SIZE * 2), recipe.inputs().get(1));
         JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1), recipe.inputs().get(4));
-        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.slotSize * 2), recipe.inputs().get(7));
+        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.SLOT_SIZE * 2), recipe.inputs().get(7));
         offsets.x().addSlot(false);
-        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.slotSize), recipe.inputs().get(2));
-        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.slotSize), recipe.inputs().get(8));
+        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 + TextureUtils.SLOT_SIZE), recipe.inputs().get(2));
+        JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1 - TextureUtils.SLOT_SIZE), recipe.inputs().get(8));
         offsets.x().addSlot(false);
         JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.slot() + 1), recipe.inputs().get(5));
         offsets.x().addSlot();
@@ -50,15 +50,15 @@ public class AncientAltarCategory extends ProcessCategory {
 
         TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot());
         offsets.x().addSlot(false);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.slotSize);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.slotSize);
+        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE);
+        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE);
         offsets.x().addSlot(false);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.slotSize * 2);
+        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE * 2);
         TextureUtils.ALTAR.draw(stack, offsets.getX(), offsets.slot());
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.slotSize * 2);
+        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE * 2);
         offsets.x().addSlot(false);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.slotSize);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.slotSize);
+        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE);
+        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE);
         offsets.x().addSlot(false);
         TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot());
         offsets.x().addSlot();

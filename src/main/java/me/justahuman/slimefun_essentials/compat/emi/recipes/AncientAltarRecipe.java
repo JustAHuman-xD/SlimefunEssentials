@@ -22,15 +22,15 @@ public class AncientAltarRecipe extends ProcessRecipe {
         
         widgets.addSlot(this.inputs.get(3), offsets.getX(), offsets.slot()).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
         offsets.x().addSlot(false);
-        widgets.addSlot(this.inputs.get(0), offsets.getX(), offsets.slot() + TextureUtils.slotSize).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
-        widgets.addSlot(this.inputs.get(6), offsets.getX(), offsets.slot() - TextureUtils.slotSize).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
+        widgets.addSlot(this.inputs.get(0), offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
+        widgets.addSlot(this.inputs.get(6), offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
         offsets.x().addSlot(false);
-        widgets.addSlot(this.inputs.get(1), offsets.getX(), offsets.slot() + TextureUtils.slotSize * 2).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
+        widgets.addSlot(this.inputs.get(1), offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE * 2).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
         widgets.addSlot(this.inputs.get(4), offsets.getX(), offsets.slot()).backgroundTexture(TextureUtils.WIDGETS, 18, 0);
-        widgets.addSlot(this.inputs.get(7), offsets.getX(), offsets.slot() - TextureUtils.slotSize * 2).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
+        widgets.addSlot(this.inputs.get(7), offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE * 2).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
         offsets.x().addSlot(false);
-        widgets.addSlot(this.inputs.get(2), offsets.getX(), offsets.slot() + TextureUtils.slotSize).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
-        widgets.addSlot(this.inputs.get(8), offsets.getX(), offsets.slot() - TextureUtils.slotSize).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
+        widgets.addSlot(this.inputs.get(2), offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
+        widgets.addSlot(this.inputs.get(8), offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
         offsets.x().addSlot(false);
         widgets.addSlot(this.inputs.get(5), offsets.getX(), offsets.slot()).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
         offsets.x().addSlot();

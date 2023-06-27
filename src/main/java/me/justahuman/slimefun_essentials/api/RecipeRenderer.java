@@ -28,19 +28,19 @@ public abstract class RecipeRenderer {
     }
 
     public int getDisplayWidth(SlimefunCategory slimefunCategory) {
-        return getContentsWidth(slimefunCategory) + TextureUtils.padding * 2;
+        return getContentsWidth(slimefunCategory) + TextureUtils.PADDING * 2;
     }
 
     public int getDisplayWidth(SlimefunRecipe slimefunRecipe) {
-        return getContentsWidth(slimefunRecipe) + TextureUtils.padding * 2;
+        return getContentsWidth(slimefunRecipe) + TextureUtils.PADDING * 2;
     }
 
     public int getDisplayHeight(SlimefunCategory slimefunCategory) {
-        return getContentsHeight(slimefunCategory) + TextureUtils.padding * 2;
+        return getContentsHeight(slimefunCategory) + TextureUtils.PADDING * 2;
     }
 
     public int getDisplayHeight(SlimefunRecipe slimefunRecipe) {
-        return getContentsHeight(slimefunRecipe) + TextureUtils.padding * 2;
+        return getContentsHeight(slimefunRecipe) + TextureUtils.PADDING * 2;
     }
 
     protected int calculateXOffset(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
@@ -139,12 +139,12 @@ public abstract class RecipeRenderer {
 
             @Override
             public int getContentsHeight(SlimefunCategory slimefunCategory) {
-                return TextureUtils.slotSize * 3;
+                return TextureUtils.SLOT_SIZE * 3;
             }
 
             @Override
             public int getContentsHeight(SlimefunRecipe slimefunRecipe) {
-                return TextureUtils.slotSize * 3;
+                return TextureUtils.SLOT_SIZE * 3;
             }
         };
 

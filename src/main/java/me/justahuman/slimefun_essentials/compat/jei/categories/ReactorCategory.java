@@ -37,11 +37,11 @@ public class ReactorCategory extends ProcessCategory {
         }
 
         if (recipe.hasEnergy()) {
-            offsets.x().add(recipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth).addPadding();
+            offsets.x().add(recipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.ENERGY_WIDTH).addPadding();
         }
 
         offsets.x().addArrow();
-        offsets.y().subtract(TextureUtils.slotSize * 2);
+        offsets.y().subtract(TextureUtils.SLOT_SIZE * 2);
 
         JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, offsets.getX() + 1, offsets.getY() + 1), recipe.inputs().get(1));
         offsets.y().addSlot(false);
@@ -70,13 +70,13 @@ public class ReactorCategory extends ProcessCategory {
         }
 
         if (recipe.hasEnergy()) {
-            addEnergy(stack, offsets.getX() + (recipe.hasOutputs() ? (TextureUtils.outputSize - TextureUtils.energyWidth) / 2 : 0), offsets.getY() + (recipe.hasOutputs() ? - TextureUtils.energyHeight - TextureUtils.padding : TextureUtils.padding), recipe.energy() < 0);
-            offsets.x().add(recipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth).addPadding();
+            addEnergy(stack, offsets.getX() + (recipe.hasOutputs() ? (TextureUtils.OUTPUT_SIZE - TextureUtils.ENERGY_WIDTH) / 2 : 0), offsets.getY() + (recipe.hasOutputs() ? - TextureUtils.ENERGY_HEIGHT - TextureUtils.PADDING : TextureUtils.PADDING), recipe.energy() < 0);
+            offsets.x().add(recipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.ENERGY_WIDTH).addPadding();
         }
 
         addFillingArrow(stack, offsets.getX(), offsets.getY(), true, getTime(recipe));
         offsets.x().addArrow();
-        offsets.y().subtract(TextureUtils.slotSize * 2);
+        offsets.y().subtract(TextureUtils.SLOT_SIZE * 2);
         TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
         TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());

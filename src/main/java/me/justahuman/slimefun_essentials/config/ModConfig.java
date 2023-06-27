@@ -25,7 +25,7 @@ public class ModConfig {
         defaultAddons.add("Slimefun");
     }
 
-    private static boolean useCustomTextures = true;
+    private static boolean placedBlockFeatures = true;
     private static boolean autoToggleAddons = true;
     private static List<String> addons = new ArrayList<>();
     
@@ -41,7 +41,7 @@ public class ModConfig {
         }
         
         try {
-            useCustomTextures = JsonUtils.getBooleanOrDefault(root, "use_custom_textures", true, true);
+            placedBlockFeatures = JsonUtils.getBooleanOrDefault(root, "placed_block_features", true, true);
             autoToggleAddons = JsonUtils.getBooleanOrDefault(root, "auto_toggle_addons", true, true);
             for (JsonElement addon : JsonUtils.getArrayOrDefault(root, "addons", defaultAddons, true)) {
                 if (addon instanceof JsonPrimitive jsonPrimitive && jsonPrimitive.isString()) {
@@ -62,7 +62,7 @@ public class ModConfig {
             addonArray.add(addon);
         }
 
-        root.addProperty("use_custom_textures", useCustomTextures);
+        root.addProperty("placed_block_features", placedBlockFeatures);
         root.addProperty("auto_toggle_addons", autoToggleAddons);
         root.add("addons", addonArray);
         
@@ -75,14 +75,14 @@ public class ModConfig {
         }
     }
     
-    public static boolean shouldUseCustomTextures() {
-        return useCustomTextures;
+    public static boolean customBlockFeatures() {
+        return placedBlockFeatures;
     }
-    public static void setUseCustomTextures(boolean newValue) {
-        useCustomTextures = newValue;
+    public static void setPlacedBlockFeatures(boolean newValue) {
+        placedBlockFeatures = newValue;
     }
     
-    public static boolean shouldAutoToggleAddons() {
+    public static boolean autoToggleAddons() {
         return autoToggleAddons;
     }
     public static void setAutoToggleAddons(boolean newValue) {

@@ -50,15 +50,15 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
         this.catalyst = catalyst;
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, catalyst);
         this.background = guiHelper.drawableBuilder(TextureUtils.WIDGETS, 0, 0, 0, 0).addPadding(yPadding(), yPadding(), xPadding(), xPadding()).build();
-        this.positiveEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY_POSITIVE.u(), TextureUtils.ENERGY.v(), TextureUtils.energyWidth, TextureUtils.energyHeight).buildAnimated(20, IDrawableAnimated.StartDirection.TOP, false);
-        this.negativeEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY_NEGATIVE.u(), TextureUtils.ENERGY.v(), TextureUtils.energyWidth, TextureUtils.energyHeight).buildAnimated(20, IDrawableAnimated.StartDirection.BOTTOM, true);
+        this.positiveEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY_POSITIVE.u(), TextureUtils.ENERGY.v(), TextureUtils.ENERGY_WIDTH, TextureUtils.ENERGY_HEIGHT).buildAnimated(20, IDrawableAnimated.StartDirection.TOP, false);
+        this.negativeEnergy = guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ENERGY_NEGATIVE.u(), TextureUtils.ENERGY.v(), TextureUtils.ENERGY_WIDTH, TextureUtils.ENERGY_HEIGHT).buildAnimated(20, IDrawableAnimated.StartDirection.BOTTOM, true);
         this.cachedArrows = CacheBuilder.newBuilder()
                 .maximumSize(25)
                 .build(new CacheLoader<>() {
                     @Override
                     @NotNull
                     public IDrawableAnimated load(@NotNull Integer sfTicks) {
-                        return guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ARROW.u(), TextureUtils.ARROW.v() + TextureUtils.arrowHeight, TextureUtils.arrowWidth, TextureUtils.arrowHeight).buildAnimated(sfTicks * 10, IDrawableAnimated.StartDirection.LEFT, false);
+                        return guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.ARROW.u(), TextureUtils.ARROW.v() + TextureUtils.ARROW_HEIGHT, TextureUtils.ARROW_WIDTH, TextureUtils.ARROW_HEIGHT).buildAnimated(sfTicks * 10, IDrawableAnimated.StartDirection.LEFT, false);
                     }
                 });
         this.cachedBackwardsArrows = CacheBuilder.newBuilder()
@@ -67,7 +67,7 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
                     @Override
                     @NotNull
                     public IDrawableAnimated load(@NotNull Integer sfTicks) {
-                        return guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.BACKWARDS_ARROW.u(), TextureUtils.BACKWARDS_ARROW.v() + TextureUtils.arrowHeight, TextureUtils.arrowWidth, TextureUtils.arrowHeight).buildAnimated(sfTicks * 10, IDrawableAnimated.StartDirection.RIGHT, false);
+                        return guiHelper.drawableBuilder(TextureUtils.WIDGETS, TextureUtils.BACKWARDS_ARROW.u(), TextureUtils.BACKWARDS_ARROW.v() + TextureUtils.ARROW_HEIGHT, TextureUtils.ARROW_WIDTH, TextureUtils.ARROW_HEIGHT).buildAnimated(sfTicks * 10, IDrawableAnimated.StartDirection.RIGHT, false);
                     }
                 });
     }
@@ -109,7 +109,7 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
         final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe));
 
         if (recipe.hasLabels()) {
-            offsets.x().add((TextureUtils.labelSize + TextureUtils.padding) * recipe.labels().size());
+            offsets.x().add((TextureUtils.LABEL_SIZE + TextureUtils.PADDING) * recipe.labels().size());
         }
 
         if (recipe.hasEnergy() && recipe.hasOutputs()) {

@@ -49,12 +49,12 @@ public class SlimefunReiCategory<T extends SlimefunDisplay> extends RecipeRender
 
     @Override
     public int getDisplayHeight() {
-        return getDisplayHeight(this.slimefunCategory) + TextureUtils.reiPadding;
+        return getDisplayHeight(this.slimefunCategory) + TextureUtils.REI_PADDING;
     }
 
     @Override
     public int getDisplayWidth(T display) {
-        return getDisplayWidth(display.slimefunRecipe()) + TextureUtils.reiPadding;
+        return getDisplayWidth(display.slimefunRecipe()) + TextureUtils.REI_PADDING;
     }
 
     @Override

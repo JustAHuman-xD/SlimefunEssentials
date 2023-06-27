@@ -19,13 +19,13 @@ public class ConfigScreen {
         final ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         final ConfigCategory category = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.category"));
         
-        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.custom_textures"), ModConfig.shouldUseCustomTextures())
+        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.placed_block_features"), ModConfig.customBlockFeatures())
                 .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.option.custom_textures.tooltip"))
-                .setSaveConsumer(ModConfig::setUseCustomTextures)
+                .setTooltip(Text.translatable("slimefun_essentials.option.placed_block_features.tooltip"))
+                .setSaveConsumer(ModConfig::setPlacedBlockFeatures)
                 .build());
         
-        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.auto_toggle_addons"), ModConfig.shouldAutoToggleAddons())
+        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.auto_toggle_addons"), ModConfig.autoToggleAddons())
                 .setDefaultValue(true)
                 .setTooltip(Text.translatable("slimefun_essentials.option.auto_toggle_addons.tooltip"))
                 .setSaveConsumer(ModConfig::setAutoToggleAddons)

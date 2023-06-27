@@ -21,7 +21,7 @@ public class SmelteryCategory extends ProcessCategory {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SlimefunRecipe recipe, IFocusGroup focuses) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, TextureUtils.padding, TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, TextureUtils.PADDING, TextureUtils.PADDING);
         recipe.fillInputs(6);
         recipe.fillOutputs(1);
 
@@ -36,10 +36,10 @@ public class SmelteryCategory extends ProcessCategory {
                 offsets.x().addSlot(false);
                 i++;
             }
-            offsets.x().subtract(TextureUtils.slotSize * 2);
+            offsets.x().subtract(TextureUtils.SLOT_SIZE * 2);
             offsets.y().addSlot(false);
         }
-        offsets.x().add(TextureUtils.slotSize * 2).addPadding();
+        offsets.x().add(TextureUtils.SLOT_SIZE * 2).addPadding();
 
         offsets.x().addArrow();
 
@@ -53,7 +53,7 @@ public class SmelteryCategory extends ProcessCategory {
 
     @Override
     public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
-        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, TextureUtils.padding, TextureUtils.padding);
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, TextureUtils.PADDING, TextureUtils.PADDING);
         recipe.fillInputs(6);
         recipe.fillOutputs(1);
 
@@ -65,10 +65,10 @@ public class SmelteryCategory extends ProcessCategory {
                 TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
                 offsets.x().addSlot(false);
             }
-            offsets.x().subtract(TextureUtils.slotSize * 2);
+            offsets.x().subtract(TextureUtils.SLOT_SIZE * 2);
             offsets.y().addSlot(false);
         }
-        offsets.x().add(TextureUtils.slotSize * 2).addPadding();
+        offsets.x().add(TextureUtils.SLOT_SIZE * 2).addPadding();
 
         // Display Arrow
         addArrow(stack, offsets, recipe);

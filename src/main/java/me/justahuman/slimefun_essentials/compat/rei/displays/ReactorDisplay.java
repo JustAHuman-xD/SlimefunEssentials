@@ -23,7 +23,7 @@ public class ReactorDisplay extends ProcessDisplay {
 
     @Override
     public List<Widget> setupDisplay(OffsetBuilder offsets, List<Widget> widgets, Rectangle bounds, ItemStack icon) {
-        offsets.setY(calculateYOffset(slimefunRecipe, TextureUtils.slotSize * 3) + offsets.minY());
+        offsets.setY(calculateYOffset(slimefunRecipe, TextureUtils.SLOT_SIZE * 3) + offsets.minY());
 
         addSlot(widgets, this.inputs.get(0), offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
@@ -41,13 +41,13 @@ public class ReactorDisplay extends ProcessDisplay {
         }
 
         if (this.slimefunRecipe.hasEnergy()) {
-            addEnergy(widgets, offsets.getX() + (this.slimefunRecipe.hasOutputs() ? (TextureUtils.outputSize - TextureUtils.energyWidth) / 2 : 0), offsets.getY() + (this.slimefunRecipe.hasOutputs() ? - TextureUtils.energyHeight - TextureUtils.padding : TextureUtils.padding));
-            offsets.x().add(this.slimefunRecipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth).addPadding();
+            addEnergy(widgets, offsets.getX() + (this.slimefunRecipe.hasOutputs() ? (TextureUtils.OUTPUT_SIZE - TextureUtils.ENERGY_WIDTH) / 2 : 0), offsets.getY() + (this.slimefunRecipe.hasOutputs() ? - TextureUtils.ENERGY_HEIGHT - TextureUtils.PADDING : TextureUtils.PADDING));
+            offsets.x().add(this.slimefunRecipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.ENERGY_WIDTH).addPadding();
         }
 
         addArrow(widgets, offsets.getX(), offsets.getY(), true);
         offsets.x().addArrow();
-        offsets.y().subtract(TextureUtils.slotSize * 2);
+        offsets.y().subtract(TextureUtils.SLOT_SIZE * 2);
         addSlot(widgets, inputs.get(1), offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
         addSlot(widgets, inputs.get(2), offsets.getX(), offsets.getY());

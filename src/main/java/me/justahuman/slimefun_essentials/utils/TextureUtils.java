@@ -10,28 +10,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TextureUtils {
-    public static final int padding = 4;
-    public static final int reiPadding = 6;
-    public static final int slotSize = 18;
-    public static final int outputSize = 26;
-    public static final int arrowHeight = 17;
-    public static final int arrowWidth = 24;
-    public static final int energyWidth = 7;
-    public static final int energyHeight = 9;
-    public static final int labelSize = 13;
+    public static final int PADDING = 4;
+    public static final int REI_PADDING = 6;
+    public static final int SLOT_SIZE = 18;
+    public static final int OUTPUT_SIZE = 26;
+    public static final int ARROW_HEIGHT = 17;
+    public static final int ARROW_WIDTH = 24;
+    public static final int ENERGY_WIDTH = 7;
+    public static final int ENERGY_HEIGHT = 9;
+    public static final int LABEL_SIZE = 13;
     public static final Identifier WIDGETS = new Identifier(Utils.ID, "textures/gui/widgets.png");
     public static final Identifier WIDGETS_DARK = new Identifier(Utils.ID, "textures/gui/widgets_dark.png");
-    public static final SlimefunLabel ENERGY = new SlimefunLabel("energy", WIDGETS, WIDGETS_DARK, 36, 0, energyWidth, energyHeight);
-    public static final SlimefunLabel ENERGY_POSITIVE = new SlimefunLabel("energy_positive", WIDGETS, WIDGETS_DARK, 43, 0, energyWidth, energyHeight);
-    public static final SlimefunLabel ENERGY_NEGATIVE = new SlimefunLabel("energy_negative", WIDGETS, WIDGETS_DARK, 50, 0, energyWidth, energyHeight);
-    public static final SlimefunLabel SLOT = new SlimefunLabel("slot", WIDGETS, WIDGETS_DARK, 0, 238, slotSize, slotSize);
-    public static final SlimefunLabel OUTPUT = new SlimefunLabel("output", WIDGETS, WIDGETS_DARK, 18, 230, outputSize, outputSize);
-    public static final SlimefunLabel ARROW = new SlimefunLabel("arrow", WIDGETS, WIDGETS_DARK, 44, 222, arrowWidth, arrowHeight);
-    public static final SlimefunLabel FILLED_ARROW = new SlimefunLabel("filled_arrow", WIDGETS, WIDGETS_DARK, 44, 239, arrowWidth, arrowHeight);
-    public static final SlimefunLabel BACKWARDS_ARROW = new SlimefunLabel("backwards_arrow", WIDGETS, WIDGETS_DARK, 67, 222, arrowWidth, arrowHeight);
-    public static final SlimefunLabel FILLED_BACKWARDS_ARROW = new SlimefunLabel("filled_backwards_arrow", WIDGETS, WIDGETS_DARK, 67, 239, arrowWidth, arrowHeight);
-    public static final SlimefunLabel PEDESTAL = new SlimefunLabel("pedestal", WIDGETS, WIDGETS_DARK, 0, 0, slotSize, slotSize);
-    public static final SlimefunLabel ALTAR = new SlimefunLabel("altar", WIDGETS, WIDGETS_DARK, 18, 0, slotSize, slotSize);
+    public static final SlimefunLabel ENERGY = new SlimefunLabel("energy", WIDGETS, WIDGETS_DARK, 36, 0, ENERGY_WIDTH, ENERGY_HEIGHT);
+    public static final SlimefunLabel ENERGY_POSITIVE = new SlimefunLabel("energy_positive", WIDGETS, WIDGETS_DARK, 43, 0, ENERGY_WIDTH, ENERGY_HEIGHT);
+    public static final SlimefunLabel ENERGY_NEGATIVE = new SlimefunLabel("energy_negative", WIDGETS, WIDGETS_DARK, 50, 0, ENERGY_WIDTH, ENERGY_HEIGHT);
+    public static final SlimefunLabel SLOT = new SlimefunLabel("slot", WIDGETS, WIDGETS_DARK, 0, 238, SLOT_SIZE, SLOT_SIZE);
+    public static final SlimefunLabel OUTPUT = new SlimefunLabel("output", WIDGETS, WIDGETS_DARK, 18, 230, OUTPUT_SIZE, OUTPUT_SIZE);
+    public static final SlimefunLabel ARROW = new SlimefunLabel("arrow", WIDGETS, WIDGETS_DARK, 44, 222, ARROW_WIDTH, ARROW_HEIGHT);
+    public static final SlimefunLabel FILLED_ARROW = new SlimefunLabel("filled_arrow", WIDGETS, WIDGETS_DARK, 44, 239, ARROW_WIDTH, ARROW_HEIGHT);
+    public static final SlimefunLabel BACKWARDS_ARROW = new SlimefunLabel("backwards_arrow", WIDGETS, WIDGETS_DARK, 67, 222, ARROW_WIDTH, ARROW_HEIGHT);
+    public static final SlimefunLabel FILLED_BACKWARDS_ARROW = new SlimefunLabel("filled_backwards_arrow", WIDGETS, WIDGETS_DARK, 67, 239, ARROW_WIDTH, ARROW_HEIGHT);
+    public static final SlimefunLabel PEDESTAL = new SlimefunLabel("pedestal", WIDGETS, WIDGETS_DARK, 0, 0, SLOT_SIZE, SLOT_SIZE);
+    public static final SlimefunLabel ALTAR = new SlimefunLabel("altar", WIDGETS, WIDGETS_DARK, 18, 0, SLOT_SIZE, SLOT_SIZE);
     public static final Map<SlimefunCategory, Integer> CACHED_WIDTH = new HashMap<>();
     public static final Map<SlimefunCategory, Integer> CACHED_HEIGHT = new HashMap<>();
     public static final NumberFormat numberFormat = NumberFormat.getInstance();
@@ -59,11 +59,11 @@ public class TextureUtils {
     }
 
     public static int getGridWidth(SlimefunRecipe slimefunRecipe, int side) {
-        return (side * TextureUtils.slotSize + TextureUtils.padding) + (slimefunRecipe.hasEnergy() ? TextureUtils.energyWidth + TextureUtils.padding : 0) + (TextureUtils.arrowWidth + TextureUtils.padding) + (slimefunRecipe.hasOutputs()? TextureUtils.outputSize * slimefunRecipe.outputs().size() : 0);
+        return (side * TextureUtils.SLOT_SIZE + TextureUtils.PADDING) + (slimefunRecipe.hasEnergy() ? TextureUtils.ENERGY_WIDTH + TextureUtils.PADDING : 0) + (TextureUtils.ARROW_WIDTH + TextureUtils.PADDING) + (slimefunRecipe.hasOutputs()? TextureUtils.OUTPUT_SIZE * slimefunRecipe.outputs().size() : 0);
     }
 
     public static int getGridHeight(int side) {
-        return side * slotSize;
+        return side * SLOT_SIZE;
     }
 
     public static int getProcessWidth(SlimefunCategory slimefunCategory) {
@@ -77,23 +77,23 @@ public class TextureUtils {
     }
     
     public static int getProcessWidth(SlimefunRecipe slimefunRecipe) {
-        return (slimefunRecipe.hasLabels() ? (labelSize + padding) * slimefunRecipe.labels().size() : 0) + (slimefunRecipe.hasEnergy() ? energyWidth + padding : 0) + ((slotSize + padding) * (slimefunRecipe.hasInputs() ? slimefunRecipe.inputs().size(): 1)) + (arrowWidth + padding) + (slimefunRecipe.hasOutputs() ? outputSize * slimefunRecipe.outputs().size() + padding * (slimefunRecipe.outputs().size() - 1) : 0);
+        return (slimefunRecipe.hasLabels() ? (LABEL_SIZE + PADDING) * slimefunRecipe.labels().size() : 0) + (slimefunRecipe.hasEnergy() ? ENERGY_WIDTH + PADDING : 0) + ((SLOT_SIZE + PADDING) * (slimefunRecipe.hasInputs() ? slimefunRecipe.inputs().size(): 1)) + (ARROW_WIDTH + PADDING) + (slimefunRecipe.hasOutputs() ? OUTPUT_SIZE * slimefunRecipe.outputs().size() + PADDING * (slimefunRecipe.outputs().size() - 1) : 0);
     }
 
     public static int getProcessHeight(SlimefunCategory slimefunCategory) {
         return CACHED_HEIGHT.computeIfAbsent(slimefunCategory, value -> {
             for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
                 if (slimefunRecipe.hasOutputs()) {
-                    return outputSize;
+                    return OUTPUT_SIZE;
                 }
             }
 
-            return slotSize;
+            return SLOT_SIZE;
         });
     }
 
     public static int getProcessHeight(SlimefunRecipe slimefunRecipe) {
-        return slimefunRecipe.hasOutputs() ? outputSize : slotSize;
+        return slimefunRecipe.hasOutputs() ? OUTPUT_SIZE : SLOT_SIZE;
     }
 
     public static int getReactorWidth(SlimefunCategory slimefunCategory) {
@@ -107,24 +107,24 @@ public class TextureUtils {
     }
 
     public static int getReactorWidth(SlimefunRecipe slimefunRecipe) {
-        return (TextureUtils.slotSize + TextureUtils.arrowWidth) * 2 + TextureUtils.padding * 4 + (slimefunRecipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.energyWidth);
+        return (TextureUtils.SLOT_SIZE + TextureUtils.ARROW_WIDTH) * 2 + TextureUtils.PADDING * 4 + (slimefunRecipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.ENERGY_WIDTH);
     }
 
     public static int getReactorHeight(SlimefunCategory slimefunCategory) {
         return CACHED_HEIGHT.computeIfAbsent(slimefunCategory, value -> {
-            final int baseAmount = TextureUtils.slotSize * 2;
+            final int baseAmount = TextureUtils.SLOT_SIZE * 2;
             for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
                 if (slimefunRecipe.hasOutputs()) {
-                    return baseAmount + outputSize;
+                    return baseAmount + OUTPUT_SIZE;
                 }
             }
 
-            return baseAmount + slotSize;
+            return baseAmount + SLOT_SIZE;
         });
     }
 
     public static int getReactorHeight(SlimefunRecipe slimefunRecipe) {
-        return TextureUtils.slotSize * 2 + (slimefunRecipe.hasOutputs() ? TextureUtils.outputSize : TextureUtils.slotSize);
+        return TextureUtils.SLOT_SIZE * 2 + (slimefunRecipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.SLOT_SIZE);
     }
 
     public static int getSmelteryWidth(SlimefunCategory slimefunCategory) {
@@ -138,6 +138,6 @@ public class TextureUtils {
     }
 
     public static int getSmelteryWidth(SlimefunRecipe slimefunRecipe) {
-        return (slimefunRecipe.hasEnergy() ? TextureUtils.energyWidth + TextureUtils.padding : 0) + (slimefunRecipe.hasInputs() ? TextureUtils.slotSize * 2 + TextureUtils.padding : TextureUtils.slotSize + TextureUtils.padding) + (TextureUtils.arrowWidth + TextureUtils.padding) + (slimefunRecipe.hasOutputs() ? TextureUtils.outputSize * slimefunRecipe.outputs().size() + TextureUtils.padding * (slimefunRecipe.outputs().size() - 1): 0);
+        return (slimefunRecipe.hasEnergy() ? TextureUtils.ENERGY_WIDTH + TextureUtils.PADDING : 0) + (slimefunRecipe.hasInputs() ? TextureUtils.SLOT_SIZE * 2 + TextureUtils.PADDING : TextureUtils.SLOT_SIZE + TextureUtils.PADDING) + (TextureUtils.ARROW_WIDTH + TextureUtils.PADDING) + (slimefunRecipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE * slimefunRecipe.outputs().size() + TextureUtils.PADDING * (slimefunRecipe.outputs().size() - 1): 0);
     }
 }

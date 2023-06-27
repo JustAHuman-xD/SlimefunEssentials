@@ -23,6 +23,9 @@
     "modmenu": [
       "me.justahuman.slimefun_essentials.config.ModMenuIntegration"
     ],
+    "jade": [
+      "me.justahuman.slimefun_essentials.compat.jade.JadeIntegration"
+    ],
     "emi": [
       "me.justahuman.slimefun_essentials.compat.emi.EmiIntegration"
     ],
