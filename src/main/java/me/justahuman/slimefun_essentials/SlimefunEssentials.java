@@ -6,6 +6,7 @@ import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.compat.cloth_config.ConfigScreen;
 import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.justahuman.slimefun_essentials.utils.Channels;
+import me.justahuman.slimefun_essentials.utils.CompatUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
@@ -33,7 +34,7 @@ public class SlimefunEssentials implements ClientModInitializer {
     public void onInitializeClient() {
         ModConfig.loadConfig();
         
-        if (Utils.isClothConfigEnabled()) {
+        if (CompatUtils.isClothConfigLoaded()) {
             final KeyBinding keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("slimefun_essentials.open_config", GLFW.GLFW_KEY_F6, "slimefun_essentials.title"));
             ClientTickEvents.END_CLIENT_TICK.register(client -> {
                 if (keyBinding.isPressed()) {
@@ -95,10 +96,13 @@ public class SlimefunEssentials implements ClientModInitializer {
                 final int z = packet.readInt();
                 final String id = packet.readUTF();
                 final BlockPos blockPos = new BlockPos(x, y, z);
+
+                // If the id is a space that means it's no longer a slimefun block
                 if (id.equals(" ")) {
                     ResourceLoader.removePlacedBlock(blockPos);
                     return;
                 }
+
                 ResourceLoader.addPlacedBlock(blockPos, id.toLowerCase());
             }));
 

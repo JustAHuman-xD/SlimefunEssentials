@@ -5,10 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.NonNull;
 import me.justahuman.slimefun_essentials.SlimefunEssentials;
+import me.justahuman.slimefun_essentials.config.ModConfig;
+import me.justahuman.slimefun_essentials.utils.CompatUtils;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -32,18 +33,20 @@ import java.util.Set;
 public class ResourceLoader {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
-    private static final Map<String, Identifier> itemModels = new HashMap<>();
+
     private static final Map<String, Identifier> blockModels = new HashMap<>();
+
     private static final Map<ChunkPos, Set<BlockPos>> placedChunks = new HashMap<>();
     private static final Map<BlockPos, String> placedBlocks = new HashMap<>();
 
     /**
-     * Clears {@link ResourceLoader#slimefunItems}, {@link ResourceLoader#itemModels}, and {@link ResourceLoader#blockModels}
+     * Clears {@link ResourceLoader#slimefunItems}, {@link ResourceLoader#blockModels}, {@link SlimefunLabel#clear()}, {@link SlimefunCategory#clear()}
      */
     public static void clear() {
         slimefunItems.clear();
-        itemModels.clear();
         blockModels.clear();
+        SlimefunLabel.clear();
+        SlimefunCategory.clear();
     }
 
     /**
@@ -60,13 +63,24 @@ public class ResourceLoader {
      * @param manager The {@link ResourceManager} to load from
      */
     public static void loadResources(ResourceManager manager) {
-        loadItems(manager);
-        loadLabels(manager);
-        loadCategories(manager);
-        loadItemModels(manager);
-        loadBlockModels(manager);
+        if (CompatUtils.isRecipeModLoaded()) {
+            loadItems(manager);
+            loadLabels(manager);
+            loadCategories(manager);
+        }
+
+        if (ModConfig.customBlockFeatures()) {
+            if (CompatUtils.isMoreBlockPredicatesLoaded()) {
+                loadItems(manager);
+                loadBlockModels(manager);
+            }
+
+            if (CompatUtils.isJadeLoaded()) {
+                loadItems(manager);
+            }
+        }
     }
-    
+
     /**
      * Takes an {@link InputStream} from a given {@link Resource} and gets a {@link JsonObject} from it
      *
@@ -167,34 +181,14 @@ public class ResourceLoader {
     }
 
     /**
-     * Locates and loads every Slimefun Item Model from the "models/item" directory
-     *
-     * @param manager The {@link ResourceManager} to load from
-     */
-    public static void loadItemModels(ResourceManager manager) {
-        for (Identifier identifier : manager.findResources("models/item", Utils::filterResources).keySet()) {
-            final String id = Utils.getFileName(identifier.getPath());
-            ResourceLoader.addItemModel(id);
-        }
-    }
-
-    /**
-     * Adds a {@link String} id of an available {@link ItemStack}'s Model
-     *
-     * @param id The {@link String} id that represents a Slimefun Item
-     */
-    public static void addItemModel(String id) {
-        itemModels.put(id, new Identifier("minecraft", "item/" + id));
-    }
-
-    /**
      * Locates and loads every Slimefun Block Model from the "models/block" directory
      *
      * @param manager The {@link ResourceManager} to load from
      */
     public static void loadBlockModels(ResourceManager manager) {
-        for (Identifier identifier : manager.findResources("models/block", Utils::filterResources).keySet()) {
+        for (Identifier identifier : manager.findResources("models/block", Utils::filterItems).keySet()) {
             final String id = Utils.getFileName(identifier.getPath());
+            Utils.log("Loaded Block Model For: " + id);
             ResourceLoader.addBlockModel(id);
         }
     }
@@ -219,8 +213,8 @@ public class ResourceLoader {
         final Set<BlockPos> blocks = placedChunks.getOrDefault(chunkPos, new HashSet<>());
 
         blocks.add(blockPos);
-        placedChunks.put(chunkPos, blocks);
         placedBlocks.put(blockPos, id);
+        placedChunks.put(chunkPos, blocks);
     }
 
     /**

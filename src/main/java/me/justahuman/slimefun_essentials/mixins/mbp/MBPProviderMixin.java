@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 public class MBPProviderMixin {
     @Inject(at = @At("HEAD"), method = "provideExtraModels")
     public void addSlimefunModels(ResourceManager manager, Consumer<Identifier> out, CallbackInfo ci) {
+        ResourceLoader.loadItems(manager);
         ResourceLoader.loadBlockModels(manager);
         ResourceLoader.getBlockModels().values().forEach(out);
     }

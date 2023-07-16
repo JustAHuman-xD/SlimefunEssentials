@@ -2,7 +2,6 @@ package me.justahuman.slimefun_essentials.utils;
 
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.config.ModConfig;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -14,12 +13,8 @@ public class Utils {
     private static final Logger LOGGER = LoggerFactory.getLogger(ID);
     private static final String ERROR_MESSAGE = "[SFE] Failed to load data";
 
-    public static Identifier newIdentifier(String namespace) {
-        return new Identifier(ID, namespace.toLowerCase());
-    }
-    
-    public static boolean isClothConfigEnabled() {
-        return FabricLoader.getInstance().isModLoaded("cloth-config2");
+    public static Identifier newIdentifier(String path) {
+        return new Identifier(ID, path.toLowerCase());
     }
 
     public static boolean filterResources(Identifier identifier) {

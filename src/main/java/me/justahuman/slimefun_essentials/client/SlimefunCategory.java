@@ -45,6 +45,10 @@ public record SlimefunCategory(String id, String type, Integer speed, Integer en
         return Collections.unmodifiableMap(slimefunCategories);
     }
 
+    public static void clear() {
+        slimefunCategories.clear();
+    }
+
     public boolean hasSpeed() {
         return this.speed != null && this.speed != 1;
     }
