@@ -5,8 +5,8 @@ import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.library.render.ItemStackRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,12 +21,12 @@ public class SlimefunStackRenderer implements IIngredientRenderer<SlimefunItemSt
     }
     
     @Override
-    public void render(MatrixStack poseStack, @Nullable SlimefunItemStack ingredient) {
+    public void render(DrawContext graphics, @Nullable SlimefunItemStack ingredient) {
         if (ingredient == null) {
             return;
         }
     
-        itemStackRenderer.render(poseStack, ingredient.itemStack());
+        itemStackRenderer.render(graphics, ingredient.itemStack());
     }
     
     @Override

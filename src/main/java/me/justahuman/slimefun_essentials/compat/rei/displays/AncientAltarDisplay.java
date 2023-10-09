@@ -16,8 +16,8 @@ public class AncientAltarDisplay extends ProcessDisplay {
     public AncientAltarDisplay(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
         super(Type.ANCIENT_ALTAR, slimefunCategory, slimefunRecipe);
 
-        ReiUtils.fillEntrys(this.inputs, 9);
-        ReiUtils.fillEntrys(this.outputs, 1);
+        ReiUtils.fillEntries(this.inputs, 9);
+        ReiUtils.fillEntries(this.outputs, 1);
     }
 
     @Override

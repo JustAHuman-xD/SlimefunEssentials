@@ -14,10 +14,10 @@ import java.util.List;
 public class GridDisplay extends ProcessDisplay {
     protected final int side;
     public GridDisplay(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, int side) {
-        super(Type.GRID(side), slimefunCategory, slimefunRecipe);
+        super(Type.grid(side), slimefunCategory, slimefunRecipe);
 
         this.side = side;
-        ReiUtils.fillEntrys(this.inputs, side * side);
+        ReiUtils.fillEntries(this.inputs, side * side);
     }
 
     @Override

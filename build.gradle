@@ -45,11 +45,11 @@ dependencies {
 
     modImplementation "curse.maven:jade-324717:${project.jade_version}"
 
-    modImplementation ("dev.emi:emi:${project.emi_version}") {
+    modImplementation ("dev.emi:emi-fabric:${project.emi_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    modImplementation("mezz.jei:${project.jei_version}") {
+    modImplementation("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}") {
         exclude(group: "mezz.jei")
     }
 

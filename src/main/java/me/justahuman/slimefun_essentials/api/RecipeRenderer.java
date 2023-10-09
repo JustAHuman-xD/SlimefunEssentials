@@ -148,7 +148,7 @@ public abstract class RecipeRenderer {
             }
         };
 
-        public static Type GRID(int side) {
+        public static Type grid(int side) {
             return new Type() {
                 @Override
                 public int getContentsWidth(SlimefunCategory slimefunCategory) {

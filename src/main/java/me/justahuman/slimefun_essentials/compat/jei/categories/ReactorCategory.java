@@ -10,7 +10,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 
 public class ReactorCategory extends ProcessCategory {
@@ -51,36 +51,36 @@ public class ReactorCategory extends ProcessCategory {
     }
 
     @Override
-    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, DrawContext graphics, double mouseX, double mouseY) {
         final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe), calculateYOffset(this.slimefunCategory, recipe));
         recipe.fillInputs(4);
 
-        TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
+        TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
-        TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
+        TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
-        TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
+        TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
         offsets.x().addSlot();
 
-        addFillingArrow(stack, offsets.getX(), offsets.getY(), false, getTime(recipe));
+        addFillingArrow(graphics, offsets.getX(), offsets.getY(), false, getTime(recipe));
         offsets.x().addArrow();
 
         if (recipe.hasOutputs()) {
-            TextureUtils.OUTPUT.draw(stack, offsets.getX(), offsets.getY());
+            TextureUtils.OUTPUT.draw(graphics, offsets.getX(), offsets.getY());
         }
 
         if (recipe.hasEnergy()) {
-            addEnergy(stack, offsets.getX() + (recipe.hasOutputs() ? (TextureUtils.OUTPUT_SIZE - TextureUtils.ENERGY_WIDTH) / 2 : 0), offsets.getY() + (recipe.hasOutputs() ? - TextureUtils.ENERGY_HEIGHT - TextureUtils.PADDING : TextureUtils.PADDING), recipe.energy() < 0);
+            addEnergy(graphics, offsets.getX() + (recipe.hasOutputs() ? (TextureUtils.OUTPUT_SIZE - TextureUtils.ENERGY_WIDTH) / 2 : 0), offsets.getY() + (recipe.hasOutputs() ? - TextureUtils.ENERGY_HEIGHT - TextureUtils.PADDING : TextureUtils.PADDING), recipe.energy() < 0);
             offsets.x().add(recipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.ENERGY_WIDTH).addPadding();
         }
 
-        addFillingArrow(stack, offsets.getX(), offsets.getY(), true, getTime(recipe));
+        addFillingArrow(graphics, offsets.getX(), offsets.getY(), true, getTime(recipe));
         offsets.x().addArrow();
         offsets.y().subtract(TextureUtils.SLOT_SIZE * 2);
-        TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
+        TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
-        TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
+        TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
-        TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
+        TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
     }
 }

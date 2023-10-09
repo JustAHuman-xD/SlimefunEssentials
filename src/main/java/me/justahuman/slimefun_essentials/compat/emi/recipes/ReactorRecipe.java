@@ -30,7 +30,7 @@ public class ReactorRecipe extends ProcessRecipe {
         offsets.x().addArrow();
         
         if (this.slimefunRecipe.hasOutputs()) {
-            widgets.addSlot(this.outputs.get(0), offsets.getX(), offsets.getY()).output(true);
+            widgets.addSlot(this.outputs.get(0), offsets.getX(), offsets.getY()).large(true);
         }
         
         if (this.slimefunRecipe.hasEnergy()) {

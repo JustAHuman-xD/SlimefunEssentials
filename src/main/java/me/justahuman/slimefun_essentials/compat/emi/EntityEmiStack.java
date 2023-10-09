@@ -7,6 +7,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.screen.tooltip.RemainderTooltipComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.DiffuseLighting;
@@ -31,7 +32,6 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class EntityEmiStack extends EmiStack {
     private final @Nullable Entity entity;
-    private final EntityEntry entry;
     private final double scale;
     private final int amount;
     
@@ -45,7 +45,6 @@ public class EntityEmiStack extends EmiStack {
     
     protected EntityEmiStack(@Nullable Entity entity, double scale, int amount) {
         this.entity = entity;
-        this.entry = new EntityEntry(entity);
         this.scale = scale;
         this.amount = amount;
     }
@@ -72,7 +71,7 @@ public class EntityEmiStack extends EmiStack {
     }
     
     @Override
-    public void render(MatrixStack matrices, int x, int y, float delta, int flags) {
+    public void render(DrawContext graphics, int x, int y, float delta, int flags) {
         if (this.entity != null) {
             if (this.entity instanceof LivingEntity living)
                 renderEntity(x + 8, (int) (y + 8 + this.scale), this.scale, living);
@@ -89,11 +88,6 @@ public class EntityEmiStack extends EmiStack {
     @Override
     public Object getKey() {
         return this.entity;
-    }
-    
-    @Override
-    public Entry<?> getEntry() {
-        return this.entry;
     }
     
     @Override
@@ -175,16 +169,5 @@ public class EntityEmiStack extends EmiStack {
         matrixStack.pop();
         RenderSystem.applyModelViewMatrix();
         DiffuseLighting.enableGuiDepthLighting();
-    }
-    
-    public static class EntityEntry extends Entry<Entity> {
-        public EntityEntry(Entity value) {
-            super(value);
-        }
-        
-        @Override
-        public Class<? extends Entity> getType() {
-            return getValue().getType().getBaseClass();
-        }
     }
 }

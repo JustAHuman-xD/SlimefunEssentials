@@ -8,7 +8,6 @@ import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.math.Rectangle;
-import me.shedaniel.rei.api.client.entry.renderer.AbstractEntryRenderer;
 import me.shedaniel.rei.api.client.entry.renderer.BatchedEntryRenderer;
 import me.shedaniel.rei.api.client.entry.renderer.EntryRenderer;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
@@ -21,10 +20,10 @@ import me.shedaniel.rei.api.common.entry.type.EntryDefinition;
 import me.shedaniel.rei.api.common.entry.type.EntryType;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import me.shedaniel.rei.plugin.client.entry.ItemEntryDefinition;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -152,7 +151,7 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
         return Stream.empty();
     }
 
-    public static class SlimefunItemStackRenderer extends AbstractEntryRenderer<SlimefunItemStack> implements BatchedEntryRenderer<SlimefunItemStack, BakedModel> {
+    public static class SlimefunItemStackRenderer implements BatchedEntryRenderer<SlimefunItemStack, BakedModel> {
         private final ItemEntryDefinition.ItemEntryRenderer itemStackEntryRenderer;
 
         public SlimefunItemStackRenderer() {
@@ -165,8 +164,8 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
         }
 
         @Override
-        public void render(EntryStack<SlimefunItemStack> entry, MatrixStack matrices, Rectangle bounds, int mouseX, int mouseY, float delta) {
-            itemStackEntryRenderer.render(ReiIntegration.unwrap(entry), matrices, bounds, mouseX, mouseY, delta);
+        public void render(EntryStack<SlimefunItemStack> entry, DrawContext graphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            itemStackEntryRenderer.render(ReiIntegration.unwrap(entry), graphics, bounds, mouseX, mouseY, delta);
         }
 
         @Override
@@ -175,29 +174,27 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
         }
 
         @Override
-        public void startBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
-            itemStackEntryRenderer.startBatch(ReiIntegration.unwrap(entry), model, matrices, delta);
+        public void startBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, DrawContext graphics, float delta) {
+            itemStackEntryRenderer.startBatch(ReiIntegration.unwrap(entry), model, graphics, delta);
         }
 
         @Override
-        public void renderBase(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, VertexConsumerProvider.Immediate immediate, Rectangle bounds, int mouseX, int mouseY, float delta) {
-            itemStackEntryRenderer.renderBase(ReiIntegration.unwrap(entry), model, matrices, immediate, bounds, mouseX, mouseY, delta);
+        public void renderBase(EntryStack<SlimefunItemStack> entry, BakedModel model, DrawContext graphics, VertexConsumerProvider.Immediate immediate, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            itemStackEntryRenderer.renderBase(ReiIntegration.unwrap(entry), model, graphics, immediate, bounds, mouseX, mouseY, delta);
         }
 
         @Override
-        public void afterBase(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
-            itemStackEntryRenderer.afterBase(ReiIntegration.unwrap(entry), model, matrices, delta);
+        public void afterBase(EntryStack<SlimefunItemStack> entry, BakedModel model, DrawContext graphics, float delta) {
+            itemStackEntryRenderer.afterBase(ReiIntegration.unwrap(entry), model, graphics, delta);
         }
 
         @Override
-        public void renderOverlay(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, VertexConsumerProvider.Immediate immediate, Rectangle bounds, int mouseX, int mouseY, float delta) {
-            itemStackEntryRenderer.renderOverlay(ReiIntegration.unwrap(entry), model, matrices, immediate, bounds, mouseX, mouseY, delta);
+        public void renderOverlay(EntryStack<SlimefunItemStack> entry, BakedModel model, DrawContext graphics, VertexConsumerProvider.Immediate immediate, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            itemStackEntryRenderer.renderOverlay(ReiIntegration.unwrap(entry), model, graphics, immediate, bounds, mouseX, mouseY, delta);
         }
 
         @Override
-        public void endBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, MatrixStack matrices, float delta) {
-            itemStackEntryRenderer.endBatch(ReiIntegration.unwrap(entry), model, matrices, delta);
-        }
+        public void endBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, DrawContext graphics, float delta) {}
 
         @Override
         @Nullable

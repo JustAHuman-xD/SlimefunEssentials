@@ -5,7 +5,7 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import java.util.List;
 
 public class ReiUtils {
-    public static void fillEntrys(List<EntryIngredient> list, int size) {
+    public static void fillEntries(List<EntryIngredient> list, int size) {
         if (list.size() >= size) {
             return;
         }

@@ -4,6 +4,7 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiStack;
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.client.SlimefunCategory;
@@ -28,7 +29,7 @@ public class EmiIntegration implements EmiPlugin {
     @Override
     public void register(EmiRegistry emiRegistry) {
         for (Map.Entry<String, SlimefunItemStack> entry : ResourceLoader.getSlimefunItems().entrySet()) {
-            emiRegistry.setDefaultComparison(EmiStack.of(entry.getValue().itemStack()), original -> original.copy().nbt(true).build());
+            emiRegistry.setDefaultComparison(EmiStack.of(entry.getValue().itemStack()), Comparison.compareNbt());
         }
         slimefunCategories.clear();
 

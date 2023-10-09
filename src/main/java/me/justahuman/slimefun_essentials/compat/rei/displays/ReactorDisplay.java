@@ -18,7 +18,7 @@ public class ReactorDisplay extends ProcessDisplay {
     public ReactorDisplay(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
         super(Type.REACTOR, slimefunCategory, slimefunRecipe);
 
-        ReiUtils.fillEntrys(this.inputs, 4);
+        ReiUtils.fillEntries(this.inputs, 4);
     }
 
     @Override

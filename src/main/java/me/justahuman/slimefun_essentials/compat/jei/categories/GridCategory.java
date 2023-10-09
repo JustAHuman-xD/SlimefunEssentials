@@ -11,13 +11,13 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 
 public class GridCategory extends ProcessCategory {
     protected final int side;
     public GridCategory(IGuiHelper guiHelper, SlimefunCategory slimefunCategory, ItemStack catalyst, int side) {
-        super(Type.GRID(side), guiHelper, slimefunCategory, catalyst);
+        super(Type.grid(side), guiHelper, slimefunCategory, catalyst);
 
         this.side = side;
     }
@@ -53,16 +53,16 @@ public class GridCategory extends ProcessCategory {
     }
 
     @Override
-    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, DrawContext graphics, double mouseX, double mouseY) {
         final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(recipe), TextureUtils.PADDING);
         recipe.fillInputs(this.side * this.side);
 
         // Display Energy
-        addEnergyWithCheck(stack, offsets, recipe);
+        addEnergyWithCheck(graphics, offsets, recipe);
 
         for (int y = 1; y <= this.side; y++) {
             for (int x = 1; x <= this.side; x++) {
-                TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
+                TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
                 offsets.x().addSlot(false);
             }
             offsets.x().subtract(TextureUtils.SLOT_SIZE * this.side);
@@ -71,9 +71,9 @@ public class GridCategory extends ProcessCategory {
         offsets.x().add(TextureUtils.SLOT_SIZE * this.side).addPadding();
 
         // Display Arrow
-        addArrow(stack, offsets, recipe);
+        addArrow(graphics, offsets, recipe);
 
         // Display Outputs
-        addOutputsOrEnergy(stack, offsets, recipe);
+        addOutputsOrEnergy(graphics, offsets, recipe);
     }
 }

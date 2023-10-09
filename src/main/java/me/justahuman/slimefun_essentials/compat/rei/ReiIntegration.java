@@ -103,23 +103,33 @@ public class ReiIntegration implements REIClientPlugin {
     }
 
     public static Widget widgetFromSlimefunLabel(SlimefunLabel slimefunLabel, int x, int y) {
-        return Widgets.createDrawableWidget((helper, stack, mouseX, mouseY, delta) -> slimefunLabel.draw(stack, x, y, REIRuntime.getInstance().isDarkThemeEnabled()));
+        return Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> slimefunLabel.draw(graphics, x, y, REIRuntime.getInstance().isDarkThemeEnabled()));
     }
 
     /**
      * I would like to note that a lot of the logic for this method came from EMI: AnimatedTextureWidget.java
      */
     public static Widget widgetFromSlimefunLabel(SlimefunLabel slimefunLabel, int x, int y, int time, boolean horizontal, boolean endToStart, boolean fullToEmpty) {
-        return Widgets.createDrawableWidget((helper, stack, mouseX, mouseY, delta) -> {
+        return Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> {
             int subTime = (int) (System.currentTimeMillis() % time);
             if (endToStart ^ fullToEmpty) {
                 subTime = time - subTime;
             }
 
-            int mx = x, my = y;
-            int w = slimefunLabel.width(), mw = slimefunLabel.width(), h = slimefunLabel.height(), mh = slimefunLabel.height();
-            int u = slimefunLabel.u(), mu = slimefunLabel.u(), v = slimefunLabel.v(), mv = slimefunLabel.v();
-            int rw = slimefunLabel.width(), mrw = slimefunLabel.width(), rh = slimefunLabel.height(), mrh = slimefunLabel.height();
+            int mx = x;
+            int my = y;
+            int w = slimefunLabel.width();
+            int mw = slimefunLabel.width();
+            int h = slimefunLabel.height();
+            int mh = slimefunLabel.height();
+            int u = slimefunLabel.u();
+            int mu = slimefunLabel.u();
+            int v = slimefunLabel.v();
+            int mv = slimefunLabel.v();
+            int rw = slimefunLabel.width();
+            int mrw = slimefunLabel.width();
+            int rh = slimefunLabel.height();
+            int mrh = slimefunLabel.height();
 
             if (horizontal) {
                 if (endToStart) {
@@ -143,13 +153,11 @@ public class ReiIntegration implements REIClientPlugin {
                 }
             }
 
-            slimefunLabel.draw(stack, mx, my, mw, mh, mu, mv, mrw, mrh, REIRuntime.getInstance().isDarkThemeEnabled());
+            slimefunLabel.draw(graphics, mx, my, mw, mh, mu, mv, mrw, mrh, REIRuntime.getInstance().isDarkThemeEnabled());
         });
     }
 
     public static EntryStack<ItemStack> unwrap(EntryStack<SlimefunItemStack> entryStack) {
-        EntryStack<ItemStack> from = EntryStacks.of(entryStack.getValue().itemStack());
-        from.setZ(entryStack.getZ());
-        return from;
+        return EntryStacks.of(entryStack.getValue().itemStack());
     }
 }

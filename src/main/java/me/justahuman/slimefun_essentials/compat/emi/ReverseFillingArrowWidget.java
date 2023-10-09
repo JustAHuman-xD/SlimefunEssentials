@@ -1,11 +1,9 @@
 package me.justahuman.slimefun_essentials.compat.emi;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.widget.AnimatedTextureWidget;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 
 public class ReverseFillingArrowWidget extends AnimatedTextureWidget {
     public ReverseFillingArrowWidget(int x, int y, int time) {
@@ -13,11 +11,9 @@ public class ReverseFillingArrowWidget extends AnimatedTextureWidget {
     }
     
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        EmiPort.setPositionTexShader();
+    public void render(DrawContext graphics, int mouseX, int mouseY, float delta) {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, this.texture);
-        DrawableHelper.drawTexture(matrices, this.x, this.y, this.width, this.height, this.u, 0, this.regionWidth, this.regionHeight, this.textureWidth, this.textureHeight);
-        super.render(matrices, mouseX, mouseY, delta);
+        graphics.drawTexture(this.texture, this.x, this.y, this.width, this.height, this.u, 0, this.regionWidth, this.regionHeight, this.textureWidth, this.textureHeight);
+        super.render(graphics, mouseX, mouseY, delta);
     }
 }

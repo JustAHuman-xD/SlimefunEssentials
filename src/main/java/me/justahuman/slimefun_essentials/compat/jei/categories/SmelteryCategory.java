@@ -11,7 +11,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 
 public class SmelteryCategory extends ProcessCategory {
@@ -52,17 +52,17 @@ public class SmelteryCategory extends ProcessCategory {
     }
 
     @Override
-    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, DrawContext graphics, double mouseX, double mouseY) {
         final OffsetBuilder offsets = new OffsetBuilder(this, recipe, TextureUtils.PADDING, TextureUtils.PADDING);
         recipe.fillInputs(6);
         recipe.fillOutputs(1);
 
         // Display Energy
-        addEnergyWithCheck(stack, offsets, recipe);
+        addEnergyWithCheck(graphics, offsets, recipe);
 
         for (int y = 1; y <= 3; y++) {
             for (int x = 1; x <= 2; x++) {
-                TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.getY());
+                TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
                 offsets.x().addSlot(false);
             }
             offsets.x().subtract(TextureUtils.SLOT_SIZE * 2);
@@ -71,9 +71,9 @@ public class SmelteryCategory extends ProcessCategory {
         offsets.x().add(TextureUtils.SLOT_SIZE * 2).addPadding();
 
         // Display Arrow
-        addArrow(stack, offsets, recipe);
+        addArrow(graphics, offsets, recipe);
 
         // Display Outputs
-        addOutputs(stack, offsets, recipe);
+        addOutputs(graphics, offsets, recipe);
     }
 }

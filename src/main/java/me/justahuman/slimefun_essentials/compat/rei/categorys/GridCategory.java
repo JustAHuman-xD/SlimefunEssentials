@@ -6,6 +6,6 @@ import net.minecraft.item.ItemStack;
 
 public class GridCategory extends SlimefunReiCategory<GridDisplay> {
     public GridCategory(SlimefunCategory slimefunCategory, ItemStack icon, int side) {
-        super(Type.GRID(side), slimefunCategory, icon);
+        super(Type.grid(side), slimefunCategory, icon);
     }
 }

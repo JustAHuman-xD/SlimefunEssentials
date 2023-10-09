@@ -11,7 +11,7 @@ import me.justahuman.slimefun_essentials.utils.TextureUtils;
 public class GridRecipe extends ProcessRecipe {
     protected final int side;
     public GridRecipe(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe, EmiRecipeCategory emiRecipeCategory, int side) {
-        super(Type.GRID(side), slimefunCategory, slimefunRecipe, emiRecipeCategory);
+        super(Type.grid(side), slimefunCategory, slimefunRecipe, emiRecipeCategory);
 
         this.side = side;
         EmiUtils.fillInputs(this.inputs, this.side * this.side);

@@ -5,9 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import lombok.NonNull;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 import java.util.Collections;
@@ -45,18 +43,16 @@ public record SlimefunLabel(String id, Identifier light, Identifier dark, int u,
         slimefunLabels.clear();
     }
 
-    public void draw(MatrixStack stack, int x, int y, int width, int height, int u, int v, int regionWidth, int regionHeight, boolean dark) {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+    public void draw(DrawContext graphics, int x, int y, int width, int height, int u, int v, int regionWidth, int regionHeight, boolean dark) {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, dark ? this.dark : this.light);
-        DrawableHelper.drawTexture(stack, x, y, width, height, u, v, regionWidth, regionHeight, 256, 256);
+        graphics.drawTexture(dark ? this.dark : this.light, x, y, width, height, u, v, regionWidth, regionHeight, 256, 256);
     }
 
-    public void draw(MatrixStack stack, int x, int y, boolean dark) {
-        draw(stack, x, y, this.width, this.height, this.u, this.v, this.width, this.height, dark);
+    public void draw(DrawContext graphics, int x, int y, boolean dark) {
+        draw(graphics, x, y, this.width, this.height, this.u, this.v, this.width, this.height, dark);
     }
 
-    public void draw(MatrixStack stack, int x, int y) {
-        draw(stack, x, y, false);
+    public void draw(DrawContext graphics, int x, int y) {
+        draw(graphics, x, y, false);
     }
 }

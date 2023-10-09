@@ -10,7 +10,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 
 public class AncientAltarCategory extends ProcessCategory {
@@ -43,27 +43,27 @@ public class AncientAltarCategory extends ProcessCategory {
     }
 
     @Override
-    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, DrawContext graphics, double mouseX, double mouseY) {
         final OffsetBuilder offsets = new OffsetBuilder(this, recipe);
         recipe.fillInputs(9);
         recipe.fillOutputs(1);
 
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot());
+        TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot());
         offsets.x().addSlot(false);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE);
+        TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE);
+        TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE);
         offsets.x().addSlot(false);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE * 2);
-        TextureUtils.ALTAR.draw(stack, offsets.getX(), offsets.slot());
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE * 2);
+        TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE * 2);
+        TextureUtils.ALTAR.draw(graphics, offsets.getX(), offsets.slot());
+        TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE * 2);
         offsets.x().addSlot(false);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE);
+        TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE);
+        TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot() - TextureUtils.SLOT_SIZE);
         offsets.x().addSlot(false);
-        TextureUtils.PEDESTAL.draw(stack, offsets.getX(), offsets.slot());
+        TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot());
         offsets.x().addSlot();
-        addArrow(stack, offsets.getX(), offsets.arrow(), false);
+        addArrow(graphics, offsets.getX(), offsets.arrow(), false);
         offsets.x().addArrow();
-        TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.slot());
+        TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.slot());
     }
 }

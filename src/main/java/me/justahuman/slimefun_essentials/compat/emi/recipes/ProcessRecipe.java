@@ -165,7 +165,7 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
 
     protected void addOutputs(WidgetHolder widgets, OffsetBuilder offsets) {
         for (EmiStack output : this.outputs) {
-            widgets.addSlot(output, offsets.getX(), offsets.output()).output(true);
+            widgets.addSlot(output, offsets.getX(), offsets.output()).large(true);
             offsets.x().addOutput();
         }
     }

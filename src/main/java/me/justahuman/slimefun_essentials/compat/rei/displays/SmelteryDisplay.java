@@ -15,8 +15,8 @@ public class SmelteryDisplay extends ProcessDisplay {
     public SmelteryDisplay(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
         super(Type.SMELTERY, slimefunCategory, slimefunRecipe);
 
-        ReiUtils.fillEntrys(this.inputs, 6);
-        ReiUtils.fillEntrys(this.outputs, 1);
+        ReiUtils.fillEntries(this.inputs, 6);
+        ReiUtils.fillEntries(this.outputs, 1);
     }
 
     @Override

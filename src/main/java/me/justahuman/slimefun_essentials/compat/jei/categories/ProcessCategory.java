@@ -22,7 +22,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
@@ -135,89 +135,89 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
             }
         }
     }
-    
+
     @Override
-    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, MatrixStack stack, double mouseX, double mouseY) {
+    public void draw(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, DrawContext graphics, double mouseX, double mouseY) {
         final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe));
 
         // Display Labels
         if (recipe.hasLabels()) {
             for (SlimefunLabel slimefunLabel : recipe.labels()) {
-                slimefunLabel.draw(stack, offsets.getX(), offsets.label());
+                slimefunLabel.draw(graphics, offsets.getX(), offsets.label());
                 offsets.x().addLabel();
             }
         }
 
         // Display Energy
-        addEnergyWithCheck(stack, offsets, recipe);
+        addEnergyWithCheck(graphics, offsets, recipe);
 
         // Display Inputs, only the slot icon
         if (recipe.hasInputs()) {
             for (SlimefunRecipeComponent ignored : recipe.inputs()) {
-                TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.slot());
+                TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.slot());
                 offsets.x().addSlot();
             }
         } else {
-            TextureUtils.SLOT.draw(stack, offsets.getX(), offsets.slot());
+            TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.slot());
             offsets.x().addSlot();
         }
 
         // Display Arrow
-        addArrow(stack, offsets, recipe);
+        addArrow(graphics, offsets, recipe);
 
         // Display Outputs
-        addOutputsOrEnergy(stack, offsets, recipe);
+        addOutputsOrEnergy(graphics, offsets, recipe);
     }
 
-    protected void addEnergyWithCheck(MatrixStack stack, OffsetBuilder offsets, SlimefunRecipe recipe) {
+    protected void addEnergyWithCheck(DrawContext graphics, OffsetBuilder offsets, SlimefunRecipe recipe) {
         if (recipe.hasEnergy() && recipe.hasOutputs()) {
-            addEnergy(stack, offsets, recipe.energy() < 0);
+            addEnergy(graphics, offsets, recipe.energy() < 0);
         }
     }
 
-    protected void addEnergy(MatrixStack stack, OffsetBuilder offsets, boolean negative) {
-        addEnergy(stack, offsets.getX(), offsets.energy(), negative);
+    protected void addEnergy(DrawContext graphics, OffsetBuilder offsets, boolean negative) {
+        addEnergy(graphics, offsets.getX(), offsets.energy(), negative);
         offsets.x().addEnergy();
     }
 
-    protected void addEnergy(MatrixStack stack, int x, int y, boolean negative) {
-        TextureUtils.ENERGY.draw(stack, x, y);
-        (negative ? this.negativeEnergy : this.positiveEnergy).draw(stack, x, y);
+    protected void addEnergy(DrawContext graphics, int x, int y, boolean negative) {
+        TextureUtils.ENERGY.draw(graphics, x, y);
+        (negative ? this.negativeEnergy : this.positiveEnergy).draw(graphics, x, y);
     }
 
-    protected void addArrow(MatrixStack stack, OffsetBuilder offsets, SlimefunRecipe recipe) {
-        addArrow(stack, recipe, offsets.getX(), offsets.arrow(),false);
+    protected void addArrow(DrawContext graphics, OffsetBuilder offsets, SlimefunRecipe recipe) {
+        addArrow(graphics, recipe, offsets.getX(), offsets.arrow(),false);
         offsets.x().addArrow();
     }
 
-    protected void addArrow(MatrixStack stack, SlimefunRecipe recipe, int x, int y, boolean backwards) {
+    protected void addArrow(DrawContext graphics, SlimefunRecipe recipe, int x, int y, boolean backwards) {
         if (recipe.hasTime()) {
-            addFillingArrow(stack, x, y, backwards, getTime(recipe));
+            addFillingArrow(graphics, x, y, backwards, getTime(recipe));
         } else {
-            addArrow(stack, x, y, backwards);
+            addArrow(graphics, x, y, backwards);
         }
     }
 
-    protected void addArrow(MatrixStack stack, int x, int y, boolean backwards) {
-        (backwards ? TextureUtils.BACKWARDS_ARROW : TextureUtils.ARROW).draw(stack, x, y);
+    protected void addArrow(DrawContext graphics, int x, int y, boolean backwards) {
+        (backwards ? TextureUtils.BACKWARDS_ARROW : TextureUtils.ARROW).draw(graphics, x, y);
     }
 
-    protected void addFillingArrow(MatrixStack stack, int x, int y, boolean backwards, int sfTicks) {
-        addArrow(stack, x, y, backwards);
-        (backwards ? this.cachedBackwardsArrows.getUnchecked(sfTicks) : this.cachedArrows.getUnchecked(sfTicks)).draw(stack, x, y);
+    protected void addFillingArrow(DrawContext graphics, int x, int y, boolean backwards, int sfTicks) {
+        addArrow(graphics, x, y, backwards);
+        (backwards ? this.cachedBackwardsArrows.getUnchecked(sfTicks) : this.cachedArrows.getUnchecked(sfTicks)).draw(graphics, x, y);
     }
 
-    protected void addOutputsOrEnergy(MatrixStack stack, OffsetBuilder offsets, SlimefunRecipe recipe) {
+    protected void addOutputsOrEnergy(DrawContext graphics, OffsetBuilder offsets, SlimefunRecipe recipe) {
         if (recipe.hasOutputs()) {
-            addOutputs(stack, offsets, recipe);
+            addOutputs(graphics, offsets, recipe);
         } else {
-            addEnergy(stack, offsets, recipe.energy() < 0);
+            addEnergy(graphics, offsets, recipe.energy() < 0);
         }
     }
 
-    protected void addOutputs(MatrixStack stack, OffsetBuilder offsets, SlimefunRecipe recipe) {
+    protected void addOutputs(DrawContext graphics, OffsetBuilder offsets, SlimefunRecipe recipe) {
         for (SlimefunRecipeComponent ignored : recipe.outputs()) {
-            TextureUtils.OUTPUT.draw(stack, offsets.getX(), offsets.output());
+            TextureUtils.OUTPUT.draw(graphics, offsets.getX(), offsets.output());
             offsets.x().addOutput();
         }
     }

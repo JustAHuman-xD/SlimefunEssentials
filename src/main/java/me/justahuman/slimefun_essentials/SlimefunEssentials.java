@@ -59,7 +59,7 @@ public class SlimefunEssentials implements ClientModInitializer {
         if (ModConfig.autoToggleAddons()) {
             final List<String> normalAddons = new ArrayList<>();
             ClientPlayNetworking.registerGlobalReceiver(Channels.ADDON_CHANNEL, ((client, handler, buf, sender) -> {
-                final String utf = ByteStreams.newDataInput(buf.getWrittenBytes()).readUTF();
+                final String utf = ByteStreams.newDataInput(buf.array()).readUTF();
                 if (utf.equals("clear")) {
                     normalAddons.addAll(ModConfig.getAddons());
                     ModConfig.getAddons().clear();
@@ -90,7 +90,7 @@ public class SlimefunEssentials implements ClientModInitializer {
             ClientChunkEvents.CHUNK_UNLOAD.register((world, chunk) -> ResourceLoader.removePlacedChunk(chunk.getPos()));
 
             ClientPlayNetworking.registerGlobalReceiver(Channels.BLOCK_CHANNEL, ((client, handler, buf, sender) -> {
-                final ByteArrayDataInput packet = ByteStreams.newDataInput(buf.getWrittenBytes());
+                final ByteArrayDataInput packet = ByteStreams.newDataInput(buf.array());
                 final int x = packet.readInt();
                 final int y = packet.readInt();
                 final int z = packet.readInt();
