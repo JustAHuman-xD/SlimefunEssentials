@@ -14,7 +14,7 @@ import snownee.jade.api.WailaPlugin;
 public class JadeIntegration implements IWailaPlugin {
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        if (ModConfig.customBlockFeatures()) {
+        if (ModConfig.blockFeatures()) {
             registration.addRayTraceCallback(((hitResult, accessor, originalAccessor) -> {
                 if (!(accessor instanceof BlockAccessor blockAccessor)) {
                     return accessor;

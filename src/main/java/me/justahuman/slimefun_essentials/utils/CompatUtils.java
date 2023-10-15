@@ -34,4 +34,8 @@ public class CompatUtils {
     public static boolean isJadeLoaded() {
         return isModLoaded("jade");
     }
+
+    public static boolean isBlockFeatureModLoaded() {
+        return isMoreBlockPredicatesLoaded() || isJadeLoaded();
+    }
 }

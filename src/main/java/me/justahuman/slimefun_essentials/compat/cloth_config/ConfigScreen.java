@@ -1,6 +1,7 @@
 package me.justahuman.slimefun_essentials.compat.cloth_config;
 
 import me.justahuman.slimefun_essentials.config.ModConfig;
+import me.justahuman.slimefun_essentials.utils.CompatUtils;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -17,23 +18,31 @@ public class ConfigScreen {
                 .setTitle(Text.translatable("slimefun_essentials.title"));
         
         final ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-        final ConfigCategory category = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.category"));
+        final ConfigCategory category = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.title"));
         
-        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.placed_block_features"), ModConfig.customBlockFeatures())
+        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.block_features"), ModConfig.blockFeatures())
                 .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.option.placed_block_features.tooltip"))
-                .setSaveConsumer(ModConfig::setPlacedBlockFeatures)
+                .setTooltip(Text.translatable("slimefun_essentials.config.option.block_features.tooltip"))
+                .setRequirement(CompatUtils::isBlockFeatureModLoaded)
+                .setSaveConsumer(ModConfig::setBlockFeatures)
+                .build());
+
+        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.recipe_features"), ModConfig.recipeFeatures())
+                .setDefaultValue(true)
+                .setTooltip(Text.translatable("slimefun_essentials.config.option.recipe_features.tooltip"))
+                .setRequirement(CompatUtils::isRecipeModLoaded)
+                .setSaveConsumer(ModConfig::setRecipeFeatures)
                 .build());
         
-        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.option.auto_toggle_addons"), ModConfig.autoToggleAddons())
+        category.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.auto_toggle_addons"), ModConfig.autoToggleAddons())
                 .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.option.auto_toggle_addons.tooltip"))
+                .setTooltip(Text.translatable("slimefun_essentials.config.option.auto_toggle_addons.tooltip"))
                 .setSaveConsumer(ModConfig::setAutoToggleAddons)
                 .build());
         
-        category.addEntry(entryBuilder.startStrList(Text.translatable("slimefun_essentials.option.addons"), ModConfig.getAddons())
+        category.addEntry(entryBuilder.startStrList(Text.translatable("slimefun_essentials.config.option.addons"), ModConfig.getAddons())
                 .setDefaultValue(new ArrayList<>(List.of("Slimefun")))
-                .setTooltip(Text.translatable("slimefun_essentials.option.addons.tooltip"))
+                .setTooltip(Text.translatable("slimefun_essentials.config.option.addons.tooltip"))
                 .setSaveConsumer(ModConfig::setAddons)
                 .build());
         

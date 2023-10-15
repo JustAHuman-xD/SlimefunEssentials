@@ -152,7 +152,7 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
     }
 
     protected void addFillingArrow(WidgetHolder widgets, int x, int y, boolean backwards, int sfTicks, int millis) {
-        widgets.add(backwards ? new ReverseFillingArrowWidget(x, y, millis) : new FillingArrowWidget(x, y, millis)).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.time", TextureUtils.numberFormat.format(sfTicks / 2f), TextureUtils.numberFormat.format(sfTicks * 10L))))));
+        widgets.add(backwards ? new ReverseFillingArrowWidget(x, y, millis) : new FillingArrowWidget(x, y, millis)).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipes.time", TextureUtils.numberFormat.format(sfTicks / 2f), TextureUtils.numberFormat.format(sfTicks * 10L))))));
     }
 
     protected void addOutputsOrEnergy(WidgetHolder widgets, OffsetBuilder offsets) {

@@ -25,7 +25,8 @@ public class ModConfig {
         defaultAddons.add("Slimefun");
     }
 
-    private static boolean placedBlockFeatures = true;
+    private static boolean blockFeatures = true;
+    private static boolean recipeFeatures = true;
     private static boolean autoToggleAddons = true;
     private static List<String> addons = new ArrayList<>();
     
@@ -41,7 +42,8 @@ public class ModConfig {
         }
         
         try {
-            placedBlockFeatures = JsonUtils.getBooleanOrDefault(root, "placed_block_features", true, true);
+            blockFeatures = JsonUtils.getBooleanOrDefault(root, "block_features", true, true);
+            recipeFeatures = JsonUtils.getBooleanOrDefault(root, "recipe_features", true, true);
             autoToggleAddons = JsonUtils.getBooleanOrDefault(root, "auto_toggle_addons", true, true);
             for (JsonElement addon : JsonUtils.getArrayOrDefault(root, "addons", defaultAddons, true)) {
                 if (addon instanceof JsonPrimitive jsonPrimitive && jsonPrimitive.isString()) {
@@ -62,7 +64,8 @@ public class ModConfig {
             addonArray.add(addon);
         }
 
-        root.addProperty("placed_block_features", placedBlockFeatures);
+        root.addProperty("block_features", blockFeatures);
+        root.addProperty("recipe_features", recipeFeatures);
         root.addProperty("auto_toggle_addons", autoToggleAddons);
         root.add("addons", addonArray);
         
@@ -75,13 +78,21 @@ public class ModConfig {
         }
     }
     
-    public static boolean customBlockFeatures() {
-        return placedBlockFeatures;
+    public static boolean blockFeatures() {
+        return blockFeatures;
     }
-    public static void setPlacedBlockFeatures(boolean newValue) {
-        placedBlockFeatures = newValue;
+    public static void setBlockFeatures(boolean newValue) {
+        blockFeatures = newValue;
     }
-    
+
+    public static boolean recipeFeatures() {
+        return recipeFeatures;
+    }
+
+    public static void setRecipeFeatures(boolean newValue) {
+        recipeFeatures = newValue;
+    }
+
     public static boolean autoToggleAddons() {
         return autoToggleAddons;
     }

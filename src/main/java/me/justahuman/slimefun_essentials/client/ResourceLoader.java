@@ -69,7 +69,7 @@ public class ResourceLoader {
             loadCategories(manager);
         }
 
-        if (ModConfig.customBlockFeatures()) {
+        if (ModConfig.blockFeatures()) {
             if (CompatUtils.isMoreBlockPredicatesLoaded()) {
                 loadItems(manager);
                 loadBlockModels(manager);

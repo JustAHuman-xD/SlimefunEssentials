@@ -14,6 +14,7 @@ import me.justahuman.slimefun_essentials.compat.rei.displays.AncientAltarDisplay
 import me.justahuman.slimefun_essentials.compat.rei.displays.GridDisplay;
 import me.justahuman.slimefun_essentials.compat.rei.displays.ProcessDisplay;
 import me.justahuman.slimefun_essentials.compat.rei.displays.ReactorDisplay;
+import me.justahuman.slimefun_essentials.compat.rei.displays.SlimefunDisplay;
 import me.justahuman.slimefun_essentials.compat.rei.displays.SmelteryDisplay;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
@@ -25,7 +26,6 @@ import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.entry.EntryRegistry;
-import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.type.EntryType;
 import me.shedaniel.rei.api.common.entry.type.EntryTypeRegistry;
@@ -72,7 +72,7 @@ public class ReiIntegration implements REIClientPlugin {
         }
     }
 
-    public static DisplayCategory<?> getReiCategory(SlimefunCategory slimefunCategory, ItemStack icon) {
+    public static DisplayCategory<? extends SlimefunDisplay> getReiCategory(SlimefunCategory slimefunCategory, ItemStack icon) {
         final String type = slimefunCategory.type();
         if (type.equals("ancient_altar")) {
             return new AncientAltarCategory(slimefunCategory, icon);
@@ -87,7 +87,7 @@ public class ReiIntegration implements REIClientPlugin {
         }
     }
 
-    public static Display getDisplay(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
+    public static SlimefunDisplay getDisplay(SlimefunCategory slimefunCategory, SlimefunRecipe slimefunRecipe) {
         final String type = slimefunCategory.type();
         if (type.equals("ancient_altar")) {
             return new AncientAltarDisplay(slimefunCategory, slimefunRecipe);

@@ -89,7 +89,7 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
     @Override
     @NotNull
     public Text getTitle() {
-        return Text.translatable("slimefun_essentials.recipe.category.slimefun", this.catalyst.getName());
+        return Text.translatable("slimefun_essentials.recipes.category.slimefun", this.catalyst.getName());
     }
     
     @Override

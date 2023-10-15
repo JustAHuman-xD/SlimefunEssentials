@@ -39,7 +39,7 @@ public class SlimefunReiCategory<T extends SlimefunDisplay> extends RecipeRender
 
     @NotNull
     public Text getTitle() {
-        return Text.translatable("slimefun_essentials.recipe.category.slimefun", this.icon.getName());
+        return Text.translatable("slimefun_essentials.recipes.category.slimefun", this.icon.getName());
     }
 
     @NotNull
