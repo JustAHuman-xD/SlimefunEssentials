@@ -1,0 +1,21 @@
+{
+  "slimefun_essentials.title": "Slimefun Essentials",
+
+  "slimefun_essentials.key_bind.open_config": "打开设置",
+
+  "slimefun_essentials.config.option.block_features": "添加粘液科技方块材质",
+  "slimefun_essentials.config.option.block_features.tooltip": "-> 开启 MBP 拓展\n-> 开启玉（Jade）拓展",
+  "slimefun_essentials.config.option.recipe_features": "添加粘液科技配方",
+  "slimefun_essentials.config.option.recipe_features.tooltip": "-> 开启玉（Jade）拓展\n-> 开启 REI 拓展\n-> 开启 EMI 拓展",
+  "slimefun_essentials.config.option.auto_toggle_addons": "自动添加附属插件",
+  "slimefun_essentials.config.option.auto_toggle_addons.tooltip": "是否自动启用/禁用附属插件的支持？",
+  "slimefun_essentials.config.option.addons": "启用的粘液科技附属插件支持：",
+  "slimefun_essentials.config.option.addons.tooltip": "添加/移除你想要支持的附属插件",
+
+  "slimefun_essentials.recipes.category.slimefun" : "%s",
+  "slimefun_essentials.recipes.time": "%s 秒 (%s 刻)",
+  "slimefun_essentials.recipes.energy.use": "使用 %sJ",
+  "slimefun_essentials.recipes.energy.generate": "生成 %sJ",
+  "slimefun_essentials.recipes.label.day": "您必须在白天才能用此方块合成该物品！",
+  "slimefun_essentials.recipes.label.night": "您必须在夜晚才能用此方块合成该物品！"
+}
