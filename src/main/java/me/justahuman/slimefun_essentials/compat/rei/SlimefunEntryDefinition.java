@@ -1,8 +1,5 @@
 package me.justahuman.slimefun_essentials.compat.rei;
 
-import dev.architectury.hooks.item.ItemStackHooks;
-import dev.architectury.utils.Env;
-import dev.architectury.utils.EnvExecutor;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
@@ -35,17 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.stream.Stream;
 
 public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStack> {
-    private EntryRenderer<SlimefunItemStack> renderer;
-    
-    public SlimefunEntryDefinition() {
-        EnvExecutor.runInEnv(Env.CLIENT, () -> () -> Client.init(this));
-    }
-    
-    private static class Client {
-        private static void init(SlimefunEntryDefinition definition) {
-            definition.renderer = new SlimefunItemStackRenderer();
-        }
-    }
+    private final EntryRenderer<SlimefunItemStack> renderer = new SlimefunItemStackRenderer();
     
     @Override
     public Class<SlimefunItemStack> getValueType() {
@@ -97,7 +84,7 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
     @Nullable
     @Override
     public SlimefunItemStack add(SlimefunItemStack o1, SlimefunItemStack o2) {
-        return new SlimefunItemStack(o1.id(), ItemStackHooks.copyWithCount(o1.itemStack(), o1.itemStack().getCount() + o2.itemStack().getCount()));
+        return new SlimefunItemStack(o1.id(), o1.itemStack().copyWithCount(o1.itemStack().getCount() + o2.itemStack().getCount()));
     }
     
     @Override
@@ -194,7 +181,9 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
         }
 
         @Override
-        public void endBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, DrawContext graphics, float delta) {}
+        public void endBatch(EntryStack<SlimefunItemStack> entry, BakedModel model, DrawContext graphics, float delta) {
+            itemStackEntryRenderer.endBatch(ReiIntegration.unwrap(entry), model, graphics, delta);
+        }
 
         @Override
         @Nullable

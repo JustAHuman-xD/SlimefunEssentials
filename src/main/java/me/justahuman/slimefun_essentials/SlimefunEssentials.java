@@ -78,7 +78,7 @@ public class SlimefunEssentials implements ClientModInitializer {
             }));
         }
         
-        if (ModConfig.customBlockFeatures()) {
+        if (ModConfig.blockFeatures()) {
             ClientChunkEvents.CHUNK_LOAD.register(((world, chunk) -> {
                 final PacketByteBuf packetByteBuf = PacketByteBufs.create();
                 final ChunkPos chunkPos = chunk.getPos();
