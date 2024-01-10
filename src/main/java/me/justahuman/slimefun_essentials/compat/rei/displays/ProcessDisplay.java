@@ -17,6 +17,7 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class ProcessDisplay extends SlimefunDisplay {
         if (this.slimefunRecipe.hasLabels()) {
             for (SlimefunLabel slimefunLabel : this.slimefunRecipe.labels()) {
                 widgets.add(ReiIntegration.widgetFromSlimefunLabel(slimefunLabel, offsets.getX(), offsets.label()));
+                widgets.add(ReiIntegration.toolTipForSlimefunLabel(slimefunLabel, offsets.getX(), offsets.label()));
                 offsets.x().addLabel();
             }
         }
@@ -88,6 +90,7 @@ public class ProcessDisplay extends SlimefunDisplay {
         final int totalEnergy = this.slimefunRecipe.energy() * Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
         widgets.add(ReiIntegration.widgetFromSlimefunLabel(TextureUtils.ENERGY, x, y));
         widgets.add(ReiIntegration.widgetFromSlimefunLabel((totalEnergy >= 0 ? TextureUtils.ENERGY_POSITIVE : TextureUtils.ENERGY_NEGATIVE), x, y, 1000, false, totalEnergy < 0, totalEnergy < 0));
+        widgets.add(Widgets.createTooltip(new Rectangle(x, y, TextureUtils.ENERGY_WIDTH, TextureUtils.ENERGY_HEIGHT), Text.translatable("slimefun_essentials.recipe.energy." + (totalEnergy >= 0 ? "generate" : "use"), TextureUtils.numberFormat.format(Math.abs(totalEnergy)))));
     }
 
     protected void addSlot(List<Widget> widgets, OffsetBuilder offsets, EntryIngredient entryIngredient) {
@@ -132,6 +135,7 @@ public class ProcessDisplay extends SlimefunDisplay {
             final int sfTicks = Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
             final int millis =  sfTicks * 500;
             widgets.add(ReiIntegration.widgetFromSlimefunLabel((backwards ? TextureUtils.FILLED_BACKWARDS_ARROW : TextureUtils.FILLED_ARROW), x, y, millis, true, backwards, false));
+            widgets.add(Widgets.createTooltip(new Rectangle(x, y, TextureUtils.ARROW_WIDTH, TextureUtils.ARROW_HEIGHT), Text.translatable("slimefun_essentials.recipes.time", TextureUtils.numberFormat.format(sfTicks / 2), TextureUtils.numberFormat.format(sfTicks * 10L))));
         }
     }
 

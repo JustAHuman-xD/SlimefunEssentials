@@ -18,6 +18,7 @@ import me.justahuman.slimefun_essentials.compat.rei.displays.SlimefunDisplay;
 import me.justahuman.slimefun_essentials.compat.rei.displays.SmelteryDisplay;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
+import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.REIRuntime;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
@@ -104,6 +105,10 @@ public class ReiIntegration implements REIClientPlugin {
 
     public static Widget widgetFromSlimefunLabel(SlimefunLabel slimefunLabel, int x, int y) {
         return Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> slimefunLabel.draw(graphics, x, y, REIRuntime.getInstance().isDarkThemeEnabled()));
+    }
+
+    public static Widget toolTipForSlimefunLabel(SlimefunLabel slimefunLabel, int x, int y) {
+        return Widgets.createTooltip(new Rectangle(x, y, slimefunLabel.width(), slimefunLabel.height()), slimefunLabel.text());
     }
 
     /**

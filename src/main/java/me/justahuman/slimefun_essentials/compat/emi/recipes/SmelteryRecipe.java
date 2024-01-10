@@ -23,7 +23,6 @@ public class SmelteryRecipe extends ProcessRecipe {
         // Display Energy
         addEnergyWithCheck(widgets, offsets);
     
-    
         int i = 0;
         for (int y = 1; y <= 3; y++) {
             for (int x = 1; x <= 2; x++) {

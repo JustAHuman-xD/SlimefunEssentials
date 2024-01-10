@@ -6,6 +6,8 @@ import lombok.NonNull;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.Collections;
@@ -54,5 +56,9 @@ public record SlimefunLabel(String id, Identifier light, Identifier dark, int u,
 
     public void draw(DrawContext graphics, int x, int y) {
         draw(graphics, x, y, false);
+    }
+
+    public Text text() {
+        return Text.translatable("slimefun_essentials.recipe.label." + this.id);
     }
 }

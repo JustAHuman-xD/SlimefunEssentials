@@ -1,6 +1,5 @@
 package me.justahuman.slimefun_essentials.compat.emi.recipes;
 
-import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
@@ -19,11 +18,13 @@ import me.justahuman.slimefun_essentials.compat.emi.EmiUtils;
 import me.justahuman.slimefun_essentials.compat.emi.ReverseFillingArrowWidget;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
     protected final SlimefunCategory slimefunCategory;
@@ -129,7 +130,7 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
     protected void addEnergy(WidgetHolder widgets, int x, int y) {
         final int totalEnergy = this.slimefunRecipe.energy() * Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
         widgets.addTexture(EmiUtils.EMPTY_CHARGE, x, y);
-        widgets.addAnimatedTexture(totalEnergy >= 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, x, y, 1000, false, totalEnergy < 0, totalEnergy < 0).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipe.energy." + (totalEnergy >= 0 ? "generate" : "use"), TextureUtils.numberFormat.format(Math.abs(totalEnergy)))))));
+        widgets.addAnimatedTexture(totalEnergy >= 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, x, y, 1000, false, totalEnergy < 0, totalEnergy < 0).tooltip(tooltip("slimefun_essentials.recipe.energy." + (totalEnergy >= 0 ? "generate" : "use"), TextureUtils.numberFormat.format(Math.abs(totalEnergy))));
     }
 
     protected void addArrowWithCheck(WidgetHolder widgets, OffsetBuilder offsets) {
@@ -152,7 +153,7 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
     }
 
     protected void addFillingArrow(WidgetHolder widgets, int x, int y, boolean backwards, int sfTicks, int millis) {
-        widgets.add(backwards ? new ReverseFillingArrowWidget(x, y, millis) : new FillingArrowWidget(x, y, millis)).tooltip((mx, my) -> List.of(TooltipComponent.of(EmiPort.ordered(EmiPort.translatable("slimefun_essentials.recipes.time", TextureUtils.numberFormat.format(sfTicks / 2f), TextureUtils.numberFormat.format(sfTicks * 10L))))));
+        widgets.add(backwards ? new ReverseFillingArrowWidget(x, y, millis) : new FillingArrowWidget(x, y, millis)).tooltip(tooltip("slimefun_essentials.recipes.time", TextureUtils.numberFormat.format(sfTicks / 2f), TextureUtils.numberFormat.format(sfTicks * 10L)));
     }
 
     protected void addOutputsOrEnergy(WidgetHolder widgets, OffsetBuilder offsets) {
@@ -168,5 +169,9 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
             widgets.addSlot(output, offsets.getX(), offsets.output()).large(true);
             offsets.x().addOutput();
         }
+    }
+
+    protected BiFunction<Integer, Integer, List<TooltipComponent>> tooltip(String key, Object... args) {
+        return (mx, my) -> List.of(TooltipComponent.of(Text.translatable(key, args).asOrderedText()));
     }
 }
