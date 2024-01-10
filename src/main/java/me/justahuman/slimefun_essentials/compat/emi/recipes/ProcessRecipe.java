@@ -130,7 +130,7 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
     protected void addEnergy(WidgetHolder widgets, int x, int y) {
         final int totalEnergy = this.slimefunRecipe.energy() * Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
         widgets.addTexture(EmiUtils.EMPTY_CHARGE, x, y);
-        widgets.addAnimatedTexture(totalEnergy >= 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, x, y, 1000, false, totalEnergy < 0, totalEnergy < 0).tooltip(tooltip("slimefun_essentials.recipe.energy." + (totalEnergy >= 0 ? "generate" : "use"), TextureUtils.numberFormat.format(Math.abs(totalEnergy))));
+        widgets.addAnimatedTexture(totalEnergy >= 0 ? EmiUtils.GAIN_CHARGE : EmiUtils.LOOSE_CHARGE, x, y, 1000, false, totalEnergy < 0, totalEnergy < 0).tooltip(tooltip("slimefun_essentials.recipes.energy." + (totalEnergy >= 0 ? "generate" : "use"), TextureUtils.numberFormat.format(Math.abs(totalEnergy))));
     }
 
     protected void addArrowWithCheck(WidgetHolder widgets, OffsetBuilder offsets) {
@@ -140,7 +140,7 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
 
     protected void addArrowWithCheck(WidgetHolder widgets, int x, int y, boolean backwards) {
         if (this.slimefunRecipe.hasTime()) {
-            final int sfTicks = Math.max(1, this.slimefunRecipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
+            final int sfTicks = this.slimefunRecipe.sfTicks(this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1);
             final int millis =  sfTicks * 500;
             addFillingArrow(widgets, x, y, backwards, sfTicks, millis);
         } else {
@@ -171,7 +171,7 @@ public class ProcessRecipe extends RecipeRenderer implements EmiRecipe {
         }
     }
 
-    protected BiFunction<Integer, Integer, List<TooltipComponent>> tooltip(String key, Object... args) {
-        return (mx, my) -> List.of(TooltipComponent.of(Text.translatable(key, args).asOrderedText()));
+    protected List<TooltipComponent> tooltip(String key, Object... args) {
+        return List.of(TooltipComponent.of(Text.translatable(key, args).asOrderedText()));
     }
 }

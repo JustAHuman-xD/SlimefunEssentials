@@ -12,6 +12,11 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReactorCategory extends ProcessCategory {
     public ReactorCategory(IGuiHelper guiHelper, SlimefunCategory slimefunCategory, ItemStack catalyst) {
@@ -62,7 +67,7 @@ public class ReactorCategory extends ProcessCategory {
         TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
         offsets.x().addSlot();
 
-        addFillingArrow(graphics, offsets.getX(), offsets.getY(), false, getTime(recipe));
+        addFillingArrow(graphics, offsets.getX(), offsets.getY(), false, getSfTicks(recipe));
         offsets.x().addArrow();
 
         if (recipe.hasOutputs()) {
@@ -74,7 +79,7 @@ public class ReactorCategory extends ProcessCategory {
             offsets.x().add(recipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.ENERGY_WIDTH).addPadding();
         }
 
-        addFillingArrow(graphics, offsets.getX(), offsets.getY(), true, getTime(recipe));
+        addFillingArrow(graphics, offsets.getX(), offsets.getY(), true, getSfTicks(recipe));
         offsets.x().addArrow();
         offsets.y().subtract(TextureUtils.SLOT_SIZE * 2);
         TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
@@ -82,5 +87,32 @@ public class ReactorCategory extends ProcessCategory {
         TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
         offsets.y().addSlot(false);
         TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.getY());
+    }
+
+    @NotNull
+    @Override
+    public List<Text> getTooltipStrings(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        final List<Text> tooltips = new ArrayList<>();
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe), calculateYOffset(this.slimefunCategory, recipe));
+
+        offsets.y().addSlot(false).addSlot(false);
+        offsets.x().addSlot();
+
+        if (tooltipActive(mouseX, mouseY, offsets.getX(), offsets.getY(), TextureUtils.ARROW)) {
+            tooltips.add(timeTooltip(recipe));
+        }
+        offsets.x().addArrow();
+
+        if (recipe.hasEnergy()) {
+            if (tooltipActive(mouseX, mouseY, offsets.getX() + (recipe.hasOutputs() ? (TextureUtils.OUTPUT_SIZE - TextureUtils.ENERGY_WIDTH) / 2 : 0), offsets.getY() + (recipe.hasOutputs() ? - TextureUtils.ENERGY_HEIGHT - TextureUtils.PADDING : TextureUtils.PADDING), TextureUtils.ENERGY)) {
+                tooltips.add(energyTooltip(recipe));
+            }
+            offsets.x().add(recipe.hasOutputs() ? TextureUtils.OUTPUT_SIZE : TextureUtils.ENERGY_WIDTH).addPadding();
+        }
+
+        if (tooltipActive(mouseX, mouseY, offsets.getX(), offsets.getY(), TextureUtils.ARROW)) {
+            tooltips.add(timeTooltip(recipe));
+        }
+        return tooltips;
     }
 }

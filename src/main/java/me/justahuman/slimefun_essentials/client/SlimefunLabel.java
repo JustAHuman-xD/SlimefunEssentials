@@ -59,6 +59,6 @@ public record SlimefunLabel(String id, Identifier light, Identifier dark, int u,
     }
 
     public Text text() {
-        return Text.translatable("slimefun_essentials.recipe.label." + this.id);
+        return Text.translatable("slimefun_essentials.recipes.label." + this.id);
     }
 }

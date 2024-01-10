@@ -112,44 +112,49 @@ public class OffsetBuilder {
             return this;
         }
 
-        public void addLabel() {
-            addLabel(true);
+        public Offset addLabel() {
+            return addLabel(true);
         }
 
-        public void addLabel(boolean padding) {
+        public Offset addLabel(boolean padding) {
             this.value += TextureUtils.LABEL_SIZE + (padding ? TextureUtils.PADDING : 0);
+            return this;
         }
 
-        public void addEnergy() {
-            addEnergy(true);
+        public Offset addEnergy() {
+            return addEnergy(true);
         }
 
-        public void addEnergy(boolean padding) {
+        public Offset addEnergy(boolean padding) {
             this.value += TextureUtils.ENERGY_WIDTH + (padding ? TextureUtils.PADDING : 0);
+            return this;
         }
 
-        public void addSlot() {
-            addSlot(true);
+        public Offset addSlot() {
+            return addSlot(true);
         }
 
-        public void addSlot(boolean padding) {
+        public Offset addSlot(boolean padding) {
             this.value += TextureUtils.SLOT_SIZE + (padding ? TextureUtils.PADDING : 0);
+            return this;
         }
 
-        public void addArrow() {
-            addArrow(true);
+        public Offset addArrow() {
+            return addArrow(true);
         }
 
-        public void addArrow(boolean padding) {
+        public Offset addArrow(boolean padding) {
             this.value += TextureUtils.ARROW_WIDTH + (padding ? TextureUtils.PADDING : 0);
+            return this;
         }
 
-        public void addOutput() {
-            addOutput(true);
+        public Offset addOutput() {
+            return addOutput(true);
         }
 
-        public void addOutput(boolean padding) {
+        public Offset addOutput(boolean padding) {
             this.value += TextureUtils.OUTPUT_SIZE + (padding ? TextureUtils.PADDING : 0);
+            return this;
         }
 
         public Offset addPadding() {

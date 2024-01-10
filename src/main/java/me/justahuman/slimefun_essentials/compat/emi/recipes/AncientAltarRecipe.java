@@ -19,7 +19,8 @@ public class AncientAltarRecipe extends ProcessRecipe {
     @Override
     public void addWidgets(WidgetHolder widgets) {
         final OffsetBuilder offsets = new OffsetBuilder(this, this.slimefunRecipe);
-        
+
+        // Special Inputs
         widgets.addSlot(this.inputs.get(3), offsets.getX(), offsets.slot()).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
         offsets.x().addSlot(false);
         widgets.addSlot(this.inputs.get(0), offsets.getX(), offsets.slot() + TextureUtils.SLOT_SIZE).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
@@ -34,8 +35,11 @@ public class AncientAltarRecipe extends ProcessRecipe {
         offsets.x().addSlot(false);
         widgets.addSlot(this.inputs.get(5), offsets.getX(), offsets.slot()).backgroundTexture(TextureUtils.WIDGETS, 0, 0);
         offsets.x().addSlot();
-        widgets.addFillingArrow(offsets.getX(), offsets.arrow(), this.slimefunRecipe.time() * 1000);
-        offsets.x().addArrow();
+
+        // Add Arrow
+        addArrowWithCheck(widgets, offsets);
+
+        // Output
         widgets.addSlot(this.outputs.get(0), offsets.getX(), offsets.slot());
     }
 }

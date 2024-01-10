@@ -27,6 +27,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<SlimefunRecipe> {
     protected final IGuiHelper guiHelper;
     protected final SlimefunCategory slimefunCategory;
@@ -169,6 +172,46 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
         addOutputsOrEnergy(graphics, offsets, recipe);
     }
 
+    @NotNull
+    @Override
+    public List<Text> getTooltipStrings(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        final List<Text> tooltips = new ArrayList<>();
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(this.slimefunCategory, recipe));
+
+        // Label Tooltips
+        if (recipe.hasLabels()) {
+            for (SlimefunLabel slimefunLabel : recipe.labels()) {
+                if (tooltipActive(mouseX, mouseY, offsets.getX(), offsets.label(), slimefunLabel)) {
+                    tooltips.add(labelTooltip(slimefunLabel));
+                }
+                offsets.x().addLabel();
+            }
+        }
+
+        // Energy Tooltip Option 1
+        if (recipe.hasEnergy() && recipe.hasOutputs()) {
+            if (tooltipActive(mouseX, mouseY, offsets.getX(), offsets.energy(), TextureUtils.ENERGY)) {
+                tooltips.add(energyTooltip(recipe));
+            }
+            offsets.x().addEnergy();
+        }
+
+        offsets.x().add((TextureUtils.SLOT_SIZE + TextureUtils.PADDING) * (recipe.hasInputs() ? recipe.inputs().size() : 1));
+
+        // Arrow Tooltip
+        if (recipe.hasTime() && tooltipActive(mouseX, mouseY, offsets.getX(), offsets.arrow(), TextureUtils.ARROW)) {
+            tooltips.add(timeTooltip(recipe));
+        }
+        offsets.x().addArrow();
+
+        // Energy Tooltip Option 2
+        if (!recipe.hasOutputs() && tooltipActive(mouseX, mouseY, offsets.getX(), offsets.energy(), TextureUtils.ENERGY)) {
+            tooltips.add(energyTooltip(recipe));
+        }
+
+        return tooltips;
+    }
+
     protected void addEnergyWithCheck(DrawContext graphics, OffsetBuilder offsets, SlimefunRecipe recipe) {
         if (recipe.hasEnergy() && recipe.hasOutputs()) {
             addEnergy(graphics, offsets, recipe.energy() < 0);
@@ -192,7 +235,7 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
 
     protected void addArrow(DrawContext graphics, SlimefunRecipe recipe, int x, int y, boolean backwards) {
         if (recipe.hasTime()) {
-            addFillingArrow(graphics, x, y, backwards, getTime(recipe));
+            addFillingArrow(graphics, x, y, backwards, getSfTicks(recipe));
         } else {
             addArrow(graphics, x, y, backwards);
         }
@@ -222,11 +265,32 @@ public class ProcessCategory extends RecipeRenderer implements IRecipeCategory<S
         }
     }
 
-    protected int getTime(SlimefunRecipe slimefunRecipe) {
+    protected int getSfTicks(SlimefunRecipe slimefunRecipe) {
         if (slimefunRecipe.hasTime()) {
             return slimefunRecipe.sfTicks(this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1);
         } else {
             return 2;
         }
+    }
+
+    protected boolean tooltipActive(double mouseX, double mouseY, OffsetBuilder offsets, SlimefunLabel label) {
+        return tooltipActive(mouseX, mouseY, offsets.getX(), offsets.getY(), label);
+    }
+
+    protected boolean tooltipActive(double mouseX, double mouseY, int x, int y, SlimefunLabel label) {
+        return mouseX >= x && mouseX <= x + label.width() && mouseY >= y && mouseY <= y + label.height();
+    }
+
+    protected Text labelTooltip(SlimefunLabel label) {
+        return Text.translatable("slimefun_essentials.recipes.label." + label.id());
+    }
+
+    protected Text timeTooltip(SlimefunRecipe recipe) {
+        return Text.translatable("slimefun_essentials.recipes.time", TextureUtils.numberFormat.format(getSfTicks(recipe) / 2), TextureUtils.numberFormat.format(getSfTicks(recipe) * 10L));
+    }
+
+    protected Text energyTooltip(SlimefunRecipe recipe) {
+        final int totalEnergy = recipe.energy() * Math.max(1, recipe.time() / 10 / (this.slimefunCategory.hasSpeed() ? this.slimefunCategory.speed() : 1));
+        return Text.translatable("slimefun_essentials.recipes.energy." + (totalEnergy >= 0 ? "generate" : "use"), TextureUtils.numberFormat.format(Math.abs(totalEnergy)));
     }
 }

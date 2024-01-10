@@ -13,7 +13,7 @@ public class EmiLabel extends TextureWidget {
     public EmiLabel(String id, EmiTexture texture, int x, int y) {
         super(texture.texture, x, y, texture.width, texture.height, texture.u, texture.v, texture.regionWidth, texture.regionHeight, texture.textureWidth, texture.textureHeight);
         
-        tooltip((mx, my) -> List.of(TooltipComponent.of(Text.translatable("slimefun_essentials.recipe.label." + id).asOrderedText())));
+        tooltip((mx, my) -> List.of(TooltipComponent.of(Text.translatable("slimefun_essentials.recipes.label." + id).asOrderedText())));
     }
     
     public EmiLabel(SlimefunLabel slimefunLabel, int x, int y) {

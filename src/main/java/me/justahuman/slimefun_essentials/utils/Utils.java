@@ -52,22 +52,18 @@ public class Utils {
         return path.substring(path.lastIndexOf("/") + 1, path.indexOf(".json"));
     }
 
-    public static boolean equalSlimefunIds(ItemStack o1, ItemStack o2) {
-        final NbtCompound n1 = o1.getNbt();
-        final NbtCompound n2 = o2.getNbt();
-        if (n1 == null || n1.isEmpty() || n2 == null || n2.isEmpty() || !n1.contains("PublicBukkitValues") || !n2.contains("PublicBukkitValues")) {
-            return false;
+    public static String getSlimefunId(ItemStack itemStack) {
+        final NbtCompound nbt = itemStack.getNbt();
+        if (nbt == null || nbt.isEmpty() || !nbt.contains("PublicBukkitValues")) {
+            return null;
         }
 
-        final NbtCompound b1 = n1.getCompound("PublicBukkitValues");
-        final NbtCompound b2 = n2.getCompound("PublicBukkitValues");
-        if (!b1.contains("slimefun:slimefun_item") || !b2.contains("slimefun:slimefun_item")) {
-            return false;
+        final NbtCompound bukkitValues = nbt.getCompound("PublicBukkitValues");
+        if (!bukkitValues.contains("slimefun:slimefun_item")) {
+            return null;
         }
 
-        final String id1 = b1.getString("slimefun:slimefun_item");
-        final String id2 = b2.getString("slimefun:slimefun_item");
-        return id1 != null && id1.equals(id2);
+        return bukkitValues.getString("slimefun:slimefun_item");
     }
 
     public static void log(String message) {

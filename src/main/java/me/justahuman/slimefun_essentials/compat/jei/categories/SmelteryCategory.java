@@ -13,6 +13,11 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SmelteryCategory extends ProcessCategory {
     public SmelteryCategory(IGuiHelper guiHelper, SlimefunCategory slimefunCategory, ItemStack catalyst) {
@@ -75,5 +80,27 @@ public class SmelteryCategory extends ProcessCategory {
 
         // Display Outputs
         addOutputs(graphics, offsets, recipe);
+    }
+
+    @NotNull
+    @Override
+    public List<Text> getTooltipStrings(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        final List<Text> tooltips = new ArrayList<>();
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, TextureUtils.PADDING, TextureUtils.PADDING);
+
+        if (recipe.hasEnergy() && recipe.hasOutputs()) {
+            if (tooltipActive(mouseX, mouseY, offsets.getX(), offsets.energy(), TextureUtils.ENERGY)) {
+                tooltips.add(energyTooltip(recipe));
+            }
+            offsets.x().addEnergy();
+        }
+
+        offsets.x().addSlot(false).addSlot(false).addPadding();
+        offsets.y().addSlot(false).addSlot(false).addSlot(false);
+
+        if (tooltipActive(mouseX, mouseY, offsets.getX(), offsets.arrow(), TextureUtils.ARROW)) {
+            tooltips.add(timeTooltip(recipe));
+        }
+        return tooltips;
     }
 }

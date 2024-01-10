@@ -12,6 +12,11 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AncientAltarCategory extends ProcessCategory {
     public AncientAltarCategory(IGuiHelper guiHelper, SlimefunCategory slimefunCategory, ItemStack catalyst) {
@@ -62,8 +67,20 @@ public class AncientAltarCategory extends ProcessCategory {
         offsets.x().addSlot(false);
         TextureUtils.PEDESTAL.draw(graphics, offsets.getX(), offsets.slot());
         offsets.x().addSlot();
-        addArrow(graphics, offsets.getX(), offsets.arrow(), false);
+        addArrow(graphics, recipe, offsets.getX(), offsets.arrow(), false);
         offsets.x().addArrow();
         TextureUtils.SLOT.draw(graphics, offsets.getX(), offsets.slot());
+    }
+
+    @NotNull
+    @Override
+    public List<Text> getTooltipStrings(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        final List<Text> tooltips = new ArrayList<>();
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe);
+        offsets.x().addSlot(false).addSlot(false).addSlot(false).addSlot(false).addSlot();
+        if (tooltipActive(mouseX, mouseY, offsets.getX(), offsets.arrow(), TextureUtils.ARROW)) {
+            tooltips.add(timeTooltip(recipe));
+        }
+        return tooltips;
     }
 }

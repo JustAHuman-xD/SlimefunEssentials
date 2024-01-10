@@ -23,6 +23,7 @@ import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
@@ -31,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStack> {
+public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStack>, EntrySerializer<SlimefunItemStack> {
     private final EntryRenderer<SlimefunItemStack> renderer = new SlimefunItemStackRenderer();
     
     @Override
@@ -97,12 +98,15 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
     
     @Override
     public boolean equals(SlimefunItemStack o1, SlimefunItemStack o2, ComparisonContext context) {
+        if (!o1.id().equals(o2.id())) {
+            return false;
+        }
+
         if (o1.itemStack().getItem() != o2.itemStack().getItem()) {
             return false;
         }
-        
-        final boolean initial = ItemComparatorRegistry.getInstance().hashOf(context, o1.itemStack()) == ItemComparatorRegistry.getInstance().hashOf(context, o2.itemStack());
-        return context.isExact() ? initial : initial && Utils.equalSlimefunIds(o1.itemStack(), o2.itemStack());
+
+        return ItemComparatorRegistry.getInstance().hashOf(context, o1.itemStack()) == ItemComparatorRegistry.getInstance().hashOf(context, o2.itemStack());
     }
     
     @Override
@@ -136,6 +140,31 @@ public class SlimefunEntryDefinition implements EntryDefinition<SlimefunItemStac
     @Override
     public Stream<? extends TagKey<?>> getTagsFor(EntryStack<SlimefunItemStack> entry, SlimefunItemStack value) {
         return Stream.empty();
+    }
+
+    @Override
+    public boolean supportSaving() {
+        return true;
+    }
+
+    @Override
+    public boolean supportReading() {
+        return true;
+    }
+
+    @Override
+    public boolean acceptsNull() {
+        return false;
+    }
+
+    @Override
+    public NbtCompound save(EntryStack<SlimefunItemStack> entry, SlimefunItemStack value) {
+        return value.itemStack().writeNbt(new NbtCompound());
+    }
+
+    @Override
+    public SlimefunItemStack read(NbtCompound tag) {
+        return new SlimefunItemStack(ItemStack.fromNbt(tag));
     }
 
     public static class SlimefunItemStackRenderer implements BatchedEntryRenderer<SlimefunItemStack, BakedModel> {

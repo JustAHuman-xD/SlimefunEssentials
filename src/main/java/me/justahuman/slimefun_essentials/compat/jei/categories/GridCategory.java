@@ -13,6 +13,11 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GridCategory extends ProcessCategory {
     protected final int side;
@@ -75,5 +80,34 @@ public class GridCategory extends ProcessCategory {
 
         // Display Outputs
         addOutputsOrEnergy(graphics, offsets, recipe);
+    }
+
+    @NotNull
+    @Override
+    public List<Text> getTooltipStrings(SlimefunRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        final List<Text> tooltips = new ArrayList<>();
+        final OffsetBuilder offsets = new OffsetBuilder(this, recipe, calculateXOffset(recipe), TextureUtils.PADDING);
+
+        // Energy Tooltip Option 1
+        if (recipe.hasEnergy() && recipe.hasOutputs()) {
+            if (tooltipActive(mouseX, mouseY, offsets.getX(), offsets.energy(), TextureUtils.ENERGY)) {
+                tooltips.add(energyTooltip(recipe));
+            }
+            offsets.x().addEnergy();
+        }
+
+        offsets.x().add(TextureUtils.SLOT_SIZE * this.side).addPadding();
+        offsets.y().add(TextureUtils.SLOT_SIZE * this.side);
+
+        if (recipe.hasTime() && tooltipActive(mouseX, mouseY, offsets.getX(), offsets.arrow(), TextureUtils.ARROW)) {
+            tooltips.add(timeTooltip(recipe));
+        }
+        offsets.x().addArrow();
+
+        // Energy Tooltip Option 2
+        if (!recipe.hasOutputs() && tooltipActive(mouseX, mouseY, offsets.getX(), offsets.energy(), TextureUtils.ENERGY)) {
+            tooltips.add(energyTooltip(recipe));
+        }
+        return tooltips;
     }
 }

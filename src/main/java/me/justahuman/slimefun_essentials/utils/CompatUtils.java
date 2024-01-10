@@ -20,7 +20,7 @@ public class CompatUtils {
     }
 
     public static boolean isReiLoaded() {
-        return isModLoaded("rei");
+        return isModLoaded("roughlyenoughitems");
     }
 
     public static boolean isJeiLoaded() {
