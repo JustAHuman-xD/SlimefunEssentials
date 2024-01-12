@@ -30,24 +30,24 @@ public abstract class AddServerScreenMixin extends Screen {
     public void addWhitelistToggleButton(CallbackInfo ci) {
         final boolean initialEnabled = ModConfig.isServerEnabled(server.name);
         final String initialLangKey = "slimefun_essentials.server_menu.%s_whitelist".formatted(initialEnabled ? "remove" : "add");
-        final ButtonWidget.Builder builder = ButtonWidget.builder(Text.translatable(initialLangKey), button -> {
-            final List<String> enabledServers = ModConfig.getEnabledServers();
-            if (!enabledServers.remove(server.name)) {
-                enabledServers.add(server.name);
+        final ButtonWidget.Builder serverWhitelist = ButtonWidget.builder(Text.translatable(initialLangKey), button -> {
+            final List<String> whitelist = ModConfig.getServerWhitelist();
+            if (!whitelist.remove(server.name)) {
+                whitelist.add(server.name);
             }
 
-            final boolean enabled = enabledServers.contains(server.name);
+            final boolean enabled = whitelist.contains(server.name);
             final String langKey = "slimefun_essentials.server_menu.%s_whitelist".formatted(enabled ? "remove" : "add");
             button.setMessage(Text.translatable(langKey));
             button.setTooltip(Tooltip.of(Text.translatable(langKey + ".tooltip"))); //    Standard Starting X Position + Width of Name Field + 4px Padding
         }).tooltip(Tooltip.of(Text.translatable(initialLangKey + ".tooltip"))).dimensions(this.width / 2 - 100 + 200 + 4, 66, 60, 20);
 
-        this.addDrawableChild(builder.build());
+        this.addDrawableChild(serverWhitelist.build());
     }
 
     @Inject(method = "addAndClose", at = @At("HEAD"))
     public void renameWhitelistEntry(CallbackInfo ci) {
-        final List<String> enabledServers = ModConfig.getEnabledServers();
+        final List<String> enabledServers = ModConfig.getServerWhitelist();
         if (enabledServers.remove(server.name)) {
             enabledServers.add(serverNameField.getText());
         }

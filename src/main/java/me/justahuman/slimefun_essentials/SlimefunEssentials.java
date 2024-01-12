@@ -56,28 +56,6 @@ public class SlimefunEssentials implements ClientModInitializer {
             }
         });
         
-        if (ModConfig.autoToggleAddons()) {
-            final List<String> normalAddons = new ArrayList<>();
-            ClientPlayNetworking.registerGlobalReceiver(Channels.ADDON_CHANNEL, ((client, handler, buf, sender) -> {
-                final String utf = ByteStreams.newDataInput(buf.array()).readUTF();
-                if (utf.equals("clear")) {
-                    normalAddons.addAll(ModConfig.getAddons());
-                    ModConfig.getAddons().clear();
-                    return;
-                }
-
-                ModConfig.getAddons().add(utf);
-            }));
-
-            ClientPlayConnectionEvents.DISCONNECT.register(((handler, client) -> {
-                if (!normalAddons.isEmpty()) {
-                    ModConfig.getAddons().clear();
-                    ModConfig.getAddons().addAll(normalAddons);
-                    normalAddons.clear();
-                }
-            }));
-        }
-        
         if (ModConfig.blockFeatures()) {
             ClientChunkEvents.CHUNK_LOAD.register(((world, chunk) -> {
                 final PacketByteBuf packetByteBuf = PacketByteBufs.create();
@@ -107,6 +85,54 @@ public class SlimefunEssentials implements ClientModInitializer {
             }));
 
             ClientPlayConnectionEvents.DISCONNECT.register((handler, minecraftClient) -> ResourceLoader.clearPlacedBlocks());
+        }
+
+        if (ModConfig.autoToggleAddons()) {
+            final List<String> normalAddons = new ArrayList<>();
+            ClientPlayNetworking.registerGlobalReceiver(Channels.ADDON_CHANNEL, ((client, handler, buf, sender) -> {
+                final String utf = ByteStreams.newDataInput(buf.array()).readUTF();
+                if (utf.equals("clear")) {
+                    normalAddons.addAll(ModConfig.getAddons());
+                    ModConfig.getAddons().clear();
+                    return;
+                }
+
+                ModConfig.getAddons().add(utf);
+            }));
+
+            ClientPlayConnectionEvents.DISCONNECT.register(((handler, client) -> {
+                if (!normalAddons.isEmpty()) {
+                    ModConfig.getAddons().clear();
+                    ModConfig.getAddons().addAll(normalAddons);
+                    normalAddons.clear();
+                }
+            }));
+        }
+
+        if (ModConfig.autoManageItems()) {
+            ClientPlayNetworking.registerGlobalReceiver(Channels.ITEM_CHANNEL, ((client, handler, buf, sender) -> {
+                final String id = ByteStreams.newDataInput(buf.array()).readUTF();
+                if (id.equals("clear")) {
+                    ResourceLoader.clearItemBlacklist();
+                    return;
+                }
+
+                ResourceLoader.blacklistItem(id);
+            }));
+        }
+
+        if (ModConfig.autoItemModels()) {
+            ClientPlayNetworking.registerGlobalReceiver(Channels.ITEM_MODELS_CHANNEL, ((client, handler, buf, sender) -> {
+                final ByteArrayDataInput packet = ByteStreams.newDataInput(buf.array());
+                final long model = packet.readLong();
+                final String id = packet.readUTF();
+                if (id.equals("clear")) {
+                    ResourceLoader.clearItemModels();
+                    return;
+                }
+
+                ResourceLoader.addItemModel(id, model);
+            }));
         }
     }
 }

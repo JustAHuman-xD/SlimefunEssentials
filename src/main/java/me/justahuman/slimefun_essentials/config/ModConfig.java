@@ -33,9 +33,13 @@ public class ModConfig {
     private static @Setter @Getter List<String> addons = new ArrayList<>();
 
     private static @Setter boolean requireServerConnection = true;
-    private static @Setter boolean autoToggleAddons = true;
     private static @Setter boolean enableServerWhitelist = false;
-    private static @Setter @Getter List<String> enabledServers = new ArrayList<>();
+    private static @Setter @Getter List<String> serverWhitelist = new ArrayList<>();
+    private static @Setter boolean autoToggleAddons = true;
+    private static @Setter boolean autoManageItems = true;
+    private static @Setter boolean autoItemModels = true;
+    private static @Setter boolean autoItemModelServerWhitelist = false;
+    private static @Setter @Getter List<String> autoItemModelServers = new ArrayList<>();
     
     public static void loadConfig() {
         final JsonObject root = new JsonObject();
@@ -59,12 +63,22 @@ public class ModConfig {
         });
 
         loadConfigOption(() -> requireServerConnection = JsonUtils.getBooleanOrDefault(root, "require_server_connection", true, true));
-        loadConfigOption(() -> autoToggleAddons = JsonUtils.getBooleanOrDefault(root, "auto_toggle_addons", true, true));
         loadConfigOption(() -> enableServerWhitelist = JsonUtils.getBooleanOrDefault(root, "enable_server_whitelist", false, true));
         loadConfigOption(() -> {
             for (JsonElement server : JsonUtils.getArrayOrDefault(root, "enabled_servers", new JsonArray(), true)) {
                 if (server instanceof JsonPrimitive jsonPrimitive && jsonPrimitive.isString()) {
-                    enabledServers.add(jsonPrimitive.getAsString());
+                    serverWhitelist.add(jsonPrimitive.getAsString());
+                }
+            }
+        });
+        loadConfigOption(() -> autoToggleAddons = JsonUtils.getBooleanOrDefault(root, "auto_toggle_addons", true, true));
+        loadConfigOption(() -> autoManageItems = JsonUtils.getBooleanOrDefault(root, "auto_manage_items", true, true));
+        loadConfigOption(() -> autoItemModels = JsonUtils.getBooleanOrDefault(root, "auto_item_models", true, true));
+        loadConfigOption(() -> autoItemModelServerWhitelist = JsonUtils.getBooleanOrDefault(root, "auto_item_model_server_whitelist", false, true));
+        loadConfigOption(() -> {
+            for (JsonElement server : JsonUtils.getArrayOrDefault(root, "auto_item_model_servers", new JsonArray(), true)) {
+                if (server instanceof JsonPrimitive jsonPrimitive && jsonPrimitive.isString()) {
+                    autoItemModelServers.add(jsonPrimitive.getAsString());
                 }
             }
         });
@@ -89,7 +103,7 @@ public class ModConfig {
         }
 
         final JsonArray serverArray = new JsonArray();
-        for (String server : enabledServers) {
+        for (String server : serverWhitelist) {
             serverArray.add(server);
         }
 
@@ -98,9 +112,13 @@ public class ModConfig {
         root.add("addons", addonArray);
 
         root.addProperty("require_server_connection", requireServerConnection);
-        root.addProperty("auto_toggle_addons", autoToggleAddons);
         root.addProperty("enable_server_whitelist", enableServerWhitelist);
         root.add("enabled_servers", serverArray);
+        root.addProperty("auto_toggle_addons", autoToggleAddons);
+        root.addProperty("auto_manage_items", autoManageItems);
+        root.addProperty("auto_item_models", autoItemModels);
+        root.addProperty("auto_item_model_server_whitelist", autoItemModelServerWhitelist);
+        root.add("auto_item_model_servers", serverArray);
         
         try (final FileWriter fileWriter = new FileWriter(getConfigFile())) {
             gson.toJson(root, fileWriter);
@@ -123,12 +141,24 @@ public class ModConfig {
         return requireServerConnection;
     }
 
+    public static boolean enableServerWhitelist() {
+        return enableServerWhitelist;
+    }
+
     public static boolean autoToggleAddons() {
         return autoToggleAddons;
     }
 
-    public static boolean enableServerWhitelist() {
-        return enableServerWhitelist;
+    public static boolean autoManageItems() {
+        return autoManageItems;
+    }
+
+    public static boolean autoItemModels() {
+        return autoItemModels;
+    }
+
+    public static boolean autoItemModelServerWhitelist() {
+        return autoItemModelServerWhitelist;
     }
 
     public static boolean isCurrentServerEnabled() {
@@ -138,11 +168,11 @@ public class ModConfig {
         }
 
         final ServerInfo serverInfo = client.getCurrentServerEntry();
-        return serverInfo != null && enabledServers.contains(serverInfo.name);
+        return serverInfo != null && serverWhitelist.contains(serverInfo.name);
     }
 
     public static boolean isServerEnabled(String server) {
-        return enabledServers.contains(server);
+        return serverWhitelist.contains(server);
     }
 
     public static File getConfigFile() {

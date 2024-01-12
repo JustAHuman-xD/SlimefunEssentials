@@ -33,18 +33,22 @@ import java.util.Set;
 public class ResourceLoader {
     private static final Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final Map<String, SlimefunItemStack> slimefunItems = new LinkedHashMap<>();
+    private static final Set<String> itemBlacklist = new HashSet<>();
 
     private static final Map<String, Identifier> blockModels = new HashMap<>();
+    private static final Map<String, Long> itemModels = new HashMap<>();
 
     private static final Map<ChunkPos, Set<BlockPos>> placedChunks = new HashMap<>();
     private static final Map<BlockPos, String> placedBlocks = new HashMap<>();
 
     /**
-     * Clears {@link ResourceLoader#slimefunItems}, {@link ResourceLoader#blockModels}, {@link SlimefunLabel#clear()}, {@link SlimefunCategory#clear()}
+     * Clears {@link ResourceLoader#slimefunItems}, {@link ResourceLoader#itemBlacklist}, {@link ResourceLoader#blockModels}, {@link ResourceLoader#itemModels}, {@link SlimefunLabel#clear()}, {@link SlimefunCategory#clear()}
      */
     public static void clear() {
         slimefunItems.clear();
+        itemBlacklist.clear();
         blockModels.clear();
+        itemModels.clear();
         SlimefunLabel.clear();
         SlimefunCategory.clear();
     }
@@ -234,6 +238,74 @@ public class ResourceLoader {
      */
     public static void removePlacedBlock(BlockPos blockPos) {
         placedBlocks.remove(blockPos);
+    }
+
+    /**
+     * Adds a {@link String} id to the Item Blacklist
+     *
+     * @param id The {@link String} id representing a Slimefun Item
+     */
+    public static void blacklistItem(String id) {
+        itemBlacklist.add(id);
+    }
+
+    /**
+     * Checks if a {@link String} id is in the Item Blacklist
+     *
+     * @param id The {@link String} id representing a Slimefun Item
+     *
+     * @return If the {@link String} id is in the Item Blacklist
+     */
+    public static boolean isItemBlacklisted(String id) {
+        return itemBlacklist.contains(id);
+    }
+
+    /**
+     * Clears {@link ResourceLoader#itemBlacklist}
+     */
+    public static void clearItemBlacklist() {
+        itemBlacklist.clear();
+    }
+
+    /**
+     * Adds an Item Model for a given {@link String} id
+     *
+     * @param id The {@link String} id that represents a Slimefun Item
+     * @param model The {@link Long} model for the Slimefun Item
+     */
+    public static void addItemModel(String id, long model) {
+        if (slimefunItems.containsKey(id)) {
+            itemModels.put(id, model);
+        }
+    }
+
+    /**
+     * Checks if a {@link String} id has a registered Item Model
+     *
+     * @param id The {@link String} id to check
+     *
+     * @return If the {@link String} id has a registered Item Model
+     */
+    public static boolean hasItemModel(String id) {
+        return itemModels.containsKey(id);
+    }
+
+    /**
+     * Gets the Item Model for a given {@link String} id
+     *
+     * @param id The {@link String} id to get the Item Model for
+     *
+     * @return The Item Model for the given {@link String} id
+     */
+    public static long getItemModel(String id) {
+        return itemModels.getOrDefault(id, 0L);
+    }
+
+    /**
+     * Clears {@link ResourceLoader#itemModels}
+     */
+    public static void clearItemModels() {
+        itemModels.clear();
     }
 
     /**
