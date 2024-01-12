@@ -6,7 +6,8 @@
   "client": [
     "mbp.MBPDataMixin",
     "mbp.MBPProviderMixin",
-    "server_list.AddServerScreenMixin"
+    "server_list.AddServerScreenMixin",
+    "item.ItemStackMixin"
   ],
   "server": [],
   "injectors": {
