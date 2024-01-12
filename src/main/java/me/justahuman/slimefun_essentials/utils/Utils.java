@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +56,11 @@ public class Utils {
         return path.substring(path.lastIndexOf("/") + 1, path.indexOf(".json"));
     }
 
-    public static String getSlimefunId(ItemStack itemStack) {
-        final NbtCompound nbt = itemStack.getNbt();
+    public static String getSlimefunId(@Nullable ItemStack itemStack) {
+        return itemStack == null ? null : getSlimefunId(itemStack.getNbt());
+    }
+
+    public static String getSlimefunId(@Nullable NbtCompound nbt) {
         if (nbt == null || nbt.isEmpty() || !nbt.contains("PublicBukkitValues")) {
             return null;
         }
