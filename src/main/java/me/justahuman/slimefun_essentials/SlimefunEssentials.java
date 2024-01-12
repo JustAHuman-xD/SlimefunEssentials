@@ -112,12 +112,11 @@ public class SlimefunEssentials implements ClientModInitializer {
         if (ModConfig.autoManageItems()) {
             ClientPlayNetworking.registerGlobalReceiver(Channels.ITEM_CHANNEL, ((client, handler, buf, sender) -> {
                 final String id = ByteStreams.newDataInput(buf.array()).readUTF();
-                if (id.equals("clear")) {
-                    ResourceLoader.clearItemBlacklist();
-                    return;
-                }
-
                 ResourceLoader.blacklistItem(id);
+            }));
+
+            ClientPlayConnectionEvents.DISCONNECT.register(((handler, client) -> {
+                ResourceLoader.clearItemBlacklist();
             }));
         }
 
@@ -126,12 +125,12 @@ public class SlimefunEssentials implements ClientModInitializer {
                 final ByteArrayDataInput packet = ByteStreams.newDataInput(buf.array());
                 final long model = packet.readLong();
                 final String id = packet.readUTF();
-                if (id.equals("clear")) {
-                    ResourceLoader.clearItemModels();
-                    return;
-                }
 
                 ResourceLoader.addItemModel(id, model);
+            }));
+
+            ClientPlayConnectionEvents.DISCONNECT.register(((handler, client) -> {
+                ResourceLoader.clearItemModels();
             }));
         }
     }
