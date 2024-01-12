@@ -19,8 +19,7 @@ public class ConfigScreen {
         
         final ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         final ConfigCategory generalCategory = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.config.category.general"));
-        final ConfigCategory addonsCategory = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.config.category.addons"));
-        final ConfigCategory serverWhitelistCategory = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.config.category.server_whitelist"));
+        final ConfigCategory serverCategory = builder.getOrCreateCategory(Text.translatable("slimefun_essentials.config.category.server"));
         
         generalCategory.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.block_features"), ModConfig.blockFeatures())
                 .setDefaultValue(true)
@@ -36,31 +35,32 @@ public class ConfigScreen {
                 .setSaveConsumer(ModConfig::setRecipeFeatures)
                 .build());
 
-        generalCategory.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.require_server_connection"), ModConfig.requireServerConnection())
-                .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.config.option.require_server_connection.tooltip"))
-                .setSaveConsumer(ModConfig::setRequireServerConnection)
-                .build());
-        
-        addonsCategory.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.auto_toggle_addons"), ModConfig.autoToggleAddons())
-                .setDefaultValue(true)
-                .setTooltip(Text.translatable("slimefun_essentials.config.option.auto_toggle_addons.tooltip"))
-                .setSaveConsumer(ModConfig::setAutoToggleAddons)
-                .build());
-        
-        addonsCategory.addEntry(entryBuilder.startStrList(Text.translatable("slimefun_essentials.config.option.addons"), ModConfig.getAddons())
+        generalCategory.addEntry(entryBuilder.startStrList(Text.translatable("slimefun_essentials.config.option.addons"), ModConfig.getAddons())
                 .setDefaultValue(new ArrayList<>(List.of("Slimefun")))
                 .setTooltip(Text.translatable("slimefun_essentials.config.option.addons.tooltip"))
                 .setSaveConsumer(ModConfig::setAddons)
                 .build());
 
-        serverWhitelistCategory.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.enable_server_whitelist"), ModConfig.enableServerWhitelist())
+        serverCategory.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.require_server_connection"), ModConfig.requireServerConnection())
+                .setDefaultValue(true)
+                .setTooltip(Text.translatable("slimefun_essentials.config.option.require_server_connection.tooltip"))
+                .setSaveConsumer(ModConfig::setRequireServerConnection)
+                .build());
+        
+        serverCategory.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.auto_toggle_addons"), ModConfig.autoToggleAddons())
+                .setDefaultValue(true)
+                .setTooltip(Text.translatable("slimefun_essentials.config.option.auto_toggle_addons.tooltip"))
+                .setSaveConsumer(ModConfig::setAutoToggleAddons)
+                .build());
+
+
+        serverCategory.addEntry(entryBuilder.startBooleanToggle(Text.translatable("slimefun_essentials.config.option.enable_server_whitelist"), ModConfig.enableServerWhitelist())
                 .setDefaultValue(false)
                 .setTooltip(Text.translatable("slimefun_essentials.config.option.enable_server_whitelist.tooltip"))
                 .setSaveConsumer(ModConfig::setEnableServerWhitelist)
                 .build());
 
-        serverWhitelistCategory.addEntry(entryBuilder.startStrList(Text.translatable("slimefun_essentials.config.option.server_whitelist"), ModConfig.getEnabledServers())
+        serverCategory.addEntry(entryBuilder.startStrList(Text.translatable("slimefun_essentials.config.option.server_whitelist"), ModConfig.getEnabledServers())
                 .setDefaultValue(new ArrayList<>())
                 .setTooltip(Text.translatable("slimefun_essentials.config.option.server_whitelist.tooltip"))
                 .setSaveConsumer(ModConfig::setEnabledServers)

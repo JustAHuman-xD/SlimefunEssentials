@@ -30,11 +30,10 @@ public class ModConfig {
 
     private static @Setter boolean blockFeatures = true;
     private static @Setter boolean recipeFeatures = true;
-    private static @Setter boolean requireServerConnection = true;
-
-    private static @Setter boolean autoToggleAddons = true;
     private static @Setter @Getter List<String> addons = new ArrayList<>();
 
+    private static @Setter boolean requireServerConnection = true;
+    private static @Setter boolean autoToggleAddons = true;
     private static @Setter boolean enableServerWhitelist = false;
     private static @Setter @Getter List<String> enabledServers = new ArrayList<>();
     
@@ -51,9 +50,6 @@ public class ModConfig {
 
         loadConfigOption(() -> blockFeatures = JsonUtils.getBooleanOrDefault(root, "block_features", true, true));
         loadConfigOption(() -> recipeFeatures = JsonUtils.getBooleanOrDefault(root, "recipe_features", true, true));
-        loadConfigOption(() -> requireServerConnection = JsonUtils.getBooleanOrDefault(root, "require_server_connection", true, true));
-
-        loadConfigOption(() -> autoToggleAddons = JsonUtils.getBooleanOrDefault(root, "auto_toggle_addons", true, true));
         loadConfigOption(() -> {
             for (JsonElement addon : JsonUtils.getArrayOrDefault(root, "addons", defaultAddons, true)) {
                 if (addon instanceof JsonPrimitive jsonPrimitive && jsonPrimitive.isString()) {
@@ -62,6 +58,8 @@ public class ModConfig {
             }
         });
 
+        loadConfigOption(() -> requireServerConnection = JsonUtils.getBooleanOrDefault(root, "require_server_connection", true, true));
+        loadConfigOption(() -> autoToggleAddons = JsonUtils.getBooleanOrDefault(root, "auto_toggle_addons", true, true));
         loadConfigOption(() -> enableServerWhitelist = JsonUtils.getBooleanOrDefault(root, "enable_server_whitelist", false, true));
         loadConfigOption(() -> {
             for (JsonElement server : JsonUtils.getArrayOrDefault(root, "enabled_servers", new JsonArray(), true)) {
@@ -97,11 +95,10 @@ public class ModConfig {
 
         root.addProperty("block_features", blockFeatures);
         root.addProperty("recipe_features", recipeFeatures);
-        root.addProperty("require_server_connection", requireServerConnection);
-
-        root.addProperty("auto_toggle_addons", autoToggleAddons);
         root.add("addons", addonArray);
 
+        root.addProperty("require_server_connection", requireServerConnection);
+        root.addProperty("auto_toggle_addons", autoToggleAddons);
         root.addProperty("enable_server_whitelist", enableServerWhitelist);
         root.add("enabled_servers", serverArray);
         
