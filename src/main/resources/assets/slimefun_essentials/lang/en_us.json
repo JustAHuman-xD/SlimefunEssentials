@@ -3,14 +3,30 @@
 
   "slimefun_essentials.key_bind.open_config": "Open Config",
 
+  "slimefun_essentials.config.category.general": "General",
   "slimefun_essentials.config.option.block_features": "Enable Block Features",
   "slimefun_essentials.config.option.block_features.tooltip": "-> Enables MBP Integration\n-> Enables Jade Integration",
   "slimefun_essentials.config.option.recipe_features": "Enable Recipe Features",
   "slimefun_essentials.config.option.recipe_features.tooltip": "-> Enables Jei Integration\n-> Enables Rei Integration\n-> Enables Emi Integration",
+  "slimefun_essentials.config.option.require_server_connection": "Require Server Connection",
+  "slimefun_essentials.config.option.require_server_connection.tooltip": "If Enabled Slimefun Essentials will not add any features on single player.\nMay require you to leave and rejoin the world to take effect.",
+
+  "slimefun_essentials.config.category.addons": "Addons",
   "slimefun_essentials.config.option.auto_toggle_addons": "Enable Auto Addons",
   "slimefun_essentials.config.option.auto_toggle_addons.tooltip": "Should Slimefun Essentials automatically Enable/Disable Addon Support?",
   "slimefun_essentials.config.option.addons": "Enabled Slimefun Addons:",
   "slimefun_essentials.config.option.addons.tooltip": "Add/Remove Slimefun Addons you want Supported",
+
+  "slimefun_essentials.config.category.server_whitelist": "Server Whitelist",
+  "slimefun_essentials.config.option.enable_server_whitelist": "Enable Server Whitelist",
+  "slimefun_essentials.config.option.enable_server_whitelist.tooltip": "Should Slimefun Essentials only function on Whitelisted Servers?",
+  "slimefun_essentials.config.option.server_whitelist": "Whitelisted Servers:",
+  "slimefun_essentials.config.option.server_whitelist.tooltip": "Add/Remove Server names you want Whitelisted\nThere is also a button in the edit server screen",
+
+  "slimefun_essentials.server_menu.add_whitelist": "Whitelist",
+  "slimefun_essentials.server_menu.add_whitelist.tooltip": "Add the Server to the Whitelist",
+  "slimefun_essentials.server_menu.remove_whitelist": "Un-Whitelist",
+  "slimefun_essentials.server_menu.remove_whitelist.tooltip": "Remove the Server from the Whitelist",
 
   "slimefun_essentials.recipes.category.slimefun" : "%s",
   "slimefun_essentials.recipes.time": "%s Seconds (%s Ticks)",

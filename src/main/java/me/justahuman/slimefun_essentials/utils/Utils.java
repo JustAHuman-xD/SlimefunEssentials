@@ -2,8 +2,11 @@ package me.justahuman.slimefun_essentials.utils;
 
 import me.justahuman.slimefun_essentials.client.ResourceLoader;
 import me.justahuman.slimefun_essentials.config.ModConfig;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +67,28 @@ public class Utils {
         }
 
         return bukkitValues.getString("slimefun:slimefun_item");
+    }
+
+    public static boolean shouldFunction() {
+        if (ModConfig.requireServerConnection() && !Utils.isOnMultiplayer()) {
+            return false;
+        }
+
+        if (ModConfig.enableServerWhitelist() && !ModConfig.isCurrentServerEnabled()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isOnMultiplayer() {
+        final MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) {
+            return false;
+        }
+
+        final ServerInfo server = client.getCurrentServerEntry();
+        return server != null && !server.isLocal() && !server.isRealm();
     }
 
     public static void log(String message) {

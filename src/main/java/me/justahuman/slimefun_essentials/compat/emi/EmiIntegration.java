@@ -15,8 +15,10 @@ import me.justahuman.slimefun_essentials.compat.emi.recipes.GridRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.ProcessRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.ReactorRecipe;
 import me.justahuman.slimefun_essentials.compat.emi.recipes.SmelteryRecipe;
+import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -28,6 +30,10 @@ public class EmiIntegration implements EmiPlugin {
     
     @Override
     public void register(EmiRegistry emiRegistry) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         for (Map.Entry<String, SlimefunItemStack> entry : ResourceLoader.getSlimefunItems().entrySet()) {
             emiRegistry.setDefaultComparison(EmiStack.of(entry.getValue().itemStack()), Comparison.compareNbt());
         }

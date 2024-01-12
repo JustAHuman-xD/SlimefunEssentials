@@ -8,10 +8,18 @@
     "JustAHuman_xD"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/slimefun-essentials",
+    "homepage": "https://modrinth.com/mod/slimefun-essentials",
     "sources": "https://github.com/JustAHuman-xD/SlimefunEssentials",
     "issues": "https://github.com/JustAHuman-xD/SlimefunEssentials/issues",
     "discord": "https://discord.gg/y6fV6pbgHB"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/y6fV6pbgHB"
+      },
+      "update_checker": true
+    }
   },
   "license": "MIT",
   "icon": "assets/slimefun_essentials/icon.png",
@@ -21,7 +29,7 @@
       "me.justahuman.slimefun_essentials.SlimefunEssentials"
     ],
     "modmenu": [
-      "me.justahuman.slimefun_essentials.config.ModMenuIntegration"
+      "me.justahuman.slimefun_essentials.compat.modmenu.ModMenuIntegration"
     ],
     "jade": [
       "me.justahuman.slimefun_essentials.compat.jade.JadeIntegration"

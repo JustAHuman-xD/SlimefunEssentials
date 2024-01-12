@@ -40,11 +40,19 @@ public class JeiIntegration implements IModPlugin {
     
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         registration.register(SLIMEFUN, ResourceLoader.getSlimefunItems().values(), new SlimefunStackHelper(), new SlimefunStackRenderer());
     }
     
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         IJeiHelpers jeiHelpers = registration.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
@@ -54,6 +62,10 @@ public class JeiIntegration implements IModPlugin {
     
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
             registration.addRecipes(RecipeType.create(Utils.ID, slimefunCategory.id().toLowerCase(), SlimefunRecipe.class), slimefunCategory.recipes());
         }
@@ -61,12 +73,16 @@ public class JeiIntegration implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
             registration.addRecipeCatalyst(ResourceLoader.getSlimefunItems().get(slimefunCategory.id()).itemStack(), RecipeType.create(Utils.ID, slimefunCategory.id().toLowerCase(), SlimefunRecipe.class));
         }
     }
 
-    public static IRecipeCategory<?> getJeiCategory(IGuiHelper guiHelper, SlimefunCategory slimefunCategory, ItemStack catalyst) {
+    public static IRecipeCategory<SlimefunRecipe> getJeiCategory(IGuiHelper guiHelper, SlimefunCategory slimefunCategory, ItemStack catalyst) {
         final String type = slimefunCategory.type();
         if (type.equals("ancient_altar")) {
             return new AncientAltarCategory(guiHelper, slimefunCategory, catalyst);

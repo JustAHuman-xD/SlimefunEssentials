@@ -44,11 +44,19 @@ public class ReiIntegration implements REIClientPlugin {
 
     @Override
     public void registerEntryTypes(EntryTypeRegistry registry) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         registry.register(SLIMEFUN, new SlimefunEntryDefinition());
     }
     
     @Override
     public void registerEntries(EntryRegistry registry) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         for (SlimefunItemStack slimefunItemStack : ResourceLoader.getSlimefunItems().values()) {
             registry.addEntry(EntryStack.of(SLIMEFUN, slimefunItemStack));
         }
@@ -56,6 +64,10 @@ public class ReiIntegration implements REIClientPlugin {
     
     @Override
     public void registerCategories(CategoryRegistry registry) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
             final ItemStack icon = ResourceLoader.getSlimefunItems().get(slimefunCategory.id()).itemStack();
             final DisplayCategory<?> displayCategory = getReiCategory(slimefunCategory, icon);
@@ -66,6 +78,10 @@ public class ReiIntegration implements REIClientPlugin {
     
     @Override
     public void registerDisplays(DisplayRegistry registry) {
+        if (!Utils.shouldFunction()) {
+            return;
+        }
+
         for (SlimefunCategory slimefunCategory : SlimefunCategory.getSlimefunCategories().values()) {
             for (SlimefunRecipe slimefunRecipe : slimefunCategory.recipes()) {
                 registry.add(getDisplay(slimefunCategory, slimefunRecipe));
