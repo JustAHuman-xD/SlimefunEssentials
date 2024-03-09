@@ -1,0 +1,21 @@
+{
+  "slimefun_essentials.title": "Slimefun Essentials",
+
+  "slimefun_essentials.key_bind.open_config": "Open Config",
+
+  "slimefun_essentials.config.option.block_features": "Enable Block Features",
+  "slimefun_essentials.config.option.block_features.tooltip": "-> Enables MBP Integration\n-> Enables Jade Integration",
+  "slimefun_essentials.config.option.recipe_features": "Enable Recipe Features",
+  "slimefun_essentials.config.option.recipe_features.tooltip": "-> Enables Jei Integration\n-> Enables Rei Integration\n-> Enables Emi Integration",
+  "slimefun_essentials.config.option.auto_toggle_addons": "Enable Auto Addons",
+  "slimefun_essentials.config.option.auto_toggle_addons.tooltip": "Should Slimefun Essentials automatically Enable/Disable Addon Support?",
+  "slimefun_essentials.config.option.addons": "Enabled Slimefun Addons:",
+  "slimefun_essentials.config.option.addons.tooltip": "Add/Remove Slimefun Addons you want Supported",
+
+  "slimefun_essentials.recipes.category.slimefun" : "%s",
+  "slimefun_essentials.recipes.time": "%s Seconds (%s Ticks)",
+  "slimefun_essentials.recipes.energy.use": "%sJ Used",
+  "slimefun_essentials.recipes.energy.generate": "%sJ Generated",
+  "slimefun_essentials.recipes.label.day": "This block must be exposed to the Sun to process this Recipe!",
+  "slimefun_essentials.recipes.label.night": "This block must be exposed to the Moon to process this Recipe!"
+}

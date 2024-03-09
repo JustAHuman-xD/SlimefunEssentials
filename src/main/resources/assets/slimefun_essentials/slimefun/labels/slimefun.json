@@ -1,0 +1,14 @@
+{
+  "day": {
+    "light": "slimefun_essentials:textures/gui/widgets.png",
+    "dark": "slimefun_essentials:textures/gui/widgets_dark.png",
+    "u": 57,
+    "v": 0
+  },
+  "night": {
+    "light": "slimefun_essentials:textures/gui/widgets.png",
+    "dark": "slimefun_essentials:textures/gui/widgets_dark.png",
+    "u": 70,
+    "v": 0
+  }
+}

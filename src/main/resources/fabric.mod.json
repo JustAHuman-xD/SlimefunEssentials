@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "slimefun_essentials",
+  "version": "${version}",
+  "name": "Slimefun Essentials",
+  "description": "A Minecraft mod bringing new features and compatibility with the Slimefun4 Plugin!\nSupported Addons: Slimefun",
+  "authors": [
+    "JustAHuman_xD"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/slimefun-essentials",
+    "sources": "https://github.com/JustAHuman-xD/SlimefunEssentials",
+    "issues": "https://github.com/JustAHuman-xD/SlimefunEssentials/issues",
+    "discord": "https://discord.gg/y6fV6pbgHB"
+  },
+  "license": "MIT",
+  "icon": "assets/slimefun_essentials/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.justahuman.slimefun_essentials.SlimefunEssentials"
+    ],
+    "modmenu": [
+      "me.justahuman.slimefun_essentials.config.ModMenuIntegration"
+    ],
+    "jade": [
+      "me.justahuman.slimefun_essentials.compat.jade.JadeIntegration"
+    ],
+    "emi": [
+      "me.justahuman.slimefun_essentials.compat.emi.EmiIntegration"
+    ],
+    "jei_mod_plugin": [
+      "me.justahuman.slimefun_essentials.compat.jei.JeiIntegration"
+    ],
+    "rei_client": [
+      "me.justahuman.slimefun_essentials.compat.rei.ReiIntegration"
+    ]
+  },
+  "mixins": [
+    "slimefun_essentials.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.22",
+    "fabric": "*",
+    "minecraft": "1.20.1"
+  }
+}

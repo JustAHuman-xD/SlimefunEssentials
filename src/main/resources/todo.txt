@@ -1,0 +1,13 @@
+Add Support For (Core):
+- Auto Brewer
+- Auto Enchanter/Disenchant
+- Auto Anvil
+- Book Binder
+- Auto Breeder
+- Animal Growth Accelerator
+- Tree Growth Accelerator
+- EXP Collector
+- Fluid Pump
+- Wither / Iron Golem Assembler
+- Produce Collector
+- Flask of Knowledge Right Click
