@@ -7,7 +7,7 @@
     "mbp.MBPDataMixin",
     "mbp.MBPProviderMixin",
     "server_list.AddServerScreenMixin",
-    "item.ItemStackMixin"
+    "jec.ILabelMixin"
   ],
   "server": [],
   "injectors": {
