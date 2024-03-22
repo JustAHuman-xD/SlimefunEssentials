@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.1-SNAPSHOT'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -24,14 +24,17 @@ repositories {
         url = "https://maven.shedaniel.me/"
     }
     maven {
-        name = "MoreBlockPredicates"
-        url = "https://jitpack.io"
-    }
-    maven {
-        name = "Jade"
+        name = "Jade, Just Enough Calculation"
         url "https://www.cursemaven.com"
         content {
             includeGroup "curse.maven"
+        }
+    }
+    maven {
+        name = "MoreBlockPredicates"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
         }
     }
     mavenCentral()
@@ -44,6 +47,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "curse.maven:jade-324717:${project.jade_version}"
+    modImplementation "curse.maven:just-enough-calculation-242223:${project.jec_version}"
 
     modImplementation ("dev.emi:emi-fabric:${project.emi_version}") {
         exclude(group: "net.fabricmc.fabric-api")
@@ -53,7 +57,7 @@ dependencies {
         exclude(group: "mezz.jei")
     }
 
-    modImplementation("com.github.JustAHuman-xD:MoreBlockPredicates:${project.mbp_version}") {
+    modImplementation("maven.modrinth:mbp:${project.mbp_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
@@ -91,12 +95,15 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
+base {
+    archivesName = project.archives_base_name
+}
+
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
-    archivesBaseName = project.archives_base_name
     withSourcesJar()
 }
 
