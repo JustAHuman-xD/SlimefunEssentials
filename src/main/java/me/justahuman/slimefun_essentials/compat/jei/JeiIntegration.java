@@ -5,6 +5,7 @@ import me.justahuman.slimefun_essentials.client.SlimefunRegistry;
 import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
+import me.justahuman.slimefun_essentials.client.screen.ReloadingScreen;
 import me.justahuman.slimefun_essentials.mixins.jei.InterpretersAccessor;
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import me.justahuman.slimefun_essentials.utils.Utils;
@@ -20,8 +21,10 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRuntimeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.library.ingredients.subtypes.SubtypeInterpreters;
 import mezz.jei.library.load.registration.SubtypeRegistration;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -29,20 +32,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @JeiPlugin
 public class JeiIntegration implements IModPlugin {
     private static final Set<SlimefunJeiCategory> CATEGORIES = new HashSet<>();
+    private static boolean mustQueue = false;
+    private static boolean runtimeAvailable = false;
+
     public static final JeiRecipeInterpreter RECIPE_INTERPRETER = new JeiRecipeInterpreter();
 
     @Override
-    @NotNull
-    public Identifier getPluginUid() {
+    public @NotNull Identifier getPluginUid() {
         return Utils.id("jei_integration");
     }
 
     @Override
     public void registerRuntime(IRuntimeRegistration registration) {
+        if (mustQueue || !Payloads.metExpected()) {
+            mustQueue = true;
+            return;
+        }
+
         for (SlimefunJeiCategory category : CATEGORIES) {
             category.updateIcon();
         }
@@ -53,7 +64,13 @@ public class JeiIntegration implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration iregistration) {
+        if (mustQueue || !Payloads.metExpected()) {
+            mustQueue = true;
+            return;
+        }
+
         if (!(iregistration instanceof SubtypeRegistration registration)) {
+            SlimefunEssentials.LOGGER.error("Failed to register JEI item subtypes: SubtypeRegistration is not an instance of SubtypeRegistration");
             return;
         }
 
@@ -74,6 +91,11 @@ public class JeiIntegration implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        if (mustQueue || !Payloads.metExpected()) {
+            mustQueue = true;
+            return;
+        }
+
         IJeiHelpers jeiHelpers = registration.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
         for (RecipeCategory recipeCategory : RecipeCategory.getRecipeCategories().values()) {
@@ -85,6 +107,11 @@ public class JeiIntegration implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        if (mustQueue || !Payloads.metExpected()) {
+            mustQueue = true;
+            return;
+        }
+
         for (RecipeCategory recipeCategory : RecipeCategory.getRecipeCategories().values()) {
             registration.addRecipes(RecipeType.create(SlimefunEssentials.MOD_ID, recipeCategory.id().toLowerCase(), SlimefunRecipe.class), recipeCategory.childRecipes());
         }
@@ -92,11 +119,45 @@ public class JeiIntegration implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        if (!Payloads.metExpected()) {
+        if (mustQueue || !Payloads.metExpected()) {
+            mustQueue = true;
             return;
         }
+
         for (RecipeCategory recipeCategory : RecipeCategory.getRecipeCategories().values()) {
             registration.addRecipeCatalyst(recipeCategory.itemStack(), RecipeType.create(SlimefunEssentials.MOD_ID, recipeCategory.id().toLowerCase(), SlimefunRecipe.class));
         }
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        runtimeAvailable = true;
+        if (mustQueue) {
+            if (Payloads.metExpected()) {
+                reload();
+            } else {
+                Payloads.onMeetExpected(JeiIntegration::reload);
+            }
+            mustQueue = false;
+        }
+    }
+
+    @Override
+    public void onRuntimeUnavailable() {
+        runtimeAvailable = false;
+    }
+
+    private static void reload() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        client.execute(() -> {
+            AtomicBoolean started = new AtomicBoolean(false);
+            client.setScreen(new ReloadingScreen(
+                    () -> !started.get() || !runtimeAvailable,
+                    () -> client.setScreen(null)
+            ));
+            JeiReloader.reload();
+            started.set(true);
+            mustQueue = false;
+        });
     }
 }

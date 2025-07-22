@@ -47,8 +47,8 @@ public interface IdInterpreter<T> {
         } catch (Exception ignored) {}
 
         // Slimefun Item
-        if (SlimefunRegistry.getSlimefunItems().containsKey(type)) {
-            final ItemStack itemStack = SlimefunRegistry.getSlimefunItems().get(type).copy().itemStack();
+        if (SlimefunRegistry.hasItem(type)) {
+            final ItemStack itemStack = SlimefunRegistry.getItemStack(type).copy();
             if (damage > 0) {
                 itemStack.setDamage(damage);
             }
@@ -60,7 +60,7 @@ public interface IdInterpreter<T> {
             try {
                 index = Integer.parseInt(type.substring(1));
             } catch (Exception ignored) {}
-            return fromItemStack(chance, component.getComplexStacks().get(index), amount, def);
+            return fromItemStack(chance, component.getComplex().get(index), amount, def);
         }
         // Entity
         else if (type.startsWith("@")) {

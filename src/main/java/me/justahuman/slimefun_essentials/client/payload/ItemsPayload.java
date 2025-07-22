@@ -1,7 +1,8 @@
-package me.justahuman.slimefun_essentials.client.payloads;
+package me.justahuman.slimefun_essentials.client.payload;
 
+import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.client.SlimefunRegistry;
-import me.justahuman.slimefun_essentials.utils.JsonUtils;
+import me.justahuman.slimefun_essentials.utils.DataUtils;
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -18,7 +19,12 @@ public record ItemsPayload(Map<String, ItemStack> items) implements CustomPayloa
                 int size = input.readInt();
                 Map<String, ItemStack> items = new LinkedHashMap<>(size);
                 for (int i = 0; i < size; i++) {
-                    items.put(input.readUTF(), JsonUtils.deserializeItem(input.readUTF()));
+                    String id = input.readUTF();
+                    try {
+                        items.put(id, DataUtils.get(input));
+                    } catch (Exception e) {
+                        SlimefunEssentials.LOGGER.error("Failed to deserialize slimefun item: {}", id, e);
+                    }
                 }
                 return new ItemsPayload(items);
             }, EMPTY);

@@ -32,12 +32,20 @@ public class SlimefunRegistry {
     private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();
     private static final Map<String, SlimefunItemStack> SLIMEFUN_ITEMS = new LinkedHashMap<>();
     private static final Set<String> VANILLA_ITEMS = new HashSet<>();
-    @Setter @Getter private static int ticksPerSecond = 2;
+    @Setter @Getter private static int sfTicksPerSecond = 2;
 
     public static void reset() {
         SLIMEFUN_ITEMS.clear();
         VANILLA_ITEMS.clear();
-        ticksPerSecond = 2;
+        sfTicksPerSecond = 2;
+    }
+
+    public static int toSfTicks(int ticks) {
+        return ticks / (20 / sfTicksPerSecond);
+    }
+
+    public static int toTicks(int sfTicks) {
+        return sfTicks * (20 / sfTicksPerSecond);
     }
 
     public static JsonObject jsonObjectFromResource(Resource resource) {
@@ -100,6 +108,10 @@ public class SlimefunRegistry {
         if (SLIMEFUN_ITEMS.containsKey(id)) {
             SLIMEFUN_ITEMS.get(id.toUpperCase()).setCustomModelData(customModelData);
         }
+    }
+
+    public static boolean hasItem(String id) {
+        return SLIMEFUN_ITEMS.containsKey(id);
     }
 
     public static ItemStack getItemStack(String id) {

@@ -20,8 +20,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
+    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("%[a-zA-Z_]+%");
     public static final Set<String> HIDDEN_SF_IDS = Set.of("_UI_BACKGROUND", "_UI_INPUT_SLOT", "_UI_OUTPUT_SLOT");
 
     public static Identifier id(String path) {
@@ -83,24 +86,44 @@ public class Utils {
     }
 
     public static String fillPlaceholders(String string, SlimefunRecipe recipe) {
-        if (recipe.hasTime()) {
-            string = string.replace("%sf_ticks%", "%s".formatted(recipe.sfTicks()))
-                    .replace("%time_seconds%", "%s".formatted(recipe.seconds()))
-                    .replace("%time_ticks%", "%s".formatted(recipe.ticks()))
-                    .replace("%time_millis%", "%s".formatted(recipe.millis()));
+        Matcher matcher = PLACEHOLDER_PATTERN.matcher(string);
+        StringBuilder builder = new StringBuilder();
+        while (matcher.find()) {
+            String placeholder = matcher.group();
+            Object value = resolvePlaceholder(placeholder, recipe);
+            matcher.appendReplacement(builder, value != null ? value.toString() : "");
         }
-        if (recipe.hasEnergy()) {
-            string = string.replace("%energy%", "%s".formatted(recipe.energy()))
-                    .replace("%total_energy%", "%s".formatted(recipe.totalEnergy()))
-                    .replace("%abs_total_energy%", "%s".formatted(Math.abs(recipe.totalEnergy())));
-        }
-        if (recipe.hasInputs()) {
-            string = string.replace("%inputs%", "%s".formatted(recipe.inputs().size()));
-        }
-        if (recipe.hasOutputs()) {
-            string = string.replace("%outputs%", "%s".formatted(recipe.outputs().size()));
-        }
-        return string;
+        return matcher.appendTail(builder).toString();
+    }
+
+    public static Object resolvePlaceholder(String string, SlimefunRecipe recipe) {
+        return resolveNumberPlaceholder(string, recipe);
+    }
+
+    public static Number resolveNumberPlaceholder(String string, SlimefunRecipe recipe) {
+        return resolveNumberPlaceholder(string, recipe, 0);
+    }
+
+    public static Number resolveNumberPlaceholder(String string, SlimefunRecipe recipe, Number defaultValue) {
+        Number number = switch (string) {
+            case "%ticks%" -> recipe.ticks();
+            case "%sf_ticks%" -> recipe.sfTicks();
+            case "%seconds%" -> recipe.seconds();
+            case "%millis%" -> recipe.millis();
+            case "%energy%" -> recipe.energy();
+            case "%total_energy%" -> recipe.totalEnergy();
+            case "%abs_total_energy%" -> recipe.totalEnergy() == null ? null : Math.abs(recipe.totalEnergy());
+            case "%inputs%" -> recipe.inputs().size();
+            case "%outputs%" -> recipe.outputs().size();
+            default -> {
+                double value = defaultValue.doubleValue();
+                try {
+                    value = Double.parseDouble(string);
+                } catch (NumberFormatException ignored) {}
+                yield value == (int) value ? (int) value : value;
+            }
+        };
+        return number == null ? defaultValue : number;
     }
 
     public static List<TooltipComponent> updateTooltip(List<TooltipComponent> tooltip, SlimefunRecipe recipe) {

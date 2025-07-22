@@ -1,22 +1,30 @@
-package me.justahuman.slimefun_essentials.client;
+package me.justahuman.slimefun_essentials.client.component;
 
-import com.google.gson.JsonArray;
+import com.google.common.io.ByteArrayDataInput;
 import com.google.gson.JsonObject;
 import me.justahuman.slimefun_essentials.api.CustomRenderable;
 import me.justahuman.slimefun_essentials.api.DisplayComponentType;
+import me.justahuman.slimefun_essentials.api.def.DrawMode;
+import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
+import me.justahuman.slimefun_essentials.utils.DataUtils;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record RecipeDisplayComponent(String type, int x, int y, int index, boolean output, CustomRenderable renderable, List<TooltipComponent> tooltipOverride, Map<SlimefunRecipe, List<TooltipComponent>> tooltipCache) implements DisplayComponentType {
+public record RecipeDisplayComponent(
+        String type,
+        int x, int y,
+        int index,
+        boolean output,
+        CustomRenderable renderable,
+        List<TooltipComponent> tooltipOverride,
+        Map<SlimefunRecipe, List<TooltipComponent>> tooltipCache
+) implements DisplayComponentType {
     public static final List<TooltipComponent> EMPTY_TOOLTIP = List.of();
 
     public RecipeDisplayComponent(String type, int x, int y) {
@@ -29,14 +37,6 @@ public record RecipeDisplayComponent(String type, int x, int y, int index, boole
 
     public RecipeDisplayComponent(String type, int x, int y, int index, boolean output) {
         this(type, x, y, index, output, null, EMPTY_TOOLTIP, new HashMap<>());
-    }
-
-    public RecipeDisplayComponent(String type, int x, int y, int index, boolean output, CustomRenderable renderable) {
-        this(type, x, y, index, output, renderable, EMPTY_TOOLTIP, new HashMap<>());
-    }
-
-    public RecipeDisplayComponent(String type, int x, int y, List<TooltipComponent> tooltipOverride) {
-        this(type, x, y, -1, false, null, tooltipOverride, new HashMap<>());
     }
 
     @Override
@@ -72,6 +72,20 @@ public record RecipeDisplayComponent(String type, int x, int y, int index, boole
         return DisplayComponentType.get(this.type);
     }
 
+    public static RecipeDisplayComponent deserialize(ByteArrayDataInput input) {
+        String type = input.readUTF();
+        int x = input.readInt();
+        int y = input.readInt();
+        int index = DataUtils.get(input, -1);
+        boolean output = input.readBoolean();
+        CustomRenderable renderable = null;
+        if (input.readBoolean()) {
+            renderable = CustomRenderable.deserialize(input);
+        }
+        List<TooltipComponent> tooltipOverride = DataUtils.getTooltip(input);
+        return new RecipeDisplayComponent(type, x, y, index, output, renderable, tooltipOverride, new HashMap<>());
+    }
+
     public static RecipeDisplayComponent deserialize(JsonObject jsonObject) {
         String type = jsonObject.get("type").getAsString();
         int x = jsonObject.get("x").getAsInt();
@@ -82,15 +96,7 @@ public record RecipeDisplayComponent(String type, int x, int y, int index, boole
         if (jsonObject.has("renderable")) {
             renderable = CustomRenderable.deserialize(jsonObject.getAsJsonObject("renderable"));
         }
-        if (!jsonObject.has("tooltip")) {
-            return new RecipeDisplayComponent(type, x, y, index, output, renderable);
-        }
-        JsonArray tooltipArray = jsonObject.getAsJsonArray("tooltip");
-        List<String> tooltip = new ArrayList<>();
-        tooltipArray.forEach(element -> tooltip.add(element.getAsString()));
-        return new RecipeDisplayComponent(type, x, y, index, output, renderable, tooltip.stream()
-                .map(Text::literal)
-                .map(MutableText::asOrderedText)
-                .map(TooltipComponent::of).toList(), new HashMap<>());
+        List<TooltipComponent> tooltip = JsonUtils.getTooltip(jsonObject);
+        return new RecipeDisplayComponent(type, x, y, index, output, renderable, tooltip, new HashMap<>());
     }
 }

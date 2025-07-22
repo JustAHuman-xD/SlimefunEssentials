@@ -1,9 +1,13 @@
 package me.justahuman.slimefun_essentials.client;
 
+import com.google.common.io.ByteArrayDataInput;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.NonNull;
+import me.justahuman.slimefun_essentials.SlimefunEssentials;
+import me.justahuman.slimefun_essentials.api.RecipeDisplay;
+import me.justahuman.slimefun_essentials.utils.DataUtils;
 import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import net.minecraft.item.ItemStack;
 
@@ -63,7 +67,29 @@ public class RecipeCategory {
     public List<SlimefunRecipe> childRecipes() {
         return this.childRecipes;
     }
-    
+
+    public static void deserialize(ByteArrayDataInput input) {
+        final String id = input.readUTF();
+        try {
+            final String display = DataUtils.get(input, "dynamic");
+            final ItemStack itemStack = DataUtils.get(input, ItemStack.EMPTY);
+            final Integer speed = DataUtils.get(input, (Integer) null);
+            final Integer energy = DataUtils.get(input, (Integer) null);
+            final List<SlimefunRecipe> recipes = new ArrayList<>();
+
+            final RecipeCategory category = new RecipeCategory(id, itemStack, display, speed, energy, recipes);
+            int size = input.readInt();
+            for (int i = 0; i < size; i++) {
+                recipes.add(SlimefunRecipe.deserialize(category, input, energy));
+            }
+
+            TO_COPY.put(id, DataUtils.get(input, ""));
+            RECIPE_CATEGORIES.put(id, category);
+        } catch (Exception e) {
+            SlimefunEssentials.LOGGER.error("Failed to deserialize recipe category: {}", id, e);
+        }
+    }
+
     public static void deserialize(String id, JsonObject categoryObject) {
         final String display = JsonUtils.get(categoryObject, "display", "dynamic");
         final ItemStack itemStack = JsonUtils.deserializeItem(JsonUtils.get(categoryObject, "item", new JsonObject()));
@@ -122,7 +148,7 @@ public class RecipeCategory {
             return 0;
         }
 
-        final String type = recipe.parent().display().id;
+        final String type = recipe.parent().display().id();
         if (type.contains("grid")) {
             return 10;
         } else if (type.equals("ancient_altar")) {

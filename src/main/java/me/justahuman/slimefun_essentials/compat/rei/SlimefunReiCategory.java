@@ -1,8 +1,8 @@
 package me.justahuman.slimefun_essentials.compat.rei;
 
-import me.justahuman.slimefun_essentials.client.DrawMode;
+import me.justahuman.slimefun_essentials.api.def.DrawMode;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
-import me.justahuman.slimefun_essentials.client.RecipeDisplayComponent;
+import me.justahuman.slimefun_essentials.client.component.RecipeDisplayComponent;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import me.justahuman.slimefun_essentials.utils.Utils;

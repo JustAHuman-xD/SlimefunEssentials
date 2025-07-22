@@ -4,6 +4,7 @@
   "package": "me.justahuman.slimefun_essentials.mixins",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "jei.ClientLifecycleHandlerMixin",
     "jei.InterpretersAccessor",
     "minecraft.DrawContextInvoker",
     "minecraft.ItemStackMixin",

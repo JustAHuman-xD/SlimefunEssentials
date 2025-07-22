@@ -4,6 +4,7 @@ import me.justahuman.slimefun_essentials.client.SlimefunRegistry;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
+import me.justahuman.slimefun_essentials.client.screen.ReloadingScreen;
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import me.shedaniel.rei.RoughlyEnoughItemsCoreClient;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
@@ -15,15 +16,14 @@ import me.shedaniel.rei.api.common.entry.comparison.ItemComparatorRegistry;
 import me.shedaniel.rei.api.common.plugins.PluginManager;
 import me.shedaniel.rei.api.common.registry.ReloadStage;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import me.shedaniel.rei.impl.client.gui.screen.ConfigReloadingScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 
-import static me.shedaniel.rei.impl.client.gui.config.options.ConfigUtils.translatable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ReiIntegration implements REIClientPlugin {
     public static final ReiRecipeInterpreter RECIPE_INTERPRETER = new ReiRecipeInterpreter();
-    private static boolean loaded = false;
+    private static boolean mustQueue = false;
 
     @Override
     public double getPriority() {
@@ -37,11 +37,11 @@ public class ReiIntegration implements REIClientPlugin {
 
     @Override
     public void registerEntries(EntryRegistry registry) {
-        if (!Payloads.metExpected()) {
+        if (mustQueue || !Payloads.metExpected()) {
+            mustQueue = true;
             return;
         }
 
-        loaded = true;
         for (SlimefunItemStack slimefunItemStack : SlimefunRegistry.getSlimefunItems().values()) {
             registry.addEntry(EntryStacks.of(slimefunItemStack.itemStack()));
         }
@@ -49,7 +49,8 @@ public class ReiIntegration implements REIClientPlugin {
     
     @Override
     public void registerCategories(CategoryRegistry registry) {
-        if (!Payloads.metExpected()) {
+        if (mustQueue || !Payloads.metExpected()) {
+            mustQueue = true;
             return;
         }
 
@@ -63,7 +64,8 @@ public class ReiIntegration implements REIClientPlugin {
     
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        if (!Payloads.metExpected()) {
+        if (mustQueue || !Payloads.metExpected()) {
+            mustQueue = true;
             return;
         }
 
@@ -76,7 +78,7 @@ public class ReiIntegration implements REIClientPlugin {
 
     @Override
     public void postStage(PluginManager<REIClientPlugin> manager, ReloadStage stage) {
-        if (!loaded && stage == ReloadStage.END) {
+        if (mustQueue && stage == ReloadStage.END) {
             if (Payloads.metExpected()) {
                 reload();
             } else {
@@ -88,17 +90,14 @@ public class ReiIntegration implements REIClientPlugin {
     private static void reload() {
         MinecraftClient client = MinecraftClient.getInstance();
         client.execute(() -> {
-            RoughlyEnoughItemsCoreClient.reloadPlugins(null, null);
-            client.setScreen(new ConfigReloadingScreen(
-                    translatable("text.rei.config.is.reloading"),
-                    PluginManager::areAnyReloading,
-                    () -> client.setScreen(null),
-                    null
+            AtomicBoolean started = new AtomicBoolean(false);
+            client.setScreen(new ReloadingScreen(
+                    () -> !started.get() || PluginManager.areAnyReloading(),
+                    () -> client.setScreen(null)
             ));
+            RoughlyEnoughItemsCoreClient.reloadPlugins(null, null);
+            started.set(true);
+            mustQueue = false;
         });
-    }
-
-    public static void reset() {
-        loaded = false;
     }
 }

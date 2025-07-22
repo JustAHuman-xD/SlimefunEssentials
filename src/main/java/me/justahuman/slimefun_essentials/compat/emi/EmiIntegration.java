@@ -9,12 +9,15 @@ import me.justahuman.slimefun_essentials.client.SlimefunRegistry;
 import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
+import me.justahuman.slimefun_essentials.client.screen.ReloadingScreen;
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import me.justahuman.slimefun_essentials.utils.Utils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EmiIntegration implements EmiPlugin {
     public static final EmiIdInterpreter RECIPE_INTERPRETER = new EmiIdInterpreter();
@@ -24,7 +27,18 @@ public class EmiIntegration implements EmiPlugin {
     @Override
     public void register(EmiRegistry emiRegistry) {
         if (!Payloads.metExpected()) {
-            Payloads.onMeetExpected(EmiReloadManager::reload);
+            Payloads.onMeetExpected(() -> {
+                MinecraftClient client = MinecraftClient.getInstance();
+                client.execute(() -> {
+                    AtomicBoolean started = new AtomicBoolean(false);
+                    client.setScreen(new ReloadingScreen(
+                            () -> !started.get() || EmiReloadManager.getStatus() == 1,
+                            () -> client.setScreen(null)
+                    ));
+                    EmiReloadManager.reload();
+                    started.set(true);
+                });
+            });
             return;
         }
 

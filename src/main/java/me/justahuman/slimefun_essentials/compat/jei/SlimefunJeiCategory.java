@@ -1,9 +1,9 @@
 package me.justahuman.slimefun_essentials.compat.jei;
 
 import me.justahuman.slimefun_essentials.SlimefunEssentials;
-import me.justahuman.slimefun_essentials.client.DrawMode;
+import me.justahuman.slimefun_essentials.api.def.DrawMode;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
-import me.justahuman.slimefun_essentials.client.RecipeDisplayComponent;
+import me.justahuman.slimefun_essentials.client.component.RecipeDisplayComponent;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
 import mezz.jei.api.constants.VanillaTypes;

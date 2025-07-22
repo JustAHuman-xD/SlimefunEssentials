@@ -1,9 +1,10 @@
 package me.justahuman.slimefun_essentials.api;
 
+import com.google.common.io.ByteArrayDataInput;
 import com.google.gson.JsonObject;
-import me.justahuman.slimefun_essentials.client.ConditionalRenderable;
-import me.justahuman.slimefun_essentials.client.OptionalRenderable;
-import me.justahuman.slimefun_essentials.client.SimpleRenderable;
+import me.justahuman.slimefun_essentials.client.renderable.ConditionalRenderable;
+import me.justahuman.slimefun_essentials.client.renderable.OptionalRenderable;
+import me.justahuman.slimefun_essentials.client.renderable.SimpleRenderable;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.util.Identifier;
@@ -23,6 +24,24 @@ public interface CustomRenderable {
     default void update(SlimefunRecipe recipe) {}
     default boolean canRender() {
         return true;
+    }
+
+    static CustomRenderable deserialize(ByteArrayDataInput input) {
+        if (input.readBoolean()) {
+            if (input.readBoolean()) {
+                return new ConditionalRenderable(
+                        deserialize(input),
+                        deserialize(input),
+                        RecipeCondition.deserialize(input)
+                );
+            }
+            return new OptionalRenderable(
+                    deserialize(input),
+                    RecipeCondition.deserialize(input)
+            );
+        } else {
+            return SimpleRenderable.deserialize(input);
+        }
     }
 
     static CustomRenderable deserialize(JsonObject jsonObject) {

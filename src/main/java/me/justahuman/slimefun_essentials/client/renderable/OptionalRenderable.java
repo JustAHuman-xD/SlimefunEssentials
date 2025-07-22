@@ -1,7 +1,8 @@
-package me.justahuman.slimefun_essentials.client;
+package me.justahuman.slimefun_essentials.client.renderable;
 
 import me.justahuman.slimefun_essentials.api.CustomRenderable;
 import me.justahuman.slimefun_essentials.api.RecipeCondition;
+import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.util.Identifier;
 

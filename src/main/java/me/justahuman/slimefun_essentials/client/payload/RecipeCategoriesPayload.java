@@ -1,7 +1,6 @@
-package me.justahuman.slimefun_essentials.client.payloads;
+package me.justahuman.slimefun_essentials.client.payload;
 
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
-import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -13,8 +12,9 @@ public class RecipeCategoriesPayload implements CustomPayload {
             Payloads.newSplitCodec(input -> {
                 int size = input.readInt();
                 for (int i = 0; i < size; i++) {
-                    RecipeCategory.deserialize(input.readUTF(), JsonUtils.toJson(input.readUTF()));
+                    RecipeCategory.deserialize(input);
                 }
+                Payloads.checkMetExpected();
                 return EMPTY;
             }, EMPTY);
 

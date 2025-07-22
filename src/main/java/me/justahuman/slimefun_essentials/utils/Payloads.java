@@ -4,19 +4,21 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
-import me.justahuman.slimefun_essentials.client.payloads.ComponentTypePayload;
-import me.justahuman.slimefun_essentials.client.payloads.ItemsPayload;
-import me.justahuman.slimefun_essentials.client.payloads.LoadingStatePayload;
-import me.justahuman.slimefun_essentials.client.payloads.RecipeCategoriesPayload;
-import me.justahuman.slimefun_essentials.client.payloads.RecipeDisplayPayload;
+import me.justahuman.slimefun_essentials.client.payload.ComponentTypePayload;
+import me.justahuman.slimefun_essentials.client.payload.ItemsPayload;
+import me.justahuman.slimefun_essentials.client.payload.LoadingStatePayload;
+import me.justahuman.slimefun_essentials.client.payload.RecipeCategoriesPayload;
+import me.justahuman.slimefun_essentials.client.payload.RecipeDisplayPayload;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.toast.SystemToast;
+import net.minecraft.client.toast.ToastManager;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -28,15 +30,44 @@ public class Payloads {
     public static final CustomPayload.Id<RecipeCategoriesPayload> RECIPE_CATEGORIES_CHANNEL = newChannel("recipe_categories");
     public static final CustomPayload.Id<LoadingStatePayload> LOADING_STATE_CHANNEL = newChannel("loading_state");
 
+    private static final Type RECEIVING_TOAST_TYPE = new Type("receiving_expected_packets");
+    private static final Type RECEIVED_TOAST_TYPE = new Type("received_expected_packets");
+
     private static final int MAX_MESSAGE_SIZE = 32766;
     private static final int SPLIT_MESSAGE_SIZE = MAX_MESSAGE_SIZE - 4 - 4 - 4;
     private static final Map<Class<?>, Integer> PACKET_COUNTS = new HashMap<>();
     private static final Map<Class<?>, Integer> EXPECTED_PACKETS = new HashMap<>();
-    private static final List<Runnable> ON_MEET_EXPECTED = new ArrayList<>();
+    private static Runnable onMeetExpected = showToast(RECEIVED_TOAST_TYPE);
     private static boolean metExpected = false;
 
+    private static Runnable showToast(Type type) {
+        return () -> {
+            Text title = Text.translatable("slimefun_essentials.toast." + type.type);
+            Text description = Text.translatable("slimefun_essentials.toast." + type.type + ".description",
+                    PACKET_COUNTS.getOrDefault(ComponentTypePayload.class, 0),
+                    EXPECTED_PACKETS.getOrDefault(ComponentTypePayload.class, 0),
+                    PACKET_COUNTS.getOrDefault(ItemsPayload.class, 0),
+                    EXPECTED_PACKETS.getOrDefault(ItemsPayload.class, 0),
+                    PACKET_COUNTS.getOrDefault(RecipeCategoriesPayload.class, 0),
+                    EXPECTED_PACKETS.getOrDefault(RecipeCategoriesPayload.class, 0),
+                    PACKET_COUNTS.getOrDefault(RecipeDisplayPayload.class, 0),
+                    EXPECTED_PACKETS.getOrDefault(RecipeDisplayPayload.class, 0));
+            ToastManager manager = MinecraftClient.getInstance().getToastManager();
+            SystemToast existing = manager.getToast(SystemToast.class, type);
+            if (existing != null) {
+                existing.setContent(title, description);
+            } else {
+                manager.add(new SystemToast(type, title, description));
+            }
+        };
+    }
+
     public static void onMeetExpected(Runnable runnable) {
-        ON_MEET_EXPECTED.add(runnable);
+        Runnable previous = onMeetExpected;
+        onMeetExpected = () -> {
+            previous.run();
+            runnable.run();
+        };
     }
 
     public static boolean metExpected() {
@@ -46,7 +77,7 @@ public class Payloads {
     public static void reset() {
         PACKET_COUNTS.clear();
         EXPECTED_PACKETS.clear();
-        ON_MEET_EXPECTED.clear();
+        onMeetExpected = showToast(RECEIVED_TOAST_TYPE);
         metExpected = false;
     }
 
@@ -56,10 +87,17 @@ public class Payloads {
         EXPECTED_PACKETS.put(ItemsPayload.class, payload.itemPackets());
         EXPECTED_PACKETS.put(RecipeCategoriesPayload.class, payload.categoryPackets());
         EXPECTED_PACKETS.put(RecipeDisplayPayload.class, payload.displayPackets());
+        SlimefunEssentials.LOGGER.info("Expecting {} type packets, {} item packets, {} category packets, and {} display packets",
+                EXPECTED_PACKETS.get(ComponentTypePayload.class),
+                EXPECTED_PACKETS.get(ItemsPayload.class),
+                EXPECTED_PACKETS.get(RecipeCategoriesPayload.class),
+                EXPECTED_PACKETS.get(RecipeDisplayPayload.class));
+        showToast(RECEIVING_TOAST_TYPE).run();
         checkMetExpected();
     }
 
-    private static void checkMetExpected() {
+    public static void checkMetExpected() {
+        showToast(RECEIVING_TOAST_TYPE).run();
         for (Map.Entry<Class<?>, Integer> expected : EXPECTED_PACKETS.entrySet()) {
             if (PACKET_COUNTS.getOrDefault(expected.getKey(), 0) < expected.getValue()) {
                 return;
@@ -70,14 +108,10 @@ public class Payloads {
 
         metExpected = !EXPECTED_PACKETS.isEmpty();
         if (metExpected) {
-            SlimefunEssentials.LOGGER.info("Received every expected packet: {}, {}, {}, {}",
-                    EXPECTED_PACKETS.get(ComponentTypePayload.class),
-                    EXPECTED_PACKETS.get(ItemsPayload.class),
-                    EXPECTED_PACKETS.get(RecipeCategoriesPayload.class),
-                    EXPECTED_PACKETS.get(RecipeDisplayPayload.class));
+            SlimefunEssentials.LOGGER.info("Received every expected packet");
             RecipeCategory.finalizeCategories();
-            ON_MEET_EXPECTED.forEach(Runnable::run);
-            ON_MEET_EXPECTED.clear();
+            onMeetExpected.run();
+            onMeetExpected = showToast(RECEIVED_TOAST_TYPE);
         }
     }
 
@@ -95,7 +129,6 @@ public class Payloads {
             @Override
             public P decode(PacketByteBuf buf) {
                 PACKET_COUNTS.compute(empty.getClass(), (k, v) -> v == null ? 1 : v + 1);
-                checkMetExpected();
 
                 byte[] bytes = new byte[buf.readableBytes()];
                 for (int i = 0; i < bytes.length; i++) {
@@ -139,5 +172,13 @@ public class Payloads {
             }
             return decoder.apply(ByteStreams.newDataInput(bytes));
         });
+    }
+
+    private static class Type extends SystemToast.Type {
+        final String type;
+
+        public Type(String type) {
+            this.type = type;
+        }
     }
 }

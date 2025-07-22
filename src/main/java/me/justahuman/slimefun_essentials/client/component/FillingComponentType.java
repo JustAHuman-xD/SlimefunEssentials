@@ -1,8 +1,10 @@
-package me.justahuman.slimefun_essentials.client;
+package me.justahuman.slimefun_essentials.client.component;
 
 import me.justahuman.slimefun_essentials.api.CustomRenderable;
 import me.justahuman.slimefun_essentials.api.DisplayComponentType;
 import me.justahuman.slimefun_essentials.api.RecipeCondition;
+import me.justahuman.slimefun_essentials.api.def.DrawMode;
+import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -10,32 +12,17 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import java.util.List;
 import java.util.function.Function;
 
-public class FillingComponentType implements DisplayComponentType {
-    public static final String RECIPE_TIME = "%time_millis%";
-    protected final CustomRenderable light;
-    protected final CustomRenderable lightFill;
-    protected final CustomRenderable dark;
-    protected final CustomRenderable darkFill;
-    protected final boolean horizontal;
-    protected final Function<SlimefunRecipe, Integer> timeToFill;
-    protected final RecipeCondition emptyToFull;
-    protected final RecipeCondition startToEnd;
-
-    public FillingComponentType(CustomRenderable light, CustomRenderable lightFill, CustomRenderable dark, CustomRenderable darkFill, boolean horizontal, int millis, RecipeCondition emptyToFull, RecipeCondition startToEnd) {
-        this(light, lightFill, dark, darkFill, horizontal, recipe -> millis, emptyToFull, startToEnd);
-    }
-
-    public FillingComponentType(CustomRenderable light, CustomRenderable lightFill, CustomRenderable dark, CustomRenderable darkFill, boolean horizontal, Function<SlimefunRecipe, Integer> timeToFill, RecipeCondition emptyToFull, RecipeCondition startToEnd) {
-        this.light = light;
-        this.lightFill = lightFill;
-        this.dark = dark;
-        this.darkFill = darkFill;
-        this.horizontal = horizontal;
-        this.timeToFill = timeToFill;
-        this.emptyToFull = emptyToFull;
-        this.startToEnd = startToEnd;
-    }
-
+public record FillingComponentType(
+        String type,
+        CustomRenderable light,
+        CustomRenderable lightFill,
+        CustomRenderable dark,
+        CustomRenderable darkFill,
+        Function<SlimefunRecipe, Integer> timeToFill,
+        boolean horizontal,
+        RecipeCondition emptyToFull,
+        RecipeCondition startToEnd
+) implements DisplayComponentType {
     @Override
     public int width() {
         return Math.max(Math.max(light.width(), dark.width()), Math.max(lightFill.width(), darkFill.width()));

@@ -119,7 +119,6 @@ public class JsonUtils {
         } catch (Exception e) {
             SlimefunEssentials.LOGGER.error("Failed to deserialize item components", e);
         }
-
         return itemStack;
     }
 

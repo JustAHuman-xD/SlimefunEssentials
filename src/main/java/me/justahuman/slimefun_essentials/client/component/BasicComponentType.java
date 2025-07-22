@@ -1,22 +1,16 @@
-package me.justahuman.slimefun_essentials.client;
+package me.justahuman.slimefun_essentials.client.component;
 
 import me.justahuman.slimefun_essentials.api.CustomRenderable;
 import me.justahuman.slimefun_essentials.api.DisplayComponentType;
+import me.justahuman.slimefun_essentials.api.def.DrawMode;
+import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 
 import java.util.List;
 
-public class BasicComponentType implements DisplayComponentType {
-    protected final CustomRenderable light;
-    protected final CustomRenderable dark;
-
-    public BasicComponentType(CustomRenderable light, CustomRenderable dark) {
-        this.light = light;
-        this.dark = dark;
-    }
-
+public record BasicComponentType(String type, CustomRenderable light, CustomRenderable dark) implements DisplayComponentType {
     @Override
     public int width() {
         return Math.max(light.width(), dark.width());

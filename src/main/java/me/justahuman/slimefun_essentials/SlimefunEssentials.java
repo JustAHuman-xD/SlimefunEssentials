@@ -1,16 +1,15 @@
 package me.justahuman.slimefun_essentials;
 
 import me.justahuman.slimefun_essentials.api.DisplayComponentType;
+import me.justahuman.slimefun_essentials.api.RecipeDisplay;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
-import me.justahuman.slimefun_essentials.client.RecipeDisplay;
 import me.justahuman.slimefun_essentials.client.SlimefunRegistry;
-import me.justahuman.slimefun_essentials.client.payloads.ComponentTypePayload;
-import me.justahuman.slimefun_essentials.client.payloads.ItemsPayload;
-import me.justahuman.slimefun_essentials.client.payloads.LoadingStatePayload;
-import me.justahuman.slimefun_essentials.client.payloads.RecipeCategoriesPayload;
-import me.justahuman.slimefun_essentials.client.payloads.RecipeDisplayPayload;
+import me.justahuman.slimefun_essentials.client.payload.ComponentTypePayload;
+import me.justahuman.slimefun_essentials.client.payload.ItemsPayload;
+import me.justahuman.slimefun_essentials.client.payload.LoadingStatePayload;
+import me.justahuman.slimefun_essentials.client.payload.RecipeCategoriesPayload;
+import me.justahuman.slimefun_essentials.client.payload.RecipeDisplayPayload;
 import me.justahuman.slimefun_essentials.compat.cloth_config.ConfigScreen;
-import me.justahuman.slimefun_essentials.compat.rei.ReiIntegration;
 import me.justahuman.slimefun_essentials.config.ModConfig;
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import me.justahuman.slimefun_essentials.utils.CompatUtils;
@@ -44,6 +43,7 @@ public class SlimefunEssentials implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(Payloads.ITEM_CHANNEL, (payload, context) -> {
             if (ModConfig.recipeFeatures() && payload != ItemsPayload.EMPTY) {
                 payload.load();
+                Payloads.checkMetExpected();
             }
         });
         ClientPlayNetworking.registerGlobalReceiver(Payloads.COMPONENT_TYPE_CHANNEL, (payload, context) -> {});
@@ -56,9 +56,6 @@ public class SlimefunEssentials implements ClientModInitializer {
             RecipeDisplay.clear();
             SlimefunRegistry.reset();
             Payloads.reset();
-            if (CompatUtils.isReiLoaded()) {
-                ReiIntegration.reset();
-            }
         });
 
         if (CompatUtils.isClothConfigLoaded()) {

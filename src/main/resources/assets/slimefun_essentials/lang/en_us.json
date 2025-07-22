@@ -1,6 +1,15 @@
 {
   "slimefun_essentials.title": "Slimefun Essentials (SFE)",
 
+  "slimefun_essentials.toast.receiving_expected_packets": "Receiving SFE Packets",
+  "slimefun_essentials.toast.receiving_expected_packets.description": "%s/%s, %s/%s, %s/%s, %s/%s",
+  "slimefun_essentials.toast.received_expected_packets": "Received SFE Packets",
+  "slimefun_essentials.toast.received_expected_packets.description": "Reloading recipe viewer...",
+  "slimefun_essentials.toast.received_unexpected_packets": "Received unexpected packets",
+  "slimefun_essentials.toast.received_unexpected_packets.description": "SFE will not load!",
+
+  "slimefun_essentials.reloading": "Reloading...",
+
   "slimefun_essentials.key_bind.open_config": "Open Config",
   "slimefun_essentials.config.category.general": "General",
   "slimefun_essentials.config.option.recipe_features": "Enable Recipe Features",

@@ -1,7 +1,6 @@
-package me.justahuman.slimefun_essentials.client.payloads;
+package me.justahuman.slimefun_essentials.client.payload;
 
 import me.justahuman.slimefun_essentials.api.DisplayComponentType;
-import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -11,7 +10,8 @@ public class ComponentTypePayload implements CustomPayload {
     private static final ComponentTypePayload EMPTY = new ComponentTypePayload();
     public static final PacketCodec<PacketByteBuf, ComponentTypePayload> CODEC =
             Payloads.newSplitCodec(input -> {
-                DisplayComponentType.deserialize(input.readUTF(), JsonUtils.toJson(input.readUTF()));
+                DisplayComponentType.deserialize(input);
+                Payloads.checkMetExpected();
                 return EMPTY;
             }, EMPTY);
 

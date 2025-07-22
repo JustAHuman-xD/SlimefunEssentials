@@ -1,11 +1,9 @@
 package me.justahuman.slimefun_essentials.client;
 
-import com.google.gson.JsonArray;
+import com.google.common.io.ByteArrayDataInput;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import lombok.Getter;
-import me.justahuman.slimefun_essentials.utils.JsonUtils;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -14,27 +12,23 @@ import java.util.List;
 
 @Getter
 public class RecipeComponent {
-    public static final RecipeComponent EMPTY = new RecipeComponent(new JsonArray(), "");
-    private final List<ItemStack> complexStacks = new ArrayList<>();
+    public static final RecipeComponent EMPTY = new RecipeComponent(new ArrayList<>(), "");
+    private final List<ItemStack> complex;
     private final String id;
     private final List<String> multiId;
     
-    public RecipeComponent(JsonArray complex, String id) {
+    public RecipeComponent(List<ItemStack> complex, String id) {
         this(complex, id, null);
     }
     
-    public RecipeComponent(JsonArray complex, List<String> multiId) {
+    public RecipeComponent(List<ItemStack> complex, List<String> multiId) {
         this(complex, null, multiId);
     }
 
-    private RecipeComponent(JsonArray complex, String id, List<String> multiId) {
+    private RecipeComponent(List<ItemStack> complex, String id, List<String> multiId) {
         this.id = id;
         this.multiId = multiId;
-        for (JsonElement element : complex) {
-            if (element instanceof JsonObject object) {
-                this.complexStacks.add(JsonUtils.deserializeItem(object));
-            }
-        }
+        this.complex = complex;
     }
 
     public boolean isLarge() {
@@ -49,12 +43,20 @@ public class RecipeComponent {
         }
         return false;
     }
-    
-    public static RecipeComponent deserialize(JsonArray complex, JsonElement element) {
+
+    public static RecipeComponent deserialize(List<ItemStack> complex, ByteArrayDataInput input) {
+        final String[] elements = input.readUTF().split(",");
+        if (elements.length == 1) {
+            return new RecipeComponent(complex, elements[0]);
+        }
+        return new RecipeComponent(complex, Arrays.asList(elements));
+    }
+
+    public static RecipeComponent deserialize(List<ItemStack> complex, JsonElement element) {
         if (element instanceof JsonPrimitive primitive && primitive.isString()) {
             final String[] elements = primitive.getAsString().split(",");
             if (elements.length == 1) {
-                return new RecipeComponent(complex, primitive.getAsString());
+                return new RecipeComponent(complex, elements[0]);
             }
             return new RecipeComponent(complex, Arrays.asList(elements));
         }

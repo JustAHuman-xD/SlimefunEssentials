@@ -1,4 +1,4 @@
-package me.justahuman.slimefun_essentials.client.payloads;
+package me.justahuman.slimefun_essentials.client.payload;
 
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import net.minecraft.network.PacketByteBuf;
