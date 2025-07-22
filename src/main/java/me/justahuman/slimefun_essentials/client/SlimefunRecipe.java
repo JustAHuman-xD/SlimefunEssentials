@@ -139,8 +139,8 @@ public class SlimefunRecipe {
             return 0;
         }
         return this.sfTicks != null
-                ? (this.sfTicks / this.parent.speed()) + 1
-                : (SlimefunRegistry.toSfTicks(this.ticks) / this.parent.speed()) + 1;
+                ? this.sfTicks / this.parent.speed()
+                : SlimefunRegistry.toSfTicks(this.ticks) / this.parent.speed();
     }
 
     public int ticks() {
@@ -148,8 +148,8 @@ public class SlimefunRecipe {
             return 0;
         }
         return this.ticks != null
-                ? (this.ticks / this.parent.speed()) + 1
-                : SlimefunRegistry.toTicks(this.sfTicks / this.parent.speed()) + 1;
+                ? this.ticks / this.parent.speed()
+                : SlimefunRegistry.toTicks(this.sfTicks / this.parent.speed());
     }
 
     public double seconds() {

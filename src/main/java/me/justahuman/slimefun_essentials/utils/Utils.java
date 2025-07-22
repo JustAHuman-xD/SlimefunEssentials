@@ -116,11 +116,11 @@ public class Utils {
             case "%inputs%" -> recipe.inputs().size();
             case "%outputs%" -> recipe.outputs().size();
             default -> {
-                double value = defaultValue.doubleValue();
+                Number value = defaultValue;
                 try {
                     value = Double.parseDouble(string);
                 } catch (NumberFormatException ignored) {}
-                yield value == (int) value ? (int) value : value;
+                yield value != null && value.doubleValue() == value.intValue() ? value.intValue() : value;
             }
         };
         return number == null ? defaultValue : number;
