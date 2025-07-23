@@ -1,12 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "slimefun_essentials",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "Slimefun Essentials",
+  "name": "${mod_name}",
   "description": "A Minecraft mod bringing new features and compatibility with the Slimefun4 Plugin!\nSupported Addons: Slimefun",
-  "authors": [
-    "JustAHuman_xD"
-  ],
+  "authors": [ "JustAHuman_xD" ],
   "contact": {
     "homepage": "https://modrinth.com/mod/slimefun-essentials",
     "sources": "https://github.com/JustAHuman-xD/SlimefunEssentials",
@@ -22,7 +20,7 @@
     }
   },
   "license": "MIT",
-  "icon": "assets/slimefun_essentials/icon.png",
+  "icon": "assets/${mod_id}/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -45,11 +43,11 @@
     ]
   },
   "mixins": [
-    "slimefun_essentials.mixins.json"
+    "${mod_id}.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.15.2",
+    "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": ">=1.21.1"
+    "minecraft": "${minecraft_version_range}"
   }
 }
