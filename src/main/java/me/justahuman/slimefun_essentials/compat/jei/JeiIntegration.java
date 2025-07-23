@@ -6,14 +6,13 @@ import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
 import me.justahuman.slimefun_essentials.client.screen.ReloadingScreen;
-import me.justahuman.slimefun_essentials.mixins.jei.InterpretersAccessor;
 import me.justahuman.slimefun_essentials.utils.Payloads;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
-import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
+import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -82,9 +81,8 @@ public class JeiIntegration implements IModPlugin {
                 continue;
             }
 
-            ISubtypeInterpreter<ItemStack> oldInterpreter = interpreters.get(VanillaTypes.ITEM_STACK, itemStack);
-            ISubtypeInterpreter<ItemStack> newInterpreter = new SlimefunIdInterpreter(oldInterpreter);
-            ((InterpretersAccessor) interpreters).getMap().put(item, newInterpreter);
+            IIngredientSubtypeInterpreter<ItemStack> oldInterpreter = registration.getInterpreters().get(VanillaTypes.ITEM_STACK, slimefunItemStack.itemStack()).orElse(null);
+            registration.getInterpreters().addInterpreter(VanillaTypes.ITEM_STACK, slimefunItemStack.itemStack().getItem(), new SlimefunIdInterpreter(oldInterpreter));
         }
     }
 

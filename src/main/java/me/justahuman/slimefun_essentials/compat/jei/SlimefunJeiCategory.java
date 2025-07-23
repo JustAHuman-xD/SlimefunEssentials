@@ -13,6 +13,7 @@ import mezz.jei.api.gui.drawable.IDrawableBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.DrawContext;
@@ -76,11 +77,11 @@ public class SlimefunJeiCategory implements IRecipeCategory<SlimefunRecipe> {
                 int y = component.y() + offset + yOffset;
 
                 if (index <= -1) {
-                    JeiIntegration.RECIPE_INTERPRETER.addIngredient(builder.addInputSlot(x, y), this.recipeCategory.itemStack());
+                    JeiIntegration.RECIPE_INTERPRETER.addIngredient(builder.addSlot(RecipeIngredientRole.INPUT, x, y), this.recipeCategory.itemStack());
                 } else if (!component.output() && index > 0 && index <= recipe.inputs().size()) {
-                    JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addInputSlot(x, y), recipe.inputs().get(--index));
+                    JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.INPUT, x, y), recipe.inputs().get(--index));
                 } else if (component.output() && index > 0 && index <= recipe.outputs().size()) {
-                    JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addOutputSlot(x, y), recipe.outputs().get(--index));
+                    JeiIntegration.RECIPE_INTERPRETER.addIngredients(builder.addSlot(RecipeIngredientRole.OUTPUT, x, y), recipe.outputs().get(--index));
                 }
             }
         }
