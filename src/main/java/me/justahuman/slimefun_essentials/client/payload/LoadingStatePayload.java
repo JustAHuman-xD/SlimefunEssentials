@@ -1,6 +1,5 @@
 package me.justahuman.slimefun_essentials.client.payload;
 
-import me.justahuman.slimefun_essentials.utils.Payloads;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;

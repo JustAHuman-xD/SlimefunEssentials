@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataUtils {
-    public static ItemStack get(ByteArrayDataInput input) {
+    public static ItemStack getStack(ByteArrayDataInput input, int dataVersion) {
         final ItemStack itemStack = new ItemStack(Registries.ITEM.get(Identifier.tryParse(input.readUTF())));
         itemStack.setCount(input.readInt());
 
@@ -32,11 +32,11 @@ public class DataUtils {
         return itemStack;
     }
 
-    public static ItemStack get(ByteArrayDataInput input, ItemStack def) {
+    public static ItemStack getStack(ByteArrayDataInput input, ItemStack def, int dataVersion) {
         if (!input.readBoolean()) {
             return def;
         }
-        return get(input);
+        return getStack(input, dataVersion);
     }
 
     public static String get(ByteArrayDataInput input, String def) {

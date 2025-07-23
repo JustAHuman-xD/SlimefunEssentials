@@ -11,7 +11,7 @@ import me.justahuman.slimefun_essentials.client.payload.RecipeCategoriesPayload;
 import me.justahuman.slimefun_essentials.client.payload.RecipeDisplayPayload;
 import me.justahuman.slimefun_essentials.compat.cloth_config.ConfigScreen;
 import me.justahuman.slimefun_essentials.config.ModConfig;
-import me.justahuman.slimefun_essentials.utils.Payloads;
+import me.justahuman.slimefun_essentials.client.payload.Payloads;
 import me.justahuman.slimefun_essentials.utils.CompatUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -19,6 +19,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -45,6 +46,16 @@ public class SlimefunEssentials implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(Payloads.COMPONENT_TYPE_CHANNEL, (payload, context) -> {});
         ClientPlayNetworking.registerGlobalReceiver(Payloads.RECIPE_CATEGORIES_CHANNEL, (payload, context) -> {});
         ClientPlayNetworking.registerGlobalReceiver(Payloads.RECIPE_DISPLAY_CHANNEL, (payload, context) -> {});
+
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+            ServerInfo getInfo = client.getCurrentServerEntry();
+            if (getInfo == null) {
+                return;
+            }
+            if (Payloads.isExpecting()) {
+
+            }
+        });
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             RecipeCategory.clear();

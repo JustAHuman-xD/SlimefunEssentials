@@ -1,14 +1,9 @@
-package me.justahuman.slimefun_essentials.utils;
+package me.justahuman.slimefun_essentials.client.payload;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
-import me.justahuman.slimefun_essentials.client.payload.ComponentTypePayload;
-import me.justahuman.slimefun_essentials.client.payload.ItemsPayload;
-import me.justahuman.slimefun_essentials.client.payload.LoadingStatePayload;
-import me.justahuman.slimefun_essentials.client.payload.RecipeCategoriesPayload;
-import me.justahuman.slimefun_essentials.client.payload.RecipeDisplayPayload;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.toast.ToastManager;
@@ -68,6 +63,10 @@ public class Payloads {
             previous.run();
             runnable.run();
         };
+    }
+
+    public static boolean isExpecting() {
+        return !EXPECTED_PACKETS.isEmpty() && !metExpected;
     }
 
     public static boolean metExpected() {

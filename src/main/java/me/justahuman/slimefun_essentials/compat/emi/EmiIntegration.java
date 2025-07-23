@@ -11,7 +11,7 @@ import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.client.screen.ReloadingScreen;
-import me.justahuman.slimefun_essentials.utils.Payloads;
+import me.justahuman.slimefun_essentials.client.payload.Payloads;
 import me.justahuman.slimefun_essentials.utils.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;

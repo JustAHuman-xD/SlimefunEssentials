@@ -68,11 +68,11 @@ public class RecipeCategory {
         return this.childRecipes;
     }
 
-    public static void deserialize(ByteArrayDataInput input) {
+    public static void deserialize(ByteArrayDataInput input, int dataVersion) {
         final String id = input.readUTF();
         try {
             final String display = DataUtils.get(input, "dynamic");
-            final ItemStack itemStack = DataUtils.get(input, ItemStack.EMPTY);
+            final ItemStack itemStack = DataUtils.getStack(input, ItemStack.EMPTY, dataVersion);
             final Integer speed = DataUtils.get(input, (Integer) null);
             final Integer energy = DataUtils.get(input, (Integer) null);
             final List<SlimefunRecipe> recipes = new ArrayList<>();
@@ -80,7 +80,7 @@ public class RecipeCategory {
             final RecipeCategory category = new RecipeCategory(id, itemStack, display, speed, energy, recipes);
             int size = input.readInt();
             for (int i = 0; i < size; i++) {
-                recipes.add(SlimefunRecipe.deserialize(category, input, energy));
+                recipes.add(SlimefunRecipe.deserialize(category, input, energy, dataVersion));
             }
 
             TO_COPY.put(id, DataUtils.get(input, ""));

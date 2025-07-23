@@ -32,7 +32,7 @@ public class SlimefunRecipe {
         this.labels = labels;
     }
 
-    public static SlimefunRecipe deserialize(RecipeCategory parent, ByteArrayDataInput input, Integer workstationEnergy) {
+    public static SlimefunRecipe deserialize(RecipeCategory parent, ByteArrayDataInput input, Integer workstationEnergy, int dataVersion) {
         final Integer sfTicks = DataUtils.get(input, (Integer) null);
         final Integer ticks = DataUtils.get(input, (Integer) null);
         final Integer energy = DataUtils.get(input, workstationEnergy);
@@ -43,7 +43,7 @@ public class SlimefunRecipe {
 
         int complexSize = input.readInt();
         for (int i = 0; i < complexSize; i++) {
-            complex.add(DataUtils.get(input));
+            complex.add(DataUtils.getStack(input, dataVersion));
         }
 
         int inputSize = input.readInt();

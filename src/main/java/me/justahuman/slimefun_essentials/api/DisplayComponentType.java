@@ -57,7 +57,7 @@ public interface DisplayComponentType {
         return COMPONENT_TYPES.get(id);
     }
 
-    static void deserialize(ByteArrayDataInput input) {
+    static void deserialize(ByteArrayDataInput input, int dataVersion) {
         String id = input.readUTF();
         if (COMPONENT_TYPES.containsKey(id)) {
             // TODO: ??

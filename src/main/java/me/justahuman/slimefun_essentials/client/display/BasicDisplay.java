@@ -28,7 +28,7 @@ public record BasicDisplay(
         return components;
     }
 
-    public static void deserialize(ByteArrayDataInput input) {
+    public static void deserialize(ByteArrayDataInput input, int dataVersion) {
         String id = input.readUTF();
         try {
             int width = input.readInt();
