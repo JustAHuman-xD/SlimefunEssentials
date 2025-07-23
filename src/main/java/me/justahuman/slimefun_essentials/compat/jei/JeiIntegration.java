@@ -8,7 +8,6 @@ import me.justahuman.slimefun_essentials.client.RecipeCategory;
 import me.justahuman.slimefun_essentials.client.screen.ReloadingScreen;
 import me.justahuman.slimefun_essentials.mixins.jei.InterpretersAccessor;
 import me.justahuman.slimefun_essentials.utils.Payloads;
-import me.justahuman.slimefun_essentials.utils.Utils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -44,7 +43,7 @@ public class JeiIntegration implements IModPlugin {
 
     @Override
     public @NotNull Identifier getPluginUid() {
-        return Utils.id("jei_integration");
+        return SlimefunEssentials.id("jei_integration");
     }
 
     @Override

@@ -1,8 +1,8 @@
 package me.justahuman.slimefun_essentials.compat.rei;
 
+import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
-import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -40,6 +40,6 @@ public class SlimefunDisplay implements Display {
 
     @Override
     public @NotNull CategoryIdentifier<SlimefunDisplay> getCategoryIdentifier() {
-        return CategoryIdentifier.of(Utils.id(this.recipeCategory.id().toLowerCase()));
+        return CategoryIdentifier.of(SlimefunEssentials.id(this.recipeCategory.id().toLowerCase()));
     }
 }

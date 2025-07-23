@@ -5,6 +5,7 @@ import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.runtime.EmiReloadManager;
+import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.client.SlimefunRegistry;
 import me.justahuman.slimefun_essentials.client.SlimefunItemStack;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
@@ -49,7 +50,7 @@ public class EmiIntegration implements EmiPlugin {
 
         for (RecipeCategory recipeCategory : RecipeCategory.getRecipeCategories().values()) {
             final String workstationId = recipeCategory.id();
-            final Identifier categoryIdentifier = Utils.id(workstationId);
+            final Identifier categoryIdentifier = SlimefunEssentials.id(workstationId);
             final EmiStack workStation = EmiStack.of(recipeCategory.itemStack());
             final SlimefunEmiCategory slimefunEmiCategory;
             if (CATEGORIES.containsKey(workstationId)) {

@@ -1,6 +1,5 @@
 package me.justahuman.slimefun_essentials.utils;
 
-import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.client.SlimefunRegistry;
 import me.justahuman.slimefun_essentials.mixins.minecraft.TextTooltipAccessor;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -26,10 +24,6 @@ import java.util.regex.Pattern;
 public class Utils {
     private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("%[a-zA-Z_]+%");
     public static final Set<String> HIDDEN_SF_IDS = Set.of("_UI_BACKGROUND", "_UI_INPUT_SLOT", "_UI_OUTPUT_SLOT");
-
-    public static Identifier id(String path) {
-        return Identifier.of(SlimefunEssentials.MOD_ID, path.toLowerCase(Locale.ROOT));
-    }
 
     public static boolean filterResources(Identifier identifier) {
         return identifier.getPath().endsWith(".json");

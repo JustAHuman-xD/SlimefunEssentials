@@ -20,9 +20,12 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Locale;
 
 public class SlimefunEssentials implements ClientModInitializer {
     public static final String MOD_ID = "slimefun_essentials";
@@ -66,5 +69,9 @@ public class SlimefunEssentials implements ClientModInitializer {
                 }
             });
         }
+    }
+
+    public static Identifier id(String path) {
+        return Identifier.of(MOD_ID, path.toLowerCase(Locale.ROOT));
     }
 }

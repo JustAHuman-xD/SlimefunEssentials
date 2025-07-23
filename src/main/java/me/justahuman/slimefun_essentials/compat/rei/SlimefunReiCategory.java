@@ -1,11 +1,11 @@
 package me.justahuman.slimefun_essentials.compat.rei;
 
+import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import me.justahuman.slimefun_essentials.api.def.DrawMode;
 import me.justahuman.slimefun_essentials.client.RecipeCategory;
 import me.justahuman.slimefun_essentials.client.component.RecipeDisplayComponent;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.justahuman.slimefun_essentials.utils.TextureUtils;
-import me.justahuman.slimefun_essentials.utils.Utils;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.REIRuntime;
@@ -41,7 +41,7 @@ public class SlimefunReiCategory implements DisplayCategory<SlimefunDisplay> {
 
     @Override
     public @NotNull CategoryIdentifier<SlimefunDisplay> getCategoryIdentifier() {
-        return CategoryIdentifier.of(Utils.id(this.category.id().toLowerCase()));
+        return CategoryIdentifier.of(SlimefunEssentials.id(this.category.id().toLowerCase()));
     }
 
     @NotNull
