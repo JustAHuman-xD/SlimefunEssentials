@@ -14,6 +14,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.HoveredTooltipPositioner;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -40,12 +41,12 @@ public interface DisplayComponentType {
     default void draw(SlimefunRecipe recipe, DrawContext context, Identifier identifier, int x, int y, int width, int height, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        context.drawTexture(identifier, x, y, width, height, u, v, regionWidth, regionHeight, textureWidth, textureHeight);
+        context.drawTexture(RenderLayer::getGuiTextured, identifier, x, y, u, v, width, height, regionWidth, regionHeight, textureWidth, textureHeight);
     }
 
     default void drawTooltip(DrawContext context, List<TooltipComponent> tooltip,  int x, int y, int mouseX, int mouseY, int width, int height) {
         if (!tooltip.isEmpty() && mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height) {
-            ((DrawContextInvoker) context).callDrawTooltip(MinecraftClient.getInstance().textRenderer, tooltip, x, y, HoveredTooltipPositioner.INSTANCE);
+            ((DrawContextInvoker) context).callDrawTooltip(MinecraftClient.getInstance().textRenderer, tooltip, x, y, HoveredTooltipPositioner.INSTANCE, null);
         }
     }
 

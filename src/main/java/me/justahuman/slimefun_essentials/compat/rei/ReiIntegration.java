@@ -12,7 +12,6 @@ import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.entry.EntryRegistry;
-import me.shedaniel.rei.api.common.entry.comparison.ItemComparatorRegistry;
 import me.shedaniel.rei.api.common.plugins.PluginManager;
 import me.shedaniel.rei.api.common.registry.ReloadStage;
 import me.shedaniel.rei.api.common.util.EntryStacks;
@@ -28,11 +27,6 @@ public class ReiIntegration implements REIClientPlugin {
     @Override
     public double getPriority() {
         return 10;
-    }
-
-    @Override
-    public void registerItemComparators(ItemComparatorRegistry registry) {
-        registry.registerGlobal(new SlimefunIdComparator());
     }
 
     @Override

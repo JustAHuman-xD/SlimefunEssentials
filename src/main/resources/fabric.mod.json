@@ -40,6 +40,9 @@
     ],
     "rei_client": [
       "me.justahuman.slimefun_essentials.compat.rei.ReiIntegration"
+    ],
+    "rei_common": [
+      "me.justahuman.slimefun_essentials.compat.rei.ReiCommonIntegration"
     ]
   },
   "mixins": [

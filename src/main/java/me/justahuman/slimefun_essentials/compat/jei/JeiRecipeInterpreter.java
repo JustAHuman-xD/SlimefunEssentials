@@ -43,7 +43,7 @@ public class JeiRecipeInterpreter implements IdInterpreter<Object> {
 
     @Override
     public Object fromTag(float chance, TagKey<Item> tagKey, int amount, Object def) {
-        Optional<RegistryEntryList.Named<Item>> optional = Registries.ITEM.getEntryList(tagKey);
+        Optional<RegistryEntryList.Named<Item>> optional = Registries.ITEM.getOptional(tagKey);
         if (optional.isEmpty()) {
             return def;
         }

@@ -40,15 +40,8 @@ public class SlimefunEssentials implements ClientModInitializer {
         PayloadTypeRegistry.playS2C().register(Payloads.RECIPE_DISPLAY_CHANNEL, RecipeDisplayPayload.CODEC);
         ModConfig.loadConfig();
 
-        ClientPlayNetworking.registerGlobalReceiver(Payloads.LOADING_STATE_CHANNEL, (payload, context) -> {
-            Payloads.expect(payload);
-        });
-        ClientPlayNetworking.registerGlobalReceiver(Payloads.ITEM_CHANNEL, (payload, context) -> {
-            if (ModConfig.recipeFeatures() && payload != ItemsPayload.EMPTY) {
-                payload.load();
-                Payloads.checkMetExpected();
-            }
-        });
+        ClientPlayNetworking.registerGlobalReceiver(Payloads.LOADING_STATE_CHANNEL, (payload, context) -> Payloads.expect(payload));
+        ClientPlayNetworking.registerGlobalReceiver(Payloads.ITEM_CHANNEL, (payload, context) -> {});
         ClientPlayNetworking.registerGlobalReceiver(Payloads.COMPONENT_TYPE_CHANNEL, (payload, context) -> {});
         ClientPlayNetworking.registerGlobalReceiver(Payloads.RECIPE_CATEGORIES_CHANNEL, (payload, context) -> {});
         ClientPlayNetworking.registerGlobalReceiver(Payloads.RECIPE_DISPLAY_CHANNEL, (payload, context) -> {});

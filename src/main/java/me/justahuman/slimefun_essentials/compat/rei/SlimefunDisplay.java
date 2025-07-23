@@ -5,11 +5,15 @@ import me.justahuman.slimefun_essentials.client.RecipeCategory;
 import me.justahuman.slimefun_essentials.client.SlimefunRecipe;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
+import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SlimefunDisplay implements Display {
     protected final RecipeCategory recipeCategory;
@@ -41,5 +45,15 @@ public class SlimefunDisplay implements Display {
     @Override
     public @NotNull CategoryIdentifier<SlimefunDisplay> getCategoryIdentifier() {
         return CategoryIdentifier.of(SlimefunEssentials.id(this.recipeCategory.id().toLowerCase()));
+    }
+
+    @Override
+    public Optional<Identifier> getDisplayLocation() {
+        return Optional.empty();
+    }
+
+    @Override
+    public @Nullable DisplaySerializer<? extends Display> getSerializer() {
+        return null;
     }
 }

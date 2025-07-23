@@ -6,7 +6,7 @@ import me.justahuman.slimefun_essentials.SlimefunEssentials;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.ComponentMapImpl;
+import net.minecraft.component.MergedComponentMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringNbtReader;
@@ -23,7 +23,7 @@ public class DataUtils {
         itemStack.setCount(input.readInt());
 
         try {
-            if (input.readBoolean() && itemStack.getComponents() instanceof ComponentMapImpl components) {
+            if (input.readBoolean() && itemStack.getComponents() instanceof MergedComponentMap components) {
                 components.setChanges(ComponentChanges.CODEC.decode(withRegistryAccess(NbtOps.INSTANCE), StringNbtReader.parse(input.readUTF())).getOrThrow().getFirst());
             }
         } catch (Exception e) {

@@ -1,6 +1,5 @@
 package me.justahuman.slimefun_essentials.compat.emi;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.emi.emi.EmiPort;
 import dev.emi.emi.EmiRenderHelper;
 import dev.emi.emi.EmiUtil;
@@ -19,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.registry.Registries;
@@ -41,7 +41,7 @@ public class EntityEmiStack extends EmiStack {
 
     public EntityEmiStack(EntityType<?> type, boolean baby) {
         this.type = type;
-        this.entity = type.create(MinecraftClient.getInstance().world);
+        this.entity = type.create(MinecraftClient.getInstance().world, SpawnReason.COMMAND);
         this.baby = baby && this.entity instanceof MobEntity;
 
         if (this.baby) {
@@ -189,10 +189,7 @@ public class EntityEmiStack extends EmiStack {
         }
 
         dispatcher.setRenderShadows(false);
-        RenderSystem.runAsFancy(() ->
-                dispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, ctx.getMatrices(), ctx.getVertexConsumers(), 15728880)
-        );
-        ctx.draw();
+        ctx.draw(vertexConsumers -> dispatcher.render(entity, 0.0, 0.0, 0.0, 1.0F, ctx.getMatrices(), vertexConsumers, 15728880));
         dispatcher.setRenderShadows(true);
         ctx.getMatrices().pop();
         DiffuseLighting.enableGuiDepthLighting();
