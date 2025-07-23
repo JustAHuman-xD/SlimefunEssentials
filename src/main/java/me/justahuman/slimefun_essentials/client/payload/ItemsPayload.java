@@ -12,8 +12,8 @@ import net.minecraft.network.packet.CustomPayload;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public record ItemsPayload(Map<String, ItemStack> items) implements CustomPayload {
-    public static final ItemsPayload EMPTY = new ItemsPayload(null);
+public class ItemsPayload implements CustomPayload {
+    public static final ItemsPayload EMPTY = new ItemsPayload();
     public static final PacketCodec<PacketByteBuf, ItemsPayload> CODEC =
             Payloads.newSplitCodec(input -> {
                 int size = input.readInt();
@@ -26,12 +26,10 @@ public record ItemsPayload(Map<String, ItemStack> items) implements CustomPayloa
                         SlimefunEssentials.LOGGER.error("Failed to deserialize slimefun item: {}", id, e);
                     }
                 }
-                return new ItemsPayload(items);
+                SlimefunRegistry.addItems(items);
+                Payloads.checkMetExpected();
+                return EMPTY;
             }, EMPTY);
-
-    public void load() {
-        SlimefunRegistry.addItems(items);
-    }
 
     @Override
     public Id<? extends CustomPayload> getId() {
